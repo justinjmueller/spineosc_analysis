@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tooling caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# spineosc runtime output
+output/
+autogen_*.xml
+autogen_*.ini
+# ... but the reviewed golden snapshots are part of the test suite
+!tests/golden/**
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Notebooks
+notebooks/*
+
+# Claude
+.claude/
+
+# Archived configs
+config/archive

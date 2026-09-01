@@ -1,0 +1,1364 @@
+<?xml version="1.0" ?>
+
+<!-- 
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!-- 
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Finally, we have two separate ICARUS runs, which mechanically are treated as
+two separate detectors due to the different collection of detector model
+systematics and the different POT. The two runs are:
+ - ICARUS Run 2:  2.0e20 POT
+ - ICARUS Run 4:  3.0e20 POT
+-->
+<detector name="SBND"       pot="1.0e+20" />
+<detector name="ICARUSRun2" pot="2.0e+20" />
+<detector name="ICARUSRun4" pot="3.0e+20" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+==================================
+= Exclusive final-state analysis =
+==================================
+Two channels split by reconstructed proton multiplicity:
+ - ccqelike: exactly one reconstructed proton
+ - nproton:  more than one reconstructed proton
+-->
+<channel name="ccqelike" unit="Reconstructed Neutrino Energy [GeV]">
+
+    <bins unit="RecoE"        edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE"        edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+    <bins unit="TrueNuE"      edges="0.3 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0 1.25 1.5 2.0"/>
+    <bins unit="Muon Start X" min="-200" max="200" nbins="30"/>
+
+    <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
+    <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
+    <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffedff"/>
+    <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
+    <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
+
+</channel>
+
+<channel name="nproton" unit="Reconstructed Neutrino Energy [GeV]">
+
+    <bins unit="RecoE"        edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE"        edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+    <bins unit="TrueNuE"      edges="0.3 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0 1.25 1.5 2.0"/>
+    <bins unit="Muon Start X" min="-200" max="200" nbins="30"/>
+    
+    <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
+    <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
+    <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffedff"/>
+    <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
+    <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
+
+</channel>
+
+<!--
+Declare the histogram-based detector systematics. These are the detector model
+systematics that are applied to the MC samples in the analysis. Each detector
+systematic is represented by a <HistVarSection> containing one or more
+<variation> elements, which specify the histogram file, histogram name, and
+knob value.
+-->
+<HistVarFiles>
+
+    <!-- SCE: Space Charge Effect -->
+    <HistVarSection name="SCE_sbnd_Run1">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="SCE_icarus_Run2">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="SCE_icarus_Run4">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
+    </HistVarSection>
+
+    <!-- Trigger Emulation -->
+    <HistVarSection name="TriggerEmulation_sbnd_Run1">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_sbnd_run1" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_sbnd_run1" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="TriggerEmulation_icarus_Run2">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run2" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run2" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="TriggerEmulation_icarus_Run4">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run4" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run4" knobval="1"/>
+    </HistVarSection>
+
+    <!-- Toroid Calibration -->
+    <HistVarSection name="ToroidCalibration_sbnd_Run1">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="ToroidCalibration_icarus_Run2">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="ToroidCalibration_icarus_Run4">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+    </HistVarSection>
+
+    <!-- Protons Missing the Target -->
+    <HistVarSection name="ProtonMiss_sbnd_Run1">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="ProtonMiss_icarus_Run2">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+    </HistVarSection>
+    <HistVarSection name="ProtonMiss_icarus_Run4">
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+    </HistVarSection>
+
+</HistVarFiles>
+
+<variation_list>
+
+    <!--
+    Here we configure statistical uncertainties. These are Poissonian
+    uncertainties due to the finite number of MC (or off-beam data) signal
+    candidates in each bin. This should always be included.
+    -->
+    <allowlist type="mcstat" plotname="MC Stats" tag="stat,MC Stats">mcstat</allowlist>
+    
+    <!--
+    Interaction Model Systematics (AR23+ Interaction Model)
+    -->
+
+    <!-- Quasi-Elastic Model -->
+    <allowlist type="covariance"             plotname="VecFFCCQEshape" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CoulombCCQE" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_CoulombCCQE</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="SF_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin0</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="SF_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin1</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="SF_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin2</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="SF_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin3</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="SF_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin4</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="HF_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin0</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="HF_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin1</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="HF_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin2</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="HF_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin3</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="HF_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin4</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CRPA_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin0</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CRPA_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin1</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CRPA_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin2</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CRPA_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin3</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CRPA_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin4</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="QEIntf_dial0" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_0</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="QEIntf_dial1" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_1</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="QEIntf_dial2" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_2</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="QEIntf_dial3" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_3</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="QEIntf_dial4" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_4</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="QEIntf_dial5" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_5</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MvAZExp_b1" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b1</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MvAZExp_b2" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b2</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MvAZExp_b3" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b3</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MvAZExp_b4" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b4</allowlist>
+
+    <!-- Meson Exchange Currents -->
+    <allowlist type="spline"  binning="var2" plotname="NormCCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormCCMEC</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="NormNCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormNCMEC</allowlist>
+    <allowlist type="covariance"             plotname="DecayAngMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_DecayAngMEC</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="ValMECResponse_q0bin0" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin0</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="ValMECResponse_q0bin1" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin1</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="ValMECResponse_q0bin2" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin2</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="ValMECResponse_q0bin3" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin3</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MarMECResponse_q0bin0" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin0</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MarMECResponse_q0bin1" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin1</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MarMECResponse_q0bin2" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin2</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MarMECResponse_q0bin3" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin3</allowlist>
+
+    <!-- Resonant Interactions -->
+    <allowlist type="spline"  binning="var2" plotname="MaCCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MaCCRES</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MvCCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvCCRES</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MaNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MaNCRES</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MvNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvNCRES</allowlist>
+    <allowlist type="covariance"             plotname="ThetaDelta2Npi" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_Theta_Delta2Npi</allowlist>
+    <allowlist type="covariance"             plotname="ThetaDelta2NRad" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_ThetaDelta2NRad</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="RDecBR1eta" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1eta</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="RDecBR1gamma" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1gamma</allowlist>
+
+    <!-- Non-Resonant Background (carried over from AR23 unchanged) -->
+    <allowlist type="covariance" plotname="NonRESBGvpCC1pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvpCC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvpCC2pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvpCC2pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvpNC1pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvpNC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvpNC2pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvpNC2pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvnCC1pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvnCC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvnCC2pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvnCC2pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvnNC1pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvnNC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvnNC2pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvnNC2pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarpCC1pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarpCC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarpCC2pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarpCC2pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarpNC1pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarpNC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarpNC2pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarpNC2pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarnCC1pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarnCC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarnCC2pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarnCC2pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarnNC1pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarnNC1pi</allowlist>
+    <allowlist type="covariance" plotname="NonRESBGvbarnNC2pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarnNC2pi</allowlist>
+
+    <!-- Deep Inelastic Scattering -->
+    <allowlist type="spline"  binning="var2" plotname="AhtBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_AhtBY</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="BhtBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_BhtBY</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CV1uBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_CV1uBY</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="CV2uBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_CV2uBY</allowlist>
+
+    <!-- Coherent Pion Production -->
+    <allowlist type="spline"  binning="var2" plotname="NormCCCOH" tag="Cross-Section-COH">GENIEReWeight_SBN_v1_multisigma_NormCCCOH</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="NormNCCOH" tag="Cross-Section-COH">GENIEReWeight_SBN_v1_multisigma_NormNCCOH</allowlist>
+
+    <!-- Neutral Current Elastic Scattering -->
+    <allowlist type="spline"  binning="var2" plotname="MaNCEL" tag="Cross-Section-NCEL">GENIEReWeight_SBN_v1_multisigma_MaNCEL</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="EtaNCEL" tag="Cross-Section-NCEL">GENIEReWeight_SBN_v1_multisigma_EtaNCEL</allowlist>
+
+    <!-- Final State Interactions -->
+    <allowlist type="spline"  binning="var2" plotname="MFP_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_MFP_pi</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrCEx_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrCEx_pi</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrInel_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrInel_pi</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrAbs_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrAbs_pi</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrPiProd_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrPiProd_pi</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MFPLoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPLoE_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MFPM1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPM1E_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MFPM2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPM2E_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="MFPHiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPHiE_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrG4LoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4LoE_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrG4M1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4M1E_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrG4M2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4M2E_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrG4HiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4HiE_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrINCLLoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLLoE_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrINCLM1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLM1E_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrINCLM2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLM2E_N</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="FrINCLHiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLHiE_N</allowlist>
+
+    <!--
+    Here we configure flux systematics. These correspond to uncertainties in
+    the neutrino flux prediction, which comes from a variety of sources.
+    Broadly, we have two major categories of flux systematics:
+        - Hadron production systematics: these correspond to uncertainties in
+        hadron production cross sections, which affect how many pions and kaons
+        are produced in the target and hence how many neutrinos are produced from
+        their decays.
+        - Beamline systematics: these correspond to uncertainties in the beamline
+        configuration, such as the horn current and skin depth of the current in
+        the horn. These affect how the hadrons are focused and hence the
+        resulting neutrino flux.
+    -->
+    <allowlist type="covariance" tag="Flux">expskin_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">horncurrent_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">nucleoninexsec_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">nucleonqexsec_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">nucleontotxsec_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">pioninexsec_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">pionqexsec_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">piontotxsec_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">piplus_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">piminus_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">kplus_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">kminus_Flux</allowlist>
+    <allowlist type="covariance" tag="Flux">kzero_Flux</allowlist>
+
+    <!--
+    Here we configure normalization systematics. We have two types of norms:
+        - Flux normalization systematics: these correspond to an overall 2%
+        uncertainty on the POT delivered by AD to the beam, as referenced in the
+        MiniBooNE results.
+        - Fiducial volume systematics: these correspond to a 1% uncertainty in the
+        volume (the amount of "stuff") in the detector that neutrinos can
+        interact with.
+        - CORSIKA systematic: a simple 30% uncertainty on the out-of-time cosmic
+        background, which is based on the CORSIKA simulation. This is assessed only
+        for SBND because ICARUS uses overlays for cosmic background estimation.
+    -->
+    <allowlist type="norm" binning="var0" plotname="CORSIKA"           tag="Cosmic Background Normalization">.*SBND.*cos:0.30</allowlist>
+    
+    <!--
+    Detector-response systematics
+    -->
+
+    <!-- Charge-scale -->
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_sbnd_Run1"            xvar="var3" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_icarus_Run2"          xvar="var3" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_icarus_Run4"          xvar="var3" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
+
+    <!-- SCE (Space Charge Effect) -->
+    <!--
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="SCE_sbnd_Run1" xvar="var3" binning="var0" mirror="false" plotname="SCE SBND"          tag="Detector Systematics"></allowlist>
+    -->
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="SCE_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="SCE ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="SCE_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="SCE ICARUS Run4" tag="Detector Systematics"></allowlist>
+
+    <!-- Trigger Emulation -->
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="TriggerEmulation_sbnd_Run1"   xvar="var3" binning="var0" mirror="false" plotname="Trigger Emulation SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="TriggerEmulation_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
+
+    <!-- WireMod X-ThetaXW -->
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
+
+    <!-- WireMod Y-Z -->
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_yz_icarus_Run2"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_yz_icarus_Run4"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
+    
+    <!-- Toroid Calibration -->
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var3" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="ToroidCalibration_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="Toroid Calibration ICARUS Run 2" tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ToroidCalibration_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Toroid Calibration ICARUS Run 4" tag="POT Normalization"></allowlist>
+
+    <!-- Protons Missing the Target -->
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ProtonMiss_sbnd_Run1"   xvar="var3" binning="var0" mirror="false" plotname="Proton Missing SBND"         tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="ProtonMiss_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 2" tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ProtonMiss_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 4" tag="POT Normalization"></allowlist>
+
+    <!-- SBND DENT Systematic -->
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
+
+</variation_list>
+
+<MCFile treename="events/sbnd/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="4.411725e+20">
+    <friend treename="events/sbnd/selected_multisigmaTree" />
+    <friend treename="events/sbnd/selected_multisimTree" />
+
+    <!-- SBND, single-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+    
+    <!-- SBND, single-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/sbnd_dirt/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="1.722473e+20">
+    <friend treename="events/sbnd_dirt/selected_multisigmaTree" />
+    <friend treename="events/sbnd_dirt/selected_multisimTree" />
+
+    <!-- SBND, single-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, multi-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, multi-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, multi-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, multi-proton, Target -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/sbnd_offbeam/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="3.98342e+20">
+
+    <!-- SBND, single-proton, in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, multi-proton, in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/sbnd/selected_nonmatched" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="4.411725e+20">
+
+    <!-- SBND, single-proton, cosmics -->
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- SBND, multi-proton, cosmics -->
+    <branch
+        associated_subchannel = "nu_SBND_nproton_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="2.451725e+20">
+    <friend treename="events/icarus_run2/selected_multisigmaTree" />
+    <friend treename="events/icarus_run2/selected_multisimTree" />
+
+    <!-- ICARUS Run 2, single-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, single-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, single-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst_run4alias.root" scale = "1.0" pot="3.893368e+20">
+    <friend treename="events/icarus_run4/selected_multisigmaTree" />
+    <friend treename="events/icarus_run4/selected_multisimTree" />
+
+    <!-- ICARUS Run 4, single-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, single-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, single-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_dirt_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="2.601858e+20">
+    <friend treename="events/icarus_dirt_run2/selected_multisigmaTree" />
+    <friend treename="events/icarus_dirt_run2/selected_multisimTree" />
+
+    <!-- ICARUS Run 2, single-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, single-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, single-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_dirt_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_dirt_wsyst_run4alias.root" scale = "1.0" pot="3.702291e+20">
+    <friend treename="events/icarus_dirt_run4/selected_multisigmaTree" />
+    <friend treename="events/icarus_dirt_run4/selected_multisimTree" />
+
+    <!-- ICARUS Run 4, single-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, single-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, single-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "true"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_offbeam_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.979626e+20">
+
+    <!-- ICARUS Run 2, single-proton, in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_offbeam_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="3.422647e+19">
+
+    <!-- ICARUS Run 4, single-proton, in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_run2/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="2.451725e+20">
+
+    <!-- ICARUS Run 2, single-proton, cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, multi-proton, cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_run4/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="3.893368e+20">
+
+    <!-- ICARUS Run 4, single-proton, cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, multi-proton, cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_leading_muon_start_x</variable>
+    </branch>
+
+</MCFile>
