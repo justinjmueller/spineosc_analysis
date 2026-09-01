@@ -350,7 +350,7 @@ knob value.
 
 </variation_list>
 
-<MCFile treename="events/sbnd/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="4.411725e+20">
+<MCFile treename="events/sbnd/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
     <friend treename="events/sbnd/selected_multisigmaTree" />
     <friend treename="events/sbnd/selected_multisimTree" />
 
@@ -654,7 +654,7 @@ knob value.
 
 </MCFile>
 
-<MCFile treename="events/sbnd/selected_nonmatched" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="4.411725e+20">
+<MCFile treename="events/sbnd/selected_nonmatched" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
 
     <!-- SBND, single-proton, cosmics -->
     <branch
@@ -690,7 +690,7 @@ knob value.
 
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="2.451725e+20">
+<MCFile treename="events/icarus_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
     <friend treename="events/icarus_run2/selected_multisigmaTree" />
     <friend treename="events/icarus_run2/selected_multisimTree" />
 
@@ -823,7 +823,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst_run4alias.root" scale = "1.0" pot="3.893368e+20">
+<MCFile treename="events/icarus_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst_run4alias.root" scale = "1.0" pot="1.786936e+21">
     <friend treename="events/icarus_run4/selected_multisigmaTree" />
     <friend treename="events/icarus_run4/selected_multisimTree" />
 
@@ -1292,7 +1292,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="2.451725e+20">
+<MCFile treename="events/icarus_run2/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
 
     <!-- ICARUS Run 2, single-proton, cosmics -->
     <branch
@@ -1327,7 +1327,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="3.893368e+20">
+<MCFile treename="events/icarus_run4/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.786936e+21">
 
     <!-- ICARUS Run 4, single-proton, cosmics -->
     <branch
