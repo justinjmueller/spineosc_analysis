@@ -163,7 +163,7 @@ knob value.
     -->
 
     <!-- Quasi-Elastic Model -->
-    <allowlist type="covariance"             plotname="VecFFCCQEshape" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="VecFFCCQEshape" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape</allowlist>
     <allowlist type="spline"  binning="var2" plotname="CoulombCCQE" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_CoulombCCQE</allowlist>
     <allowlist type="spline"  binning="var2" plotname="SF_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin0</allowlist>
     <allowlist type="spline"  binning="var2" plotname="SF_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin1</allowlist>
@@ -194,7 +194,7 @@ knob value.
     <!-- Meson Exchange Currents -->
     <allowlist type="spline"  binning="var2" plotname="NormCCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormCCMEC</allowlist>
     <allowlist type="spline"  binning="var2" plotname="NormNCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormNCMEC</allowlist>
-    <allowlist type="covariance"             plotname="DecayAngMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_DecayAngMEC</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="DecayAngMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_DecayAngMEC</allowlist>
     <allowlist type="spline"  binning="var2" plotname="ValMECResponse_q0bin0" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin0</allowlist>
     <allowlist type="spline"  binning="var2" plotname="ValMECResponse_q0bin1" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin1</allowlist>
     <allowlist type="spline"  binning="var2" plotname="ValMECResponse_q0bin2" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin2</allowlist>
@@ -209,8 +209,8 @@ knob value.
     <allowlist type="spline"  binning="var2" plotname="MvCCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvCCRES</allowlist>
     <allowlist type="spline"  binning="var2" plotname="MaNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MaNCRES</allowlist>
     <allowlist type="spline"  binning="var2" plotname="MvNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvNCRES</allowlist>
-    <allowlist type="covariance"             plotname="ThetaDelta2Npi" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_Theta_Delta2Npi</allowlist>
-    <allowlist type="covariance"             plotname="ThetaDelta2NRad" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_ThetaDelta2NRad</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="ThetaDelta2Npi" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_Theta_Delta2Npi</allowlist>
+    <allowlist type="spline"  binning="var2" plotname="ThetaDelta2NRad" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_ThetaDelta2NRad</allowlist>
     <allowlist type="spline"  binning="var2" plotname="RDecBR1eta" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1eta</allowlist>
     <allowlist type="spline"  binning="var2" plotname="RDecBR1gamma" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1gamma</allowlist>
 
@@ -291,6 +291,11 @@ knob value.
     <allowlist type="covariance" tag="Flux">kplus_Flux</allowlist>
     <allowlist type="covariance" tag="Flux">kminus_Flux</allowlist>
     <allowlist type="covariance" tag="Flux">kzero_Flux</allowlist>
+
+    <!-- G4 Systematics -->
+    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">multisim_reinteractions_piminus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">multisim_reinteractions_piplus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">multisim_reinteractions_proton_Geant4</allowlist>
 
     <!--
     Here we configure normalization systematics. We have two types of norms:
@@ -1362,3 +1367,6 @@ knob value.
     </branch>
 
 </MCFile>
+
+<correlation>ToroidCalibration_sbnd_Run1 ToroidCalibration_icarus_Run4 0.33</correlation>
+<correlation>ProtonMiss_sbnd_Run1 ProtonMiss_icarus_Run4 0.33</correlation>
