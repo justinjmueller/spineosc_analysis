@@ -121,55 +121,55 @@ knob value.
 
     <!-- SCE: Space Charge Effect -->
     <HistVarSection name="SCE_sbnd_Run1">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
+        <variation filename="detsys.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
+        <variation filename="detsys.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run2">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
+        <variation filename="detsys.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
+        <variation filename="detsys.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run4">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
+        <variation filename="detsys.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
+        <variation filename="detsys.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
     </HistVarSection>
 
     <!-- Trigger Emulation -->
     <HistVarSection name="TriggerEmulation_sbnd_Run1">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_sbnd_run1" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_sbnd_run1" knobval="1"/>
+        <variation filename="detsys.root" histname="TriggerEmulationM1_sbnd_run1" knobval="-1"/>
+        <variation filename="detsys.root" histname="TriggerEmulationP1_sbnd_run1" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="TriggerEmulation_icarus_Run2">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run2" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run2" knobval="1"/>
+        <variation filename="detsys.root" histname="TriggerEmulationM1_icarus_run2" knobval="-1"/>
+        <variation filename="detsys.root" histname="TriggerEmulationP1_icarus_run2" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="TriggerEmulation_icarus_Run4">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run4" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run4" knobval="1"/>
+        <variation filename="detsys.root" histname="TriggerEmulationM1_icarus_run4" knobval="-1"/>
+        <variation filename="detsys.root" histname="TriggerEmulationP1_icarus_run4" knobval="1"/>
     </HistVarSection>
 
     <!-- Toroid Calibration -->
     <HistVarSection name="ToroidCalibration_sbnd_Run1">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="detsys.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ToroidCalibration_icarus_Run2">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="detsys.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ToroidCalibration_icarus_Run4">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="detsys.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
 
     <!-- Protons Missing the Target -->
     <HistVarSection name="ProtonMiss_sbnd_Run1">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="detsys.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="detsys.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ProtonMiss_icarus_Run2">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="detsys.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="detsys.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ProtonMiss_icarus_Run4">
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="detsys.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="detsys.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
 
 </HistVarFiles>
@@ -341,9 +341,9 @@ knob value.
     -->
 
     <!-- Charge-scale -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="detsys.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="detsys.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
 
     <!-- SCE (Space Charge Effect) -->
     <!--
@@ -358,12 +358,14 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod X-ThetaXW -->
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var0" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="detsys.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="detsys.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod Y-Z -->
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_yz_icarus_Run2"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_yz_icarus_Run4"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="WireMod_yz_sbnd_Run1"              xvar="var0" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="detsys.root" name="WireMod_yz_icarus_Run2"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="detsys.root" name="WireMod_yz_icarus_Run4"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
     
     <!-- Toroid Calibration -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var0" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
@@ -376,7 +378,7 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ProtonMiss_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 4" tag="POT Normalization"></allowlist>
 
     <!-- SBND DENT Systematic -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
 
 </variation_list>
 
