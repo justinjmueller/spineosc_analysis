@@ -1,0 +1,269 @@
+<?xml version="1.0" ?>
+
+<!-- 
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!-- 
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Here, the POT matches the development sample POT in data for SBND and ICARUS Run 2 and Run 4:
+-->
+<detector name="SBND" pot="4.552154e+18" />
+<detector name="ICARUSRun2" pot="1.973578e+19" />
+<detector name="ICARUSRun4" pot="1.893397e+19" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+Data overlay companion for varset1_mc.xml
+- data carries no interaction-model systematics
+Two channels split by reconstructed proton multiplicity (ccqelike = 1p,
+nproton = Np), each with a single flat "data" subchannel (shared across the
+byfs_1p/byfs_Np patterns; see the [[pattern.*.data]] entries in the config's
+patterns.toml). Reco-level selection only - no truth-level cuts - and no
+systematics.
+
+ICARUS data (events/icarus_bnblight_run2, events/icarus_bnblight_run4) is
+already split into separate per-run trees upstream, so it gets two MCFile
+blocks (detector="ICARUSRun2"/"ICARUSRun4") - no Run-cut weight trickery
+needed here, unlike the MC side in selected_test.xml.
+-->
+
+<channel name="ccqelike" unit="Reconstructed Neutrino Energy [GeV]">
+
+    <bins unit = "RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit = "Reco dp [MeV/c]" edges="0 0.083 0.167 0.25 0.333 0.417 0.5 0.583 0.667 0.792 1.0"/>
+    <bins unit = "Reco dpT [MeV/c]" edges="0 0.083 0.167 0.25 0.333 0.417 0.5 0.583 0.667 0.792 1.0"/>
+    <bins unit = "Reco dalphaT [rad]" min="0" max="3.14" nbins="12"/>
+    <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
+    <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
+    <bins unit = "Reco Leading Proton Score" edges="0.33 0.5 0.6 0.7 0.8 0.9 0.975 1.0"/>
+    <bins unit = "Reco Muon Primary Score" edges="0.1 0.5 0.7 0.8 0.9 0.95 1.0"/>
+    <bins unit = "Reco Leading Proton Primary Score" min="0.1" max="1.0" nbins="10"/>
+    <bins unit = "Reco Leading Proton KE [GeV]" edges="0.04 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6"/>
+    <bins unit = "Reco Leading Muon Azimuthal Angle [rad]" min="-3.14" max="3.14" nbins="12"/>
+    <bins unit = "Reco Vertex X (SBND) [cm]" min="-200" max="200" nbins="15"/>
+    <bins unit = "Reco Vertex Y (SBND) [cm]" min="-200" max="200" nbins="15"/>
+    <bins unit = "Reco Vertex Z (SBND) [cm]" min="0" max="450" nbins="15"/>
+    <bins unit = "Reco Vertex X (ICARUS) [cm]" min="-350" max="350" nbins="15"/>
+    <bins unit = "Reco Vertex Y (ICARUS) [cm]" min="-150" max="100" nbins="15"/>
+    <bins unit = "Reco Vertex Z (ICARUS) [cm]" min="0" max="850" nbins="15"/>
+    <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="nproton" unit="Reconstructed Neutrino Energy [GeV]">
+
+    <bins unit = "RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit = "Reco dp [MeV/c]" edges="0 125 250 375 500 625 750 875 1000 1188 1500"/>
+    <bins unit = "Reco dpT [MeV/c]" edges="0 125 250 375 500 625 750 875 1000 1188 1500"/>
+    <bins unit = "Reco dalphaT [rad]" min="0" max="3.14" nbins="12"/>
+    <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
+    <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
+    <bins unit = "Reco Leading Proton Score" edges="0.33 0.5 0.6 0.7 0.8 0.9 0.975 1.0"/>
+    <bins unit = "Reco Muon Primary Score" edges="0.1 0.5 0.7 0.8 0.9 0.95 1.0"/>
+    <bins unit = "Reco Leading Proton Primary Score" min="0.1" max="1.0" nbins="10"/>
+    <bins unit = "Reco Leading Proton KE [GeV]" edges="0.04 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6"/>
+    <bins unit = "Reco Leading Muon Azimuthal Angle [rad]" min="-3.14" max="3.14" nbins="12"/>
+    <bins unit = "Reco Vertex X (SBND) [cm]" min="-200" max="200" nbins="15"/>
+    <bins unit = "Reco Vertex Y (SBND) [cm]" min="-200" max="200" nbins="15"/>
+    <bins unit = "Reco Vertex Z (SBND) [cm]" min="0" max="450" nbins="15"/>
+    <bins unit = "Reco Vertex X (ICARUS) [cm]" min="-350" max="350" nbins="15"/>
+    <bins unit = "Reco Vertex Y (ICARUS) [cm]" min="-150" max="100" nbins="15"/>
+    <bins unit = "Reco Vertex Z (ICARUS) [cm]" min="0" max="850" nbins="15"/>
+    <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+    
+</channel>
+
+<MCFile treename="events/sbnd_bnblight/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_bnblight.root" scale = "1.0" pot="4.552154e+18">
+    
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>reco_pn/1000</variable>
+        <variable>reco_dpT/1000</variable>
+        <variable>reco_dalphaT</variable>
+        <variable>reco_dphiT</variable>
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>reco_leading_proton_proton_softmax</variable>
+        <variable>reco_leading_muon_primary_softmax</variable>
+        <variable>reco_leading_proton_primary_softmax</variable>
+        <variable>reco_leading_proton_ke/1000</variable>
+        <variable>reco_leading_muon_azimuthal_angle</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+    
+    <branch
+        associated_subchannel = "nu_SBND_nproton_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>reco_pn/1000</variable>
+        <variable>reco_dpT/1000</variable>
+        <variable>reco_dalphaT</variable>
+        <variable>reco_dphiT</variable>
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>reco_leading_proton_proton_softmax</variable>
+        <variable>reco_leading_muon_primary_softmax</variable>
+        <variable>reco_leading_proton_primary_softmax</variable>
+        <variable>reco_leading_proton_ke/1000</variable>
+        <variable>reco_leading_muon_azimuthal_angle</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+</MCFile>
+
+
+<MCFile treename="events/icarus_bnblight_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_bnblight.root" scale = "1.0" pot="1.973578e+19">
+    
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>reco_pn/1000</variable>
+        <variable>reco_dpT/1000</variable>
+        <variable>reco_dalphaT</variable>
+        <variable>reco_dphiT</variable>
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>reco_leading_proton_proton_softmax</variable>
+        <variable>reco_leading_muon_primary_softmax</variable>
+        <variable>reco_leading_proton_primary_softmax</variable>
+        <variable>reco_leading_proton_ke/1000</variable>
+        <variable>reco_leading_muon_azimuthal_angle</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>reco_pn/1000</variable>
+        <variable>reco_dpT/1000</variable>
+        <variable>reco_dalphaT</variable>
+        <variable>reco_dphiT</variable>
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>reco_leading_proton_proton_softmax</variable>
+        <variable>reco_leading_muon_primary_softmax</variable>
+        <variable>reco_leading_proton_primary_softmax</variable>
+        <variable>reco_leading_proton_ke/1000</variable>
+        <variable>reco_leading_muon_azimuthal_angle</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_bnblight_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_bnblight.root" scale = "1.0" pot="1.893397e+19">
+  
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+    >     
+        <variable>reco_visible_energy</variable>
+        <variable>reco_pn/1000</variable>
+        <variable>reco_dpT/1000</variable>
+        <variable>reco_dalphaT</variable>
+        <variable>reco_dphiT</variable>
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>reco_leading_proton_proton_softmax</variable>
+        <variable>reco_leading_muon_primary_softmax</variable>
+        <variable>reco_leading_proton_primary_softmax</variable>
+        <variable>reco_leading_proton_ke/1000</variable>
+        <variable>reco_leading_muon_azimuthal_angle</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>reco_pn/1000</variable>
+        <variable>reco_dpT/1000</variable>
+        <variable>reco_dalphaT</variable>
+        <variable>reco_dphiT</variable>
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>reco_leading_proton_proton_softmax</variable>
+        <variable>reco_leading_muon_primary_softmax</variable>
+        <variable>reco_leading_proton_primary_softmax</variable>
+        <variable>reco_leading_proton_ke/1000</variable>
+        <variable>reco_leading_muon_azimuthal_angle</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>reco_vertex_x</variable>
+        <variable>reco_vertex_y</variable>
+        <variable>reco_vertex_z</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+</MCFile>
