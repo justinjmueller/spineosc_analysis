@@ -325,12 +325,14 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod X-ThetaXW -->
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var3" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod Y-Z -->
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_icarus_Run2"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_icarus_Run4"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_sbnd_Run1"              xvar="var3" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_icarus_Run2"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_icarus_Run4"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
     
     <!-- Toroid Calibration -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var0" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
