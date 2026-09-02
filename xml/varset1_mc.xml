@@ -382,19 +382,6 @@ knob value.
 
 </variation_list>
 
- -   ('reco_leading_muon_muon_softmax', 'Reco Muon Score', ([0.3,1], 15), False),
- -   ('reco_leading_proton_proton_softmax', 'Reco Proton Score', ([0.3,0.5,0.6,0.7,0.8,0.9,0.975,1]), False),
- -   ('reco_leading_muon_primary_softmax', 'Reco Muon Primary Score', ([0.1,0.5,0.7,0.8,0.9,0.95,1]), False),
- -   ('reco_leading_proton_primary_softmax', 'Reco Proton Primary Score', ([0.1,1], 10), False),
- -   ('reco_leading_proton_ke', 'Reco Leading Proton KE [MeV]', ([40,100,150,200,250,300,350,400,450,500,550,600]), False),
- -   ('reco_leading_muon_azimuthal_angle', 'Reco Muon Azimuthal Angle [rad]', ([-3.14,3.14], 12), False),
-    ('reco_vertex_x', 'SBND Reco Vertex Position X [cm]', ([-200,200], 15), False),
-    ('reco_vertex_x', 'ICARUS Reco Vertex Position X [cm]', ([-350,350], 15), False),
-    ('reco_vertex_y', 'SBND Reco Vertex Position Y [cm]', ([-200,200], 15), False),
-    ('reco_vertex_y', 'ICARUS Reco Vertex Position Y [cm]', ([-150,100], 15), False),
-    ('reco_vertex_z', 'SBND Reco Vertex Position Z [cm]', ([0,450], 15), False),
-    ('reco_vertex_z', 'ICARUS Reco Vertex Position Z [cm]', ([0,850], 15), False),
-
 <MCFile treename="events/sbnd/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
     <friend treename="events/sbnd/selected_multisigmaTree" />
     <friend treename="events/sbnd/selected_multisimTree" />
