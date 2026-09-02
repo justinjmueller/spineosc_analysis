@@ -770,10 +770,6 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
-        <variable>reco_visible_energy</variable>
-        <variable>0.5</variable>
-        <variable>true_neutrino_energy</variable>
-        <variable>reco_leading_muon_start_x</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Electron Neutrino Charged Current -->
@@ -786,10 +782,6 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
-        <variable>reco_visible_energy</variable>
-        <variable>0.5</variable>
-        <variable>true_neutrino_energy</variable>
-        <variable>reco_leading_muon_start_x</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Other Charged Current -->
@@ -802,10 +794,6 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
-        <variable>reco_visible_energy</variable>
-        <variable>0.5</variable>
-        <variable>true_neutrino_energy</variable>
-        <variable>reco_leading_muon_start_x</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Target -->
@@ -818,10 +806,6 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
-        <variable>reco_visible_energy</variable>
-        <variable>0.5</variable>
-        <variable>true_neutrino_energy</variable>
-        <variable>reco_leading_muon_start_x</variable>
     </branch>
 </MCFile>
 
