@@ -49,9 +49,12 @@ Two channels split by reconstructed proton multiplicity:
 -->
 <channel name="ccqelike" unit="Reconstructed Neutrino Energy [GeV]">
 
-    <bins2D unit="RecoE;pn" edgesx="0.3 0.4 0.46 0.52 0.58 0.64 0.70 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" edgesy="0.0 0.25 0.55 1.0"/>
-    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
-    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit = "RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit = "Reco Muon Polar Angle [rad]" min="0.0" max="3.14" nbins="12"/>
+    <bins unit = "Reco Muon Momentum [MeV/c]" min="200" max="1300" nbins="12"/>
+    <bins unit = "Reco Muon-Leading Proton Opening Angle [cos(rad)]" min="-1.0" max="1.0" nbins="12"/>
+    <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
 
     <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
     <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
@@ -64,9 +67,12 @@ Two channels split by reconstructed proton multiplicity:
 
 <channel name="nproton" unit="Reconstructed Neutrino Energy [GeV]">
 
-    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0"/>
-    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
-    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit = "RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit = "Reco Muon Polar Angle [rad]" min="0.0" max="3.14" nbins="12"/>
+    <bins unit = "Reco Muon Momentum [MeV/c]" min="200" max="1300" nbins="12"/>
+    <bins unit = "Reco Muon-Leading Proton Opening Angle [cos(rad)]" min="-1.0" max="1.0" nbins="12"/>
+    <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
     
     <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
     <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
@@ -88,55 +94,55 @@ knob value.
 
     <!-- SCE: Space Charge Effect -->
     <HistVarSection name="SCE_sbnd_Run1">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run2">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run4">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
     </HistVarSection>
 
     <!-- Trigger Emulation -->
     <HistVarSection name="TriggerEmulation_sbnd_Run1">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="TriggerEmulationM1_sbnd_run1" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="TriggerEmulationP1_sbnd_run1" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_sbnd_run1" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_sbnd_run1" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="TriggerEmulation_icarus_Run2">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run2" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run2" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run2" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run2" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="TriggerEmulation_icarus_Run4">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run4" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run4" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationM1_icarus_run4" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="TriggerEmulationP1_icarus_run4" knobval="1"/>
     </HistVarSection>
 
     <!-- Toroid Calibration -->
     <HistVarSection name="ToroidCalibration_sbnd_Run1">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ToroidCalibration_icarus_Run2">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ToroidCalibration_icarus_Run4">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
 
     <!-- Protons Missing the Target -->
     <HistVarSection name="ProtonMiss_sbnd_Run1">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ProtonMiss_icarus_Run2">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ProtonMiss_icarus_Run4">
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
 
 </HistVarFiles>
@@ -301,16 +307,16 @@ knob value.
         background, which is based on the CORSIKA simulation. This is assessed only
         for SBND because ICARUS uses overlays for cosmic background estimation.
     -->
-    <allowlist type="norm" binning="var0" plotname="CORSIKA"           tag="Cosmic Background Normalization">.*SBND_.*cos:0.30</allowlist>
+    <allowlist type="norm" binning="var0" plotname="CORSIKA"           tag="Cosmic Background Normalization">.*SBND.*cos:0.30</allowlist>
     
     <!--
     Detector-response systematics
     -->
 
     <!-- Charge-scale -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
 
     <!-- SCE (Space Charge Effect) -->
     <!--
@@ -325,14 +331,12 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod X-ThetaXW -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var3" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod Y-Z -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_sbnd_Run1"              xvar="var3" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_icarus_Run2"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="WireMod_yz_icarus_Run4"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_yz_icarus_Run2"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="WireMod_yz_icarus_Run4"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
     
     <!-- Toroid Calibration -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var0" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
@@ -345,11 +349,11 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ProtonMiss_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 4" tag="POT Normalization"></allowlist>
 
     <!-- SBND DENT Systematic -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/sBruceTrees/detsys_rev1.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/Users/mueller/Projects/spineosc_pdsvar/detsys/v2/detsys_rev1.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
 
 </variation_list>
 
-<MCFile treename="events/sbnd/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
+<MCFile treename="events/sbnd/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
     <friend treename="events/sbnd/selected_multisigmaTree" />
     <friend treename="events/sbnd/selected_multisimTree" />
 
@@ -360,7 +364,10 @@ knob value.
         additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -372,7 +379,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -384,7 +394,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -396,7 +409,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -409,6 +425,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -421,6 +440,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -433,6 +455,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -445,13 +470,16 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
 
 </MCFile>
 
-<MCFile treename="events/sbnd_dirt/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_sbnd_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="1.722473e+20">
+<MCFile treename="events/sbnd_dirt/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="1.722473e+20">
     <friend treename="events/sbnd_dirt/selected_multisigmaTree" />
     <friend treename="events/sbnd_dirt/selected_multisimTree" />
 
@@ -462,7 +490,10 @@ knob value.
         additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -474,7 +505,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -486,7 +520,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -498,7 +535,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -511,6 +551,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -523,6 +566,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -535,6 +581,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -547,13 +596,16 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
 
 </MCFile>
 
-<MCFile treename="events/sbnd_offbeam/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="3.98342e+20">
+<MCFile treename="events/sbnd_offbeam/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="3.98342e+20">
 
     <!-- SBND, single-proton, in-time cosmics -->
     <branch
@@ -562,7 +614,10 @@ knob value.
         additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
         incl_systematics      = "false"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -575,13 +630,16 @@ knob value.
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
 
 </MCFile>
 
-<MCFile treename="events/sbnd/selected_nonmatched" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
+<MCFile treename="events/sbnd/selected_nonmatched" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
 
     <!-- SBND, single-proton, cosmics -->
     <branch
@@ -590,7 +648,10 @@ knob value.
         additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -603,13 +664,16 @@ knob value.
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
 
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
+<MCFile treename="events/icarus_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
     <friend treename="events/icarus_run2/selected_multisigmaTree" />
     <friend treename="events/icarus_run2/selected_multisimTree" />
 
@@ -620,7 +684,10 @@ knob value.
         additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -632,7 +699,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -644,7 +714,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -656,7 +729,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -669,6 +745,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -681,6 +760,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -693,6 +775,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -705,12 +790,15 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_wsyst_run4alias.root" scale = "1.0" pot="1.786936e+21">
+<MCFile treename="events/icarus_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst_run4alias.root" scale = "1.0" pot="1.786936e+21">
     <friend treename="events/icarus_run4/selected_multisigmaTree" />
     <friend treename="events/icarus_run4/selected_multisimTree" />
 
@@ -721,7 +809,10 @@ knob value.
         additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -733,7 +824,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -745,7 +839,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -757,7 +854,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -770,6 +870,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -782,6 +885,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -794,6 +900,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -806,12 +915,15 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_dirt_run2/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="2.601858e+20">
+<MCFile treename="events/icarus_dirt_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="2.601858e+20">
     <friend treename="events/icarus_dirt_run2/selected_multisigmaTree" />
     <friend treename="events/icarus_dirt_run2/selected_multisimTree" />
 
@@ -822,7 +934,10 @@ knob value.
         additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -834,7 +949,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -846,7 +964,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -858,7 +979,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -871,6 +995,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -883,6 +1010,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -895,6 +1025,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -907,12 +1040,15 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_dirt_run4/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_dirt_wsyst_run4alias.root" scale = "1.0" pot="3.702291e+20">
+<MCFile treename="events/icarus_dirt_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_dirt_wsyst_run4alias.root" scale = "1.0" pot="3.702291e+20">
     <friend treename="events/icarus_dirt_run4/selected_multisigmaTree" />
     <friend treename="events/icarus_dirt_run4/selected_multisimTree" />
 
@@ -923,7 +1059,10 @@ knob value.
         additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -935,7 +1074,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -947,7 +1089,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -959,7 +1104,10 @@ knob value.
         additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -972,6 +1120,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -984,6 +1135,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -996,6 +1150,9 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1008,12 +1165,15 @@ knob value.
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_offbeam_run2/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.979626e+20">
+<MCFile treename="events/icarus_offbeam_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.979626e+20">
 
     <!-- ICARUS Run 2, single-proton, in-time cosmics -->
     <branch
@@ -1022,7 +1182,10 @@ knob value.
         additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
         incl_systematics      = "false"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -1035,12 +1198,15 @@ knob value.
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_offbeam_run4/selected" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="3.422647e+19">
+<MCFile treename="events/icarus_offbeam_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="3.422647e+19">
 
     <!-- ICARUS Run 4, single-proton, in-time cosmics -->
     <branch
@@ -1049,7 +1215,10 @@ knob value.
         additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
         incl_systematics      = "false"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -1062,12 +1231,15 @@ knob value.
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected_nonmatched" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
+<MCFile treename="events/icarus_run2/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
 
     <!-- ICARUS Run 2, single-proton, cosmics -->
     <branch
@@ -1076,7 +1248,10 @@ knob value.
         additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -1089,12 +1264,15 @@ knob value.
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected_nonmatched" filename="/flare/neutrinoGPU/nupur/sBruceTrees/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.786936e+21">
+<MCFile treename="events/icarus_run4/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.786936e+21">
 
     <!-- ICARUS Run 4, single-proton, cosmics -->
     <branch
@@ -1103,7 +1281,10 @@ knob value.
         additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
-        <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
+        <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -1116,6 +1297,9 @@ knob value.
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
+        <variable>reco_leading_muon_polar_angle</variable>
+        <variable>reco_leading_muon_p</variable>
+        <variable>leading_muon_start_dir_x*leading_proton_start_dir_x + leading_muon_start_dir_y*leading_proton_start_dir_y + leading_muon_start_dir_z*leading_proton_start_dir_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
