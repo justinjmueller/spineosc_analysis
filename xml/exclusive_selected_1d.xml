@@ -293,9 +293,9 @@ knob value.
     <allowlist type="covariance" tag="Flux">kzero_Flux</allowlist>
 
     <!-- G4 Systematics -->
-    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">multisim_reinteractions_piminus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">multisim_reinteractions_piplus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">multisim_reinteractions_proton_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">reinteractions_piminus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">reinteractions_piplus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">reinteractions_proton_Geant4</allowlist>
 
     <!--
     Here we configure normalization systematics. We have two types of norms:
@@ -353,7 +353,7 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ProtonMiss_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 4" tag="POT Normalization"></allowlist>
 
     <!-- SBND DENT Systematic -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="DENT_sbnd_Run1"        xvar="var3" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
 
 </variation_list>
 

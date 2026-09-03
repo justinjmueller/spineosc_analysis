@@ -52,6 +52,7 @@ Two channels split by reconstructed proton multiplicity:
     <bins2D unit="RecoE;pn" edgesx="0.3 0.4 0.46 0.52 0.58 0.64 0.70 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" edgesy="0.0 0.25 0.55 1.0"/>
     <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
 
     <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
     <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
@@ -67,7 +68,8 @@ Two channels split by reconstructed proton multiplicity:
     <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0"/>
     <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
-    
+    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+
     <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
     <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
     <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
@@ -285,10 +287,10 @@ knob value.
     <allowlist type="covariance" tag="Flux">kzero_Flux</allowlist>
 
     <!-- G4 Systematics -->
-    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">multisim_reinteractions_piminus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">multisim_reinteractions_piplus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">multisim_reinteractions_proton_Geant4</allowlist>
-
+    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">reinteractions_piminus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">reinteractions_piplus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">reinteractions_proton_Geant4</allowlist>
+    
     <!--
     Here we configure normalization systematics. We have two types of norms:
         - Flux normalization systematics: these correspond to an overall 2%
@@ -308,44 +310,44 @@ knob value.
     -->
 
     <!-- Charge-scale -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="ChargeScale_sbnd_Run1"            xvar="var3" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="ChargeScale_icarus_Run2"          xvar="var3" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="ChargeScale_icarus_Run4"          xvar="var3" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
 
     <!-- SCE (Space Charge Effect) -->
     <!--
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="SCE_sbnd_Run1" xvar="var0" binning="var0" mirror="false" plotname="SCE SBND"          tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="SCE_sbnd_Run1" xvar="var3" binning="var0" mirror="false" plotname="SCE SBND"          tag="Detector Systematics"></allowlist>
     -->
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="SCE_icarus_Run2" xvar="var0" binning="var0" mirror="false" plotname="SCE ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="SCE_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="SCE ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="SCE_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="SCE ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="SCE_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="SCE ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- Trigger Emulation -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="TriggerEmulation_sbnd_Run1"   xvar="var0" binning="var0" mirror="false" plotname="Trigger Emulation SBND"        tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="TriggerEmulation_icarus_Run2" xvar="var0" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="TriggerEmulation_sbnd_Run1"   xvar="var3" binning="var0" mirror="false" plotname="Trigger Emulation SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="TriggerEmulation_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod X-ThetaXW -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var0" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var3" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod Y-Z -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_yz_sbnd_Run1"              xvar="var0" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_yz_icarus_Run2"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_yz_icarus_Run4"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_yz_sbnd_Run1"              xvar="var3" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_yz_icarus_Run2"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="WireMod_yz_icarus_Run4"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
     
     <!-- Toroid Calibration -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var0" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="ToroidCalibration_icarus_Run2" xvar="var0" binning="var0" mirror="false" plotname="Toroid Calibration ICARUS Run 2" tag="POT Normalization"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ToroidCalibration_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Toroid Calibration ICARUS Run 4" tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var3" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="ToroidCalibration_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="Toroid Calibration ICARUS Run 2" tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ToroidCalibration_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Toroid Calibration ICARUS Run 4" tag="POT Normalization"></allowlist>
 
     <!-- Protons Missing the Target -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ProtonMiss_sbnd_Run1"   xvar="var0" binning="var0" mirror="false" plotname="Proton Missing SBND"         tag="POT Normalization"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="ProtonMiss_icarus_Run2" xvar="var0" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 2" tag="POT Normalization"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ProtonMiss_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 4" tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ProtonMiss_sbnd_Run1"   xvar="var3" binning="var0" mirror="false" plotname="Proton Missing SBND"         tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" name="ProtonMiss_icarus_Run2" xvar="var3" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 2" tag="POT Normalization"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ProtonMiss_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 4" tag="POT Normalization"></allowlist>
 
     <!-- SBND DENT Systematic -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="/flare/neutrinoGPU/nupur/spineosc_analysis/detvar/detsys.root" name="DENT_sbnd_Run1"        xvar="var3" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
 
 </variation_list>
 
@@ -363,6 +365,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
     
     <!-- SBND, single-proton, Electron Neutrino Charged Current -->
@@ -375,6 +378,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Other Charged Current -->
@@ -387,6 +391,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Target -->
@@ -399,6 +404,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Neutral Current -->
@@ -411,6 +417,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Electron Neutrino Charged Current -->
@@ -423,6 +430,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Other Charged Current -->
@@ -435,6 +443,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Target -->
@@ -447,6 +456,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
 </MCFile>
@@ -465,6 +475,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Electron Neutrino Charged Current -->
@@ -477,6 +488,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Other Charged Current -->
@@ -489,6 +501,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, single-proton, Target -->
@@ -501,6 +514,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, multi-proton, Neutral Current -->
@@ -513,6 +527,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, multi-proton, Electron Neutrino Charged Current -->
@@ -525,6 +540,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, multi-proton, Other Charged Current -->
@@ -537,6 +553,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, multi-proton, Target -->
@@ -549,6 +566,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
 </MCFile>
@@ -565,6 +583,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, multi-proton, in-time cosmics -->
@@ -577,6 +596,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
 </MCFile>
@@ -593,6 +613,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- SBND, multi-proton, cosmics -->
@@ -605,6 +626,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
 </MCFile>
@@ -623,6 +645,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, single-proton, Electron Neutrino Charged Current -->
@@ -635,6 +658,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, single-proton, Other Charged Current -->
@@ -647,6 +671,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, single-proton, Target -->
@@ -659,6 +684,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Neutral Current -->
@@ -671,6 +697,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Electron Neutrino Charged Current -->
@@ -683,6 +710,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Other Charged Current -->
@@ -695,6 +723,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Target -->
@@ -707,6 +736,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 </MCFile>
 
@@ -724,6 +754,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, single-proton, Electron Neutrino Charged Current -->
@@ -736,6 +767,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, single-proton, Other Charged Current -->
@@ -748,6 +780,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, single-proton, Target -->
@@ -760,6 +793,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Neutral Current -->
@@ -772,6 +806,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Electron Neutrino Charged Current -->
@@ -784,6 +819,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Other Charged Current -->
@@ -796,6 +832,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Target -->
@@ -808,6 +845,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 </MCFile>
 
@@ -825,6 +863,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, single-proton, Electron Neutrino Charged Current -->
@@ -837,6 +876,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, single-proton, Other Charged Current -->
@@ -849,6 +889,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, single-proton, Target -->
@@ -861,6 +902,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Neutral Current -->
@@ -873,6 +915,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Electron Neutrino Charged Current -->
@@ -885,6 +928,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Other Charged Current -->
@@ -897,6 +941,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, Target -->
@@ -909,6 +954,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 </MCFile>
 
@@ -926,6 +972,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, single-proton, Electron Neutrino Charged Current -->
@@ -938,6 +985,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, single-proton, Other Charged Current -->
@@ -950,6 +998,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, single-proton, Target -->
@@ -962,6 +1011,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Neutral Current -->
@@ -974,6 +1024,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Electron Neutrino Charged Current -->
@@ -986,6 +1037,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Other Charged Current -->
@@ -998,6 +1050,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, Target -->
@@ -1010,6 +1063,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 </MCFile>
 
@@ -1025,6 +1079,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, in-time cosmics -->
@@ -1037,6 +1092,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 </MCFile>
 
@@ -1052,6 +1108,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, in-time cosmics -->
@@ -1064,6 +1121,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 </MCFile>
 
@@ -1079,6 +1137,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 2, multi-proton, cosmics -->
@@ -1091,6 +1150,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 </MCFile>
 
@@ -1106,6 +1166,7 @@ knob value.
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
     <!-- ICARUS Run 4, multi-proton, cosmics -->
@@ -1118,6 +1179,7 @@ knob value.
         <variable>reco_visible_energy</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>reco_visible_energy</variable>
     </branch>
 
 </MCFile>

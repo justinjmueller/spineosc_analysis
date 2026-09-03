@@ -285,9 +285,9 @@ knob value.
     <allowlist type="covariance" tag="Flux">kzero_Flux</allowlist>
 
     <!-- G4 Systematics -->
-    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">multisim_reinteractions_piminus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">multisim_reinteractions_piplus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">multisim_reinteractions_proton_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">reinteractions_piminus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">reinteractions_piplus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">reinteractions_proton_Geant4</allowlist>
 
     <!--
     Here we configure normalization systematics. We have two types of norms:
