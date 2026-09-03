@@ -22,6 +22,12 @@ autogen_*.ini
 # ... but the reviewed golden snapshots are part of the test suite
 !tests/golden/**
 
+# spineosc deploy (scripts/deploy.sh): per-machine file map and the
+# symlink work directory it populates. input/sources.list.example stays
+# tracked as the template.
+/work/
+/input/sources.list
+
 # Editor / OS
 .DS_Store
 .idea/

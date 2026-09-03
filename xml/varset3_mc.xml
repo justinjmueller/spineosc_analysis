@@ -88,55 +88,55 @@ knob value.
 
     <!-- SCE: Space Charge Effect -->
     <HistVarSection name="SCE_sbnd_Run1">
-        <variation filename="detsys.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
-        <variation filename="detsys.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run2">
-        <variation filename="detsys.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
-        <variation filename="detsys.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run4">
-        <variation filename="detsys.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
-        <variation filename="detsys.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
     </HistVarSection>
 
     <!-- Trigger Emulation -->
     <HistVarSection name="TriggerEmulation_sbnd_Run1">
-        <variation filename="detsys.root" histname="TriggerEmulationM1_sbnd_run1" knobval="-1"/>
-        <variation filename="detsys.root" histname="TriggerEmulationP1_sbnd_run1" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="TriggerEmulationM1_sbnd_run1" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="TriggerEmulationP1_sbnd_run1" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="TriggerEmulation_icarus_Run2">
-        <variation filename="detsys.root" histname="TriggerEmulationM1_icarus_run2" knobval="-1"/>
-        <variation filename="detsys.root" histname="TriggerEmulationP1_icarus_run2" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="TriggerEmulationM1_icarus_run2" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="TriggerEmulationP1_icarus_run2" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="TriggerEmulation_icarus_Run4">
-        <variation filename="detsys.root" histname="TriggerEmulationM1_icarus_run4" knobval="-1"/>
-        <variation filename="detsys.root" histname="TriggerEmulationP1_icarus_run4" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="TriggerEmulationM1_icarus_run4" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="TriggerEmulationP1_icarus_run4" knobval="1"/>
     </HistVarSection>
 
     <!-- Toroid Calibration -->
     <HistVarSection name="ToroidCalibration_sbnd_Run1">
-        <variation filename="detsys.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ToroidCalibration_icarus_Run2">
-        <variation filename="detsys.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ToroidCalibration_icarus_Run4">
-        <variation filename="detsys.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="ToroidCalibration_generic_RunX" knobval="1"/>
     </HistVarSection>
 
     <!-- Protons Missing the Target -->
     <HistVarSection name="ProtonMiss_sbnd_Run1">
-        <variation filename="detsys.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="detsys.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ProtonMiss_icarus_Run2">
-        <variation filename="detsys.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="detsys.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="ProtonMiss_icarus_Run4">
-        <variation filename="detsys.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
-        <variation filename="detsys.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="ProtonMissLow_generic_RunX" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="ProtonMissHigh_generic_RunX" knobval="1"/>
     </HistVarSection>
 
 </HistVarFiles>
@@ -308,9 +308,9 @@ knob value.
     -->
 
     <!-- Charge-scale -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="detsys.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="detsys.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
 
     <!-- SCE (Space Charge Effect) -->
     <!--
@@ -325,14 +325,14 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod X-ThetaXW -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var0" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="detsys.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="detsys.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var0" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var0" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod Y-Z -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="WireMod_yz_sbnd_Run1"              xvar="var0" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="detsys.root" name="WireMod_yz_icarus_Run2"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="detsys.root" name="WireMod_yz_icarus_Run4"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="WireMod_yz_sbnd_Run1"              xvar="var0" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="WireMod_yz_icarus_Run2"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireMod_yz_icarus_Run4"            xvar="var0" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
     
     <!-- Toroid Calibration -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var0" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
@@ -345,11 +345,11 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="ProtonMiss_icarus_Run4" xvar="var0" binning="var0" mirror="false" plotname="Proton Missing ICARUS Run 4" tag="POT Normalization"></allowlist>
 
     <!-- SBND DENT Systematic -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="detsys.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="DENT_sbnd_Run1"        xvar="var0" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
 
 </variation_list>
 
-<MCFile treename="events/sbnd/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
+<MCFile treename="events/sbnd/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.662695e+20">
     <friend treename="events/sbnd/selected_multisigmaTree" />
     <friend treename="events/sbnd/selected_multisimTree" />
 
@@ -451,7 +451,7 @@ knob value.
 
 </MCFile>
 
-<MCFile treename="events/sbnd_dirt/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="1.722473e+20">
+<MCFile treename="events/sbnd_dirt/selected" filename="work/sbnd_run1_dirt.root" scale = "1.0" pot="1.722473e+20">
     <friend treename="events/sbnd_dirt/selected_multisigmaTree" />
     <friend treename="events/sbnd_dirt/selected_multisimTree" />
 
@@ -553,7 +553,7 @@ knob value.
 
 </MCFile>
 
-<MCFile treename="events/sbnd_offbeam/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="3.98342e+20">
+<MCFile treename="events/sbnd_offbeam/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="3.98342e+20">
 
     <!-- SBND, single-proton, in-time cosmics -->
     <branch
@@ -581,7 +581,7 @@ knob value.
 
 </MCFile>
 
-<MCFile treename="events/sbnd/selected_nonmatched" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_wsyst.root" scale = "1.0" pot="5.662695e+20">
+<MCFile treename="events/sbnd/selected_nonmatched" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.662695e+20">
 
     <!-- SBND, single-proton, cosmics -->
     <branch
@@ -609,7 +609,7 @@ knob value.
 
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
+<MCFile treename="events/icarus_run2/selected" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.050655e+21">
     <friend treename="events/icarus_run2/selected_multisigmaTree" />
     <friend treename="events/icarus_run2/selected_multisimTree" />
 
@@ -710,7 +710,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst_run4alias.root" scale = "1.0" pot="1.786936e+21">
+<MCFile treename="events/icarus_run4/selected" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.786936e+21">
     <friend treename="events/icarus_run4/selected_multisigmaTree" />
     <friend treename="events/icarus_run4/selected_multisimTree" />
 
@@ -811,7 +811,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_dirt_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_dirt_wsyst.root" scale = "1.0" pot="2.601858e+20">
+<MCFile treename="events/icarus_dirt_run2/selected" filename="work/icarus_run2_dirt.root" scale = "1.0" pot="2.601858e+20">
     <friend treename="events/icarus_dirt_run2/selected_multisigmaTree" />
     <friend treename="events/icarus_dirt_run2/selected_multisimTree" />
 
@@ -912,7 +912,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_dirt_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_dirt_wsyst_run4alias.root" scale = "1.0" pot="3.702291e+20">
+<MCFile treename="events/icarus_dirt_run4/selected" filename="work/icarus_run4_dirt.root" scale = "1.0" pot="3.702291e+20">
     <friend treename="events/icarus_dirt_run4/selected_multisigmaTree" />
     <friend treename="events/icarus_dirt_run4/selected_multisimTree" />
 
@@ -1013,7 +1013,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_offbeam_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.979626e+20">
+<MCFile treename="events/icarus_offbeam_run2/selected" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.979626e+20">
 
     <!-- ICARUS Run 2, single-proton, in-time cosmics -->
     <branch
@@ -1040,7 +1040,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_offbeam_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="3.422647e+19">
+<MCFile treename="events/icarus_offbeam_run4/selected" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="3.422647e+19">
 
     <!-- ICARUS Run 4, single-proton, in-time cosmics -->
     <branch
@@ -1067,7 +1067,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.050655e+21">
+<MCFile treename="events/icarus_run2/selected_nonmatched" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.050655e+21">
 
     <!-- ICARUS Run 2, single-proton, cosmics -->
     <branch
@@ -1094,7 +1094,7 @@ knob value.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected_nonmatched" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_wsyst.root" scale = "1.0" pot="1.786936e+21">
+<MCFile treename="events/icarus_run4/selected_nonmatched" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.786936e+21">
 
     <!-- ICARUS Run 4, single-proton, cosmics -->
     <branch

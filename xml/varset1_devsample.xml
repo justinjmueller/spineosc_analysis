@@ -102,7 +102,7 @@ needed here, unlike the MC side in selected_test.xml.
     
 </channel>
 
-<MCFile treename="events/sbnd_bnblight/selected" filename="/Users/mueller/data/spineosc/sbndv2/spineosc_numu_sbnd_v1.0.9_bnblight.root" scale = "1.0" pot="4.552154e+18">
+<MCFile treename="events/sbnd_bnblight/selected" filename="work/sbnd_run1_data.root" scale = "1.0" pot="4.552154e+18">
     
     <branch
         associated_subchannel = "nu_SBND_ccqelike_data"
@@ -158,7 +158,7 @@ needed here, unlike the MC side in selected_test.xml.
 </MCFile>
 
 
-<MCFile treename="events/icarus_bnblight_run2/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_bnblight.root" scale = "1.0" pot="1.973578e+19">
+<MCFile treename="events/icarus_bnblight_run2/selected" filename="work/icarus_run2_data.root" scale = "1.0" pot="1.973578e+19">
     
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_data"
@@ -213,7 +213,7 @@ needed here, unlike the MC side in selected_test.xml.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_bnblight_run4/selected" filename="/Users/mueller/data/spineosc/icarusv2/spineosc_numu_icarus_v1.0.9_bnblight.root" scale = "1.0" pot="1.893397e+19">
+<MCFile treename="events/icarus_bnblight_run4/selected" filename="work/icarus_run4_data.root" scale = "1.0" pot="1.893397e+19">
   
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_data"

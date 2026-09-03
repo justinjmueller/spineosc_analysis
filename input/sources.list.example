@@ -1,0 +1,39 @@
+# input/sources.list
+#
+# Maps a logical file key (used as work/<key>.root by the XML configs)
+# to the actual absolute path of that file on THIS machine.
+#
+# Copy this file to input/sources.list and edit the paths for your
+# machine, then run scripts/deploy.sh. input/sources.list is
+# machine-specific and gitignored; this .example file is the checked-in
+# template so collaborators know which keys the XML configs expect.
+#
+# Format: one KEY=/absolute/path/to/file.root per line. Blank lines and
+# lines starting with # are ignored.
+#
+# Key pattern: <detector>_<runX>_<type>, type in {cvmc, dirt, data}.
+# SBND is entirely run1. ICARUS is Run 2 and Run 4.
+#
+# ICARUS Run 2/Run 4 pairs (and the two icarus_data lines) intentionally
+# point at the SAME physical file per type: Run 2 and Run 4 are read out
+# of one underlying production file, but PROfit needs each to see a
+# distinct path, so both are aliased explicitly here instead of relying
+# on one "primary" name plus a manually-made symlink for the other.
+
+# --- SBND Run 1 ---
+sbnd_run1_cvmc=/path/to/spineosc_numu_sbnd_v1.0.9_wsyst_add.root
+sbnd_run1_dirt=/path/to/spineosc_numu_sbnd_v1.0.9_dirt_wsyst.root
+sbnd_run1_data=/path/to/spineosc_numu_sbnd_v1.0.9_bnblight.root
+
+# --- ICARUS Run 2 ---
+icarus_run2_cvmc=/path/to/spineosc_numu_icarus_v1.0.9_wsyst_add.root
+icarus_run2_dirt=/path/to/spineosc_numu_icarus_v1.0.9_dirt_wsyst.root
+icarus_run2_data=/path/to/spineosc_numu_icarus_v1.0.9_bnblight.root
+
+# --- ICARUS Run 4 ---
+icarus_run4_cvmc=/path/to/spineosc_numu_icarus_v1.0.9_wsyst_add.root
+icarus_run4_dirt=/path/to/spineosc_numu_icarus_v1.0.9_dirt_wsyst.root
+icarus_run4_data=/path/to/spineosc_numu_icarus_v1.0.9_bnblight.root
+
+# --- Detector systematics (shared, not per-detector/run/type) ---
+detsys_main=/path/to/detsys.root
