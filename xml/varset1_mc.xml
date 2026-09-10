@@ -73,7 +73,7 @@ Two channels split by reconstructed proton multiplicity:
     <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
     <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
     <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
-    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffedff"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffed"/>
     <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
     <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
 
@@ -82,8 +82,8 @@ Two channels split by reconstructed proton multiplicity:
 <channel name="nproton" unit="Reconstructed Neutrino Energy [GeV]">
 
     <bins unit = "RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
-    <bins unit = "Reco dp [MeV/c]" edges="0 125 250 375 500 625 750 875 1000 1188 1500"/>
-    <bins unit = "Reco dpT [MeV/c]" edges="0 125 250 375 500 625 750 875 1000 1188 1500"/>
+    <bins unit = "Reco dp [MeV/c]" edges="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.188 1.5"/>
+    <bins unit = "Reco dpT [MeV/c]" edges="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.188 1.5"/>
     <bins unit = "Reco dalphaT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
@@ -104,7 +104,7 @@ Two channels split by reconstructed proton multiplicity:
     <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
     <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
     <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
-    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffedff"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffed"/>
     <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
     <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
 
@@ -318,9 +318,9 @@ knob value.
     <allowlist type="covariance" tag="Flux">kzero_Flux</allowlist>
 
     <!-- G4 Systematics -->
-    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">multisim_reinteractions_piminus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">multisim_reinteractions_piplus_Geant4</allowlist>
-    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">multisim_reinteractions_proton_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piminus" tag="G4">reinteractions_piminus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4piplus" tag="G4">reinteractions_piplus_Geant4</allowlist>
+    <allowlist type="covariance" binning="var2" plotname="G4proton" tag="G4">reinteractions_proton_Geant4</allowlist>
 
     <!--
     Here we configure normalization systematics. We have two types of norms:
