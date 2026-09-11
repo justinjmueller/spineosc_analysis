@@ -33,7 +33,7 @@ analysis.
 <model tag="numudis">
     <rule index="0" name="No Osc"/>
     <rule index="1" name="Numu Dis"/>
-    <parameter name="L/E" variable_index="1"/>
+    <parameter name="L/E" variable_index="4"/>
 </model>
 
 <!--
