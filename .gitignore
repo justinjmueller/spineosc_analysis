@@ -41,3 +41,8 @@ notebooks/*
 
 # Archived configs
 config/archive
+
+# Specific to this project
+detsys/profit_systematics/*.root
+*.bin
+*.pdf
