@@ -94,18 +94,24 @@ knob value.
 -->
 <HistVarFiles>
 
+    <!-- Gain Variation -->
+    <HistVarSection name="Gain_sbnd_Run1">
+        <variation filename="work/detsys_main.root" histname="GainHigh_sbnd_Run1" knobval="-2.5"/>
+        <variation filename="work/detsys_main.root" histname="GainLow_sbnd_Run1" knobval="2.5"/>
+    </HistVarSection>
+
     <!-- SCE: Space Charge Effect -->
     <HistVarSection name="SCE_sbnd_Run1">
-        <variation filename="work/detsys_main.root" histname="SCE_0x_sbnd_Run1" knobval="-1"/>
-        <variation filename="work/detsys_main.root" histname="SCE_2x_sbnd_Run1" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="SCE0x_sbnd_Run1" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="SCE2x_sbnd_Run1" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run2">
-        <variation filename="work/detsys_main.root" histname="SCE_0x_icarus_Run2" knobval="-1"/>
-        <variation filename="work/detsys_main.root" histname="SCE_2x_icarus_Run2" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="SCE0x_icarus_Run2" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="SCE2x_icarus_Run2" knobval="1"/>
     </HistVarSection>
     <HistVarSection name="SCE_icarus_Run4">
-        <variation filename="work/detsys_main.root" histname="SCE_0x_icarus_Run4" knobval="-1"/>
-        <variation filename="work/detsys_main.root" histname="SCE_2x_icarus_Run4" knobval="1"/>
+        <variation filename="work/detsys_main.root" histname="SCE0x_icarus_Run4" knobval="-1"/>
+        <variation filename="work/detsys_main.root" histname="SCE2x_icarus_Run4" knobval="1"/>
     </HistVarSection>
 
     <!-- Trigger Emulation -->
@@ -315,6 +321,9 @@ knob value.
     Detector-response systematics
     -->
 
+    <!-- Gain -->
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="Gain_sbnd_Run1"  xvar="var3" binning="var0" mirror="false" plotname="Gain SBND"       tag="Detector Systematics"></allowlist>
+
     <!-- Charge-scale -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="ChargeScale_sbnd_Run1"            xvar="var3" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="ChargeScale_icarus_Run2"          xvar="var3" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
@@ -333,14 +342,14 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" name="TriggerEmulation_icarus_Run4" xvar="var3" binning="var0" mirror="false" plotname="Trigger Emulation ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod X-ThetaXW -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="WireMod_xThetaXW_sbnd_Run1"        xvar="var3" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="WireMod_xThetaXW_icarus_Run2"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireMod_xThetaXW_icarus_Run4"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="WireModxThetaXW_sbnd_Run1"        xvar="var3" binning="var0" plotname="WireMod xThetaXW SBND"        tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="WireModxThetaXW_icarus_Run2"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run2" tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireModxThetaXW_icarus_Run4"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod Y-Z -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="WireMod_yz_sbnd_Run1"              xvar="var3" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="WireMod_yz_icarus_Run2"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
-    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireMod_yz_icarus_Run4"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="WireModYZ_sbnd_Run1"              xvar="var3" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="WireModYZ_icarus_Run2"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireModYZ_icarus_Run4"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
     
     <!-- Toroid Calibration -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="ToroidCalibration_sbnd_Run1"   xvar="var3" binning="var0" mirror="false" plotname="Toroid Calibration SBND"         tag="POT Normalization"></allowlist>
