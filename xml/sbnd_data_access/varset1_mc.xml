@@ -24,9 +24,9 @@ systematics and the different POT. The two runs are:
  - ICARUS Run 2:  2.0e20 POT
  - ICARUS Run 4:  3.0e20 POT
 -->
-<detector name="SBND"       pot="1.0e+20" />
-<detector name="ICARUSRun2" pot="2.0e+20" />
-<detector name="ICARUSRun4" pot="3.0e+20" />
+<detector name="SBND" pot="3.619273e+18" />
+<detector name="ICARUSRun2" pot="1.806050e+19" />
+<detector name="ICARUSRun4" pot="1.713296e+19" />
 
 <!--
 Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
@@ -51,8 +51,8 @@ Two channels split by reconstructed proton multiplicity:
 <channel name="ccqelike" unit="Reconstructed Neutrino Energy [GeV]">
 
     <bins unit = "RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
-    <bins unit = "Reco dp [MeV/c]" edges="0 0.083 0.167 0.25 0.333 0.417 0.5 0.583 0.667 0.792 1.0"/>
-    <bins unit = "Reco dpT [MeV/c]" edges="0 0.083 0.167 0.25 0.333 0.417 0.5 0.583 0.667 0.792 1.0"/>
+    <bins unit = "Reco dp [GeV/c]" edges="0 0.083 0.167 0.25 0.333 0.417 0.5 0.583 0.667 0.792 1.0"/>
+    <bins unit = "Reco dpT [GeV/c]" edges="0 0.083 0.167 0.25 0.333 0.417 0.5 0.583 0.667 0.792 1.0"/>
     <bins unit = "Reco dalphaT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
@@ -82,8 +82,8 @@ Two channels split by reconstructed proton multiplicity:
 <channel name="nproton" unit="Reconstructed Neutrino Energy [GeV]">
 
     <bins unit = "RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
-    <bins unit = "Reco dp [MeV/c]" edges="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.188 1.5"/>
-    <bins unit = "Reco dpT [MeV/c]" edges="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.188 1.5"/>
+    <bins unit = "Reco dp [GeV/c]" edges="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.188 1.5"/>
+    <bins unit = "Reco dpT [GeV/c]" edges="0 0.125 0.25 0.375 0.5 0.625 0.75 0.875 1.0 1.188 1.5"/>
     <bins unit = "Reco dalphaT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
