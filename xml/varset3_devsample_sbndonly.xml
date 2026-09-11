@@ -20,10 +20,10 @@ different POT than the target POT.
 
 Here, the POT matches the development sample POT in data for SBND and ICARUS Run 2 and Run 4:
 -->
-<detector name="SBND" pot="4.552154e+18" />
+<detector name="SBND" pot="3.619273e+18" />
 <!--
-<detector name="ICARUSRun2" pot="1.973578e+19" />
-<detector name="ICARUSRun4" pot="1.893397e+19" />
+<detector name="ICARUSRun2" pot="1.806050e+19" />
+<detector name="ICARUSRun4" pot="1.713296e+19" />
 -->
 
 <!--
@@ -72,7 +72,7 @@ needed here, unlike the MC side in selected_test.xml.
     
 </channel>
 
-<MCFile treename="events/sbnd_bnblight/selected" filename="work/sbnd_run1_data.root" scale = "1.0" pot="4.552154e+18">
+<MCFile treename="events/sbnd_bnblight/selected" filename="work/sbnd_run1_data.root" scale = "1.0" pot="3.619273e+18">
     
     <branch
         associated_subchannel = "nu_SBND_ccqelike_data"
@@ -96,7 +96,7 @@ needed here, unlike the MC side in selected_test.xml.
 </MCFile>
 
 <!--
-<MCFile treename="events/icarus_bnblight_run2/selected" filename="work/icarus_run2_data.root" scale = "1.0" pot="1.973578e+19">
+<MCFile treename="events/icarus_bnblight_run2/selected" filename="work/icarus_run2_data.root" scale = "1.0" pot="1.806050e+19">
     
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_data"
@@ -119,7 +119,7 @@ needed here, unlike the MC side in selected_test.xml.
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_bnblight_run4/selected" filename="work/icarus_run4_data.root" scale = "1.0" pot="1.893397e+19">
+<MCFile treename="events/icarus_bnblight_run4/selected" filename="work/icarus_run4_data.root" scale = "1.0" pot="1.713296e+19">
   
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_data"
