@@ -49,10 +49,11 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
 
 <channel name="ccqelike" unit="Reconstructed Proton Primary Score">
 
-    <bins unit="Reco Proton Primary Score" min="0.0" max="1.0" nbins="20"/>
+    <bins unit="Reco Proton Primary Score" min="0.1" max="1.0" nbins="20"/>
     <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
     <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
 
     <subchannel name="data" plotname="Data" color="#FBBC04"/>
 
@@ -60,10 +61,11 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
 
 <channel name="nproton" unit="Reconstructed Proton Primary Score">
 
-    <bins unit="Reco Proton Primary Score" min="0.0" max="1.0" nbins="20"/>
+    <bins unit="Reco Proton Primary Score" min="0.1" max="1.0" nbins="20"/>
     <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
     <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
 
     <subchannel name="data" plotname="Data" color="#FBBC04"/>
 
@@ -80,6 +82,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
         <variable>0</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>0.5</variable>
     </branch>
 
     <branch
@@ -91,6 +94,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
         <variable>0</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>0.5</variable>
     </branch>
 </MCFile>
 
@@ -105,6 +109,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
         <variable>0</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>0.5</variable>
     </branch>
 
     <branch
@@ -116,6 +121,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
         <variable>0</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>0.5</variable>
     </branch>
 </MCFile>
 
@@ -130,6 +136,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
         <variable>0</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>0.5</variable>
     </branch>
 
     <branch
@@ -141,5 +148,6 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
         <variable>0</variable>
         <variable>0</variable>
         <variable>0</variable>
+        <variable>0.5</variable>
     </branch>
 </MCFile>

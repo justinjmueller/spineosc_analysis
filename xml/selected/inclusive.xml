@@ -1,0 +1,527 @@
+<?xml version="1.0" ?>
+
+<!-- 
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!-- 
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Finally, we have two separate ICARUS runs, which mechanically are treated as
+two separate detectors due to the different collection of detector model
+systematics and the different POT. The two runs are:
+ - ICARUS Run 2:  2.0e20 POT
+ - ICARUS Run 4:  3.0e20 POT
+-->
+<detector name="SBND"       pot="1.0e+20" />
+<detector name="ICARUSRun2" pot="2.0e+20" />
+<detector name="ICARUSRun4" pot="3.0e+20" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+==================================
+= Inclusive final-state analysis =
+==================================
+One channel covering every event with at least one reconstructed proton:
+ - numu: reco_proton_multiplicity >= 1
+
+This is the selection-level counterpart of xml/signal/inclusive.xml, and the
+inclusive companion to xml/selected/exclusive.xml, whose two channels
+(ccqelike == 1p, nproton > 1p) partition exactly this sample.
+
+Every cut other than the proton multiplicity is inherited verbatim from
+selected/exclusive.xml. Note that ICARUS Run 2 and Run 4 are not cut
+identically there: Run 2 branches carry (reco_user_containment_cut_filterEE
+== 1) plus a Run-2-specific trigger threshold, while Run 4 branches use the
+compound true_detector/Run trigger expression and no containment cut. That
+asymmetry is mirrored here rather than silently changed.
+
+RecoE uses the inclusive edge list shared with signal/inclusive.xml, since the
+two exclusive channels it replaces use different binnings (0.3-1.5 and
+0.4-2.0) and neither alone spans the inclusive sample.
+-->
+<channel name="numu" unit="Reconstructed Neutrino Energy [GeV]">
+
+    <bins unit = "RecoE" edges="0.3 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0 1.25 1.5 2.0"/>
+    <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
+    <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
+    <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffed"/>
+    <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
+    <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
+
+</channel>
+
+<variation_list>
+
+    <!--
+    Here we configure statistical uncertainties. These are Poissonian
+    uncertainties due to the finite number of MC (or off-beam data) signal
+    candidates in each bin. This should always be included.
+    -->
+    <allowlist type="mcstat" plotname="MC Stats" tag="stat,MC Stats">mcstat</allowlist>
+    
+</variation_list>
+
+<MCFile treename="events/sbnd/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.446590e+20">
+
+    <!-- SBND, inclusive (>=1p), Neutral Current -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+    
+    <!-- SBND, inclusive (>=1p), Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- SBND, inclusive (>=1p), Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- SBND, inclusive (>=1p), Target -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/sbnd_dirt/selected" filename="work/sbnd_run1_dirt.root" scale = "1.0" pot="2.325245e+20">
+
+    <!-- SBND, inclusive (>=1p), Neutral Current -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- SBND, inclusive (>=1p), Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- SBND, inclusive (>=1p), Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- SBND, inclusive (>=1p), Target -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/sbnd_offbeam/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="3.790752e+20">
+
+    <!-- SBND, inclusive (>=1p), in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/sbnd/selected_nonmatched" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.446590e+20">
+
+    <!-- SBND, inclusive (>=1p), cosmics -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_run2/selected" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.052781e+21">
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_run4/selected" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.689644e+21">
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_dirt_run2/selected" filename="work/icarus_run2_dirt.root" scale = "1.0" pot="8.933430e+20">
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 2, inclusive (>=1p), Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_dirt_run4/selected" filename="work/icarus_run4_dirt.root" scale = "1.0" pot="1.426472e+21">
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Neutral Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Electron Neutrino Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Other Charged Current -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <!-- ICARUS Run 4, inclusive (>=1p), Target -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_offbeam_run2/selected" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.969203e+20">
+
+    <!-- ICARUS Run 2, inclusive (>=1p), in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_offbeam_run4/selected" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="3.414582e+19">
+
+    <!-- ICARUS Run 4, inclusive (>=1p), in-time cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_intime"
+        model_rule            = "0"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_run2/selected_nonmatched" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.052781e+21">
+
+    <!-- ICARUS Run 2, inclusive (>=1p), cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_run4/selected_nonmatched" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.689644e+21">
+
+    <!-- ICARUS Run 4, inclusive (>=1p), cosmics -->
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_cos"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>

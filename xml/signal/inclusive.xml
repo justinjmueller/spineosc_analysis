@@ -1,0 +1,247 @@
+<?xml version="1.0" ?>
+
+<!--
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!--
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+
+ICARUS Run 2 and Run 4 are mechanically treated as two separate detectors: they
+carry different detector-model systematics and different POT. Unlike the older
+workshop configs, the two runs here read genuinely run-specific files
+(work/icarus_run2_cvmc.root and work/icarus_run4_cvmc.root) with run-specific
+tree keys, so no "run4alias" trickery is needed.
+
+The POT below is the TARGET POT each MC sample is scaled to, and matches the
+data POT used by the selection-level XMLs (xml/coverage/*.xml).
+-->
+<detector name="SBND"       pot="1.0e20" />
+<detector name="ICARUSRun2" pot="2.0e20" />
+<detector name="ICARUSRun4" pot="3.0e20" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+==================================
+= Inclusive final-state analysis =
+==================================
+One channel including all events with at least one reconstructed proton:
+ - numu: all events with true_proton_multiplicity >= 1
+-->
+<channel name="numu" unit="Reconstructed Neutrino Energy [GeV]">
+
+    <bins unit="RecoE" edges="0.3 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0 1.25 1.5 2.0"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="Count" min="0.0" max="1.0" nbins="1"/>
+    <bins unit="TrueNuE" edges="0.3 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0 1.25 1.5 2.0"/>
+
+    <subchannel name="ccdis" plotname="CCDIS" color="#FBBC04"/>
+    <subchannel name="ccres" plotname="CCRES" color="#E37400"/>
+    <subchannel name="ccmec" plotname="CCMEC" color="#FF6961"/>
+    <subchannel name="ccqe"  plotname="CCQE"  color="#99CCFF"/>
+
+</channel>
+
+<variation_list>
+
+    <!--
+    Statistical uncertainties only. These are Poissonian uncertainties due to
+    the finite number of MC signal candidates in each bin, and should always be
+    included. This is a signal-composition plot, so no flux, cross-section or
+    detector systematics are configured; every branch below sets
+    incl_systematics="false" to match.
+    -->
+    <allowlist type="mcstat" plotname="MC Stats" tag="stat,MC Stats">mcstat</allowlist>
+
+</variation_list>
+
+<!--
+The per-MCFile POT below is the POT of the underlying production file. The
+signal and selected trees live in the same physical file, so these are the same
+values the selection-level XMLs declare for events/<key>/selected.
+-->
+<MCFile treename="events/sbnd/signal" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.446590e+20">
+
+    <branch
+        associated_subchannel = "nu_SBND_numu_ccdis"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_numu_ccres"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_numu_ccmec"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_numu_ccqe"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_run2/signal" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.052781e+21">
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_ccdis"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_ccres"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_ccmec"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_ccqe"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+</MCFile>
+
+<MCFile treename="events/icarus_run4/signal" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.689644e+21">
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_ccdis"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_ccres"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_ccmec"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_numu_ccqe"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0)"
+        incl_systematics      = "false"
+    >
+        <variable>reco_visible_energy</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>0.5</variable>
+        <variable>true_neutrino_energy</variable>
+    </branch>
+
+</MCFile>
