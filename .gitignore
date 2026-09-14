@@ -46,3 +46,4 @@ config/archive
 detsys/profit_systematics/*.root
 *.bin
 *.pdf
+*PROplot*.root
