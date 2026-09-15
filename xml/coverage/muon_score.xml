@@ -322,10 +322,10 @@ knob value.
     -->
 
     <!-- Gain -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="Gain_sbnd_Run1"  xvar="var0" binning="var0" mirror="false" plotname="Gain SBND"       tag="Detector Systematics"></allowlist>
+    <!-- <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="Gain_sbnd_Run1"  xvar="var0" binning="var0" mirror="false" plotname="Gain SBND"       tag="Detector Systematics"></allowlist> -->
 
     <!-- Charge-scale -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_muon_score.root" name="ChargeScale_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_muon_score.root" name="ChargeScale15_sbnd_Run1"            xvar="var0" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_muon_score.root" name="ChargeScale_icarus_Run2"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run2"      tag="Detector Systematics"></allowlist>
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_muon_score.root" name="ChargeScale_icarus_Run4"          xvar="var0" binning="var0" plotname="ChargeScale ICARUS Run4"      tag="Detector Systematics"></allowlist>
 
