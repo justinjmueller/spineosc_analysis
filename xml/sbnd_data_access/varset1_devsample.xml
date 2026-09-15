@@ -32,7 +32,7 @@ analysis.
 <model tag="numudis">
     <rule index="0" name="No Osc"/>
     <rule index="1" name="Numu Dis"/>
-    <parameter name="L/E" variable_index="17"/>
+    <parameter name="L/E" variable_index="9"/>
 </model>
 
 <!--
@@ -59,16 +59,8 @@ needed here, unlike the MC side in selected_test.xml.
     <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton Score" edges="0.33 0.5 0.6 0.7 0.8 0.9 0.975 1.0"/>
-    <bins unit = "Reco Muon Primary Score" edges="0.1 0.5 0.7 0.8 0.9 0.95 1.0"/>
-    <bins unit = "Reco Leading Proton Primary Score" min="0.1" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton KE [GeV]" edges="0.04 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6"/>
     <bins unit = "Reco Leading Muon Azimuthal Angle [rad]" min="-3.14" max="3.14" nbins="12"/>
-    <bins unit = "Reco Vertex X (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Y (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Z (SBND) [cm]" min="0" max="450" nbins="15"/>
-    <bins unit = "Reco Vertex X (ICARUS) [cm]" min="-350" max="350" nbins="15"/>
-    <bins unit = "Reco Vertex Y (ICARUS) [cm]" min="-150" max="100" nbins="15"/>
-    <bins unit = "Reco Vertex Z (ICARUS) [cm]" min="0" max="850" nbins="15"/>
     <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
 
@@ -85,16 +77,8 @@ needed here, unlike the MC side in selected_test.xml.
     <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton Score" edges="0.33 0.5 0.6 0.7 0.8 0.9 0.975 1.0"/>
-    <bins unit = "Reco Muon Primary Score" edges="0.1 0.5 0.7 0.8 0.9 0.95 1.0"/>
-    <bins unit = "Reco Leading Proton Primary Score" min="0.1" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton KE [GeV]" edges="0.04 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6"/>
     <bins unit = "Reco Leading Muon Azimuthal Angle [rad]" min="-3.14" max="3.14" nbins="12"/>
-    <bins unit = "Reco Vertex X (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Y (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Z (SBND) [cm]" min="0" max="450" nbins="15"/>
-    <bins unit = "Reco Vertex X (ICARUS) [cm]" min="-350" max="350" nbins="15"/>
-    <bins unit = "Reco Vertex Y (ICARUS) [cm]" min="-150" max="100" nbins="15"/>
-    <bins unit = "Reco Vertex Z (ICARUS) [cm]" min="0" max="850" nbins="15"/>
     <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
     
@@ -116,16 +100,8 @@ needed here, unlike the MC side in selected_test.xml.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -142,16 +118,8 @@ needed here, unlike the MC side in selected_test.xml.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -172,16 +140,8 @@ needed here, unlike the MC side in selected_test.xml.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -198,16 +158,8 @@ needed here, unlike the MC side in selected_test.xml.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -227,16 +179,8 @@ needed here, unlike the MC side in selected_test.xml.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -253,16 +197,8 @@ needed here, unlike the MC side in selected_test.xml.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>

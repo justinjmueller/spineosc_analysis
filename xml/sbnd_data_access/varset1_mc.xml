@@ -36,7 +36,7 @@ analysis.
 <model tag="numudis">
     <rule index="0" name="No Osc"/>
     <rule index="1" name="Numu Dis"/>
-    <parameter name="L/E" variable_index="17"/>
+    <parameter name="L/E" variable_index="9"/>
 </model>
 
 <!--
@@ -57,16 +57,8 @@ Two channels split by reconstructed proton multiplicity:
     <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton Score" edges="0.33 0.5 0.6 0.7 0.8 0.9 0.975 1.0"/>
-    <bins unit = "Reco Muon Primary Score" edges="0.1 0.5 0.7 0.8 0.9 0.95 1.0"/>
-    <bins unit = "Reco Leading Proton Primary Score" min="0.1" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton KE [GeV]" edges="0.04 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6"/>
     <bins unit = "Reco Leading Muon Azimuthal Angle [rad]" min="-3.14" max="3.14" nbins="12"/>
-    <bins unit = "Reco Vertex X (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Y (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Z (SBND) [cm]" min="0" max="450" nbins="15"/>
-    <bins unit = "Reco Vertex X (ICARUS) [cm]" min="-350" max="350" nbins="15"/>
-    <bins unit = "Reco Vertex Y (ICARUS) [cm]" min="-150" max="100" nbins="15"/>
-    <bins unit = "Reco Vertex Z (ICARUS) [cm]" min="0" max="850" nbins="15"/>
     <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
 
@@ -88,16 +80,8 @@ Two channels split by reconstructed proton multiplicity:
     <bins unit = "Reco dphiT [rad]" min="0" max="3.14" nbins="12"/>
     <bins unit = "Reco Muon Score" min="0.33" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton Score" edges="0.33 0.5 0.6 0.7 0.8 0.9 0.975 1.0"/>
-    <bins unit = "Reco Muon Primary Score" edges="0.1 0.5 0.7 0.8 0.9 0.95 1.0"/>
-    <bins unit = "Reco Leading Proton Primary Score" min="0.1" max="1.0" nbins="10"/>
     <bins unit = "Reco Leading Proton KE [GeV]" edges="0.04 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6"/>
     <bins unit = "Reco Leading Muon Azimuthal Angle [rad]" min="-3.14" max="3.14" nbins="12"/>
-    <bins unit = "Reco Vertex X (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Y (SBND) [cm]" min="-200" max="200" nbins="15"/>
-    <bins unit = "Reco Vertex Z (SBND) [cm]" min="0" max="450" nbins="15"/>
-    <bins unit = "Reco Vertex X (ICARUS) [cm]" min="-350" max="350" nbins="15"/>
-    <bins unit = "Reco Vertex Y (ICARUS) [cm]" min="-150" max="100" nbins="15"/>
-    <bins unit = "Reco Vertex Z (ICARUS) [cm]" min="0" max="850" nbins="15"/>
     <bins unit = "True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
     <bins unit = "True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
     
@@ -194,56 +178,56 @@ knob value.
     -->
 
     <!-- Quasi-Elastic Model -->
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="VecFFCCQEshape" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CoulombCCQE" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_CoulombCCQE</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="SF_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin0</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="SF_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin1</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="SF_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin2</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="SF_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin3</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="SF_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin4</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="HF_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin0</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="HF_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin1</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="HF_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin2</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="HF_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin3</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="HF_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin4</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CRPA_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin0</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CRPA_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin1</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CRPA_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin2</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CRPA_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin3</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CRPA_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin4</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="QEIntf_dial0" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_0</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="QEIntf_dial1" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_1</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="QEIntf_dial2" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_2</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="QEIntf_dial3" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_3</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="QEIntf_dial4" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_4</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="QEIntf_dial5" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_5</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MvAZExp_b1" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b1</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MvAZExp_b2" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b2</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MvAZExp_b3" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b3</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MvAZExp_b4" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b4</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="VecFFCCQEshape" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_VecFFCCQEshape</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CoulombCCQE" tag="Cross-Section-QE">GENIEReWeight_SBN_v1_multisigma_CoulombCCQE</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="SF_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin0</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="SF_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin1</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="SF_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin2</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="SF_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin3</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="SF_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToSF_q0bin4</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="HF_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin0</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="HF_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin1</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="HF_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin2</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="HF_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin3</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="HF_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_LFGToHF_q0bin4</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CRPA_q0bin0" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin0</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CRPA_q0bin1" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin1</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CRPA_q0bin2" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin2</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CRPA_q0bin3" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin3</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CRPA_q0bin4" tag="Cross-Section-QE">CCQETemplateReweight_SBN_v3_HFToCRPA_q0bin4</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="QEIntf_dial0" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_0</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="QEIntf_dial1" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_1</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="QEIntf_dial2" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_2</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="QEIntf_dial3" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_3</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="QEIntf_dial4" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_4</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="QEIntf_dial5" tag="Cross-Section-QE">QEInterference_SBN_v3_QEIntf_dial_5</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MvAZExp_b1" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b1</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MvAZExp_b2" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b2</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MvAZExp_b3" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b3</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MvAZExp_b4" tag="Cross-Section-QE">ZExpPCAWeighter_SBN_v3_MvA_b4</allowlist>
 
     <!-- Meson Exchange Currents -->
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="NormCCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormCCMEC</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="NormNCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormNCMEC</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="DecayAngMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_DecayAngMEC</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="ValMECResponse_q0bin0" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin0</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="ValMECResponse_q0bin1" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin1</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="ValMECResponse_q0bin2" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin2</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="ValMECResponse_q0bin3" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin3</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MarMECResponse_q0bin0" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin0</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MarMECResponse_q0bin1" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin1</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MarMECResponse_q0bin2" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin2</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MarMECResponse_q0bin3" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin3</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="NormCCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormCCMEC</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="NormNCMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_NormNCMEC</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="DecayAngMEC" tag="Cross-Section-MEC">GENIEReWeight_SBN_v1_multisigma_DecayAngMEC</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="ValMECResponse_q0bin0" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin0</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="ValMECResponse_q0bin1" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin1</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="ValMECResponse_q0bin2" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin2</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="ValMECResponse_q0bin3" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToVal_MECResponse_q0bin3</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MarMECResponse_q0bin0" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin0</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MarMECResponse_q0bin1" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin1</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MarMECResponse_q0bin2" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin2</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MarMECResponse_q0bin3" tag="Cross-Section-MEC">MECq0q3InterpWeighting_SBN_v3_SuSAToMar_MECResponse_q0bin3</allowlist>
 
     <!-- Resonant Interactions -->
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MaCCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MaCCRES</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MvCCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvCCRES</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MaNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MaNCRES</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MvNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvNCRES</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="ThetaDelta2Npi" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_Theta_Delta2Npi</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="ThetaDelta2NRad" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_ThetaDelta2NRad</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="RDecBR1eta" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1eta</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="RDecBR1gamma" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1gamma</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MaCCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MaCCRES</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MvCCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvCCRES</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MaNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MaNCRES</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MvNCRES" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_MvNCRES</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="ThetaDelta2Npi" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_Theta_Delta2Npi</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="ThetaDelta2NRad" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_ThetaDelta2NRad</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="RDecBR1eta" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1eta</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="RDecBR1gamma" tag="Cross-Section-RES">GENIEReWeight_SBN_v1_multisigma_RDecBR1gamma</allowlist>
 
     <!-- Non-Resonant Background (carried over from AR23 unchanged) -->
     <allowlist type="covariance" binning="var0" apply_to_subchannel="_(target|othercc|nuecc|nc)$" plotname="NonRESBGvpCC1pi" tag="Cross-Section-NonRES-nu">GENIEReWeight_SBN_v1_multisim_NonRESBGvpCC1pi</allowlist>
@@ -264,37 +248,37 @@ knob value.
     <allowlist type="covariance" binning="var0" apply_to_subchannel="_(target|othercc|nuecc|nc)$" plotname="NonRESBGvbarnNC2pi" tag="Cross-Section-NonRES-nubar">GENIEReWeight_SBN_v1_multisim_NonRESBGvbarnNC2pi</allowlist>
 
     <!-- Deep Inelastic Scattering -->
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="AhtBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_AhtBY</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="BhtBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_BhtBY</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CV1uBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_CV1uBY</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="CV2uBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_CV2uBY</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="AhtBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_AhtBY</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="BhtBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_BhtBY</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CV1uBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_CV1uBY</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="CV2uBY" tag="Cross-Section-DIS">GENIEReWeight_SBN_v1_multisigma_CV2uBY</allowlist>
 
     <!-- Coherent Pion Production -->
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="NormCCCOH" tag="Cross-Section-COH">GENIEReWeight_SBN_v1_multisigma_NormCCCOH</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="NormNCCOH" tag="Cross-Section-COH">GENIEReWeight_SBN_v1_multisigma_NormNCCOH</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="NormCCCOH" tag="Cross-Section-COH">GENIEReWeight_SBN_v1_multisigma_NormCCCOH</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="NormNCCOH" tag="Cross-Section-COH">GENIEReWeight_SBN_v1_multisigma_NormNCCOH</allowlist>
 
     <!-- Neutral Current Elastic Scattering -->
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MaNCEL" tag="Cross-Section-NCEL">GENIEReWeight_SBN_v1_multisigma_MaNCEL</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="EtaNCEL" tag="Cross-Section-NCEL">GENIEReWeight_SBN_v1_multisigma_EtaNCEL</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MaNCEL" tag="Cross-Section-NCEL">GENIEReWeight_SBN_v1_multisigma_MaNCEL</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="EtaNCEL" tag="Cross-Section-NCEL">GENIEReWeight_SBN_v1_multisigma_EtaNCEL</allowlist>
 
     <!-- Final State Interactions -->
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MFP_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_MFP_pi</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrCEx_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrCEx_pi</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrInel_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrInel_pi</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrAbs_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrAbs_pi</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrPiProd_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrPiProd_pi</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MFPLoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPLoE_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MFPM1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPM1E_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MFPM2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPM2E_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="MFPHiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPHiE_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrG4LoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4LoE_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrG4M1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4M1E_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrG4M2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4M2E_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrG4HiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4HiE_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrINCLLoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLLoE_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrINCLM1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLM1E_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrINCLM2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLM2E_N</allowlist>
-    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="FrINCLHiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLHiE_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MFP_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_MFP_pi</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrCEx_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrCEx_pi</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrInel_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrInel_pi</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrAbs_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrAbs_pi</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrPiProd_pi" tag="Cross-Section-FSI">GENIEReWeight_SBN_v1_multisigma_FrPiProd_pi</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MFPLoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPLoE_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MFPM1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPM1E_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MFPM2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPM2E_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="MFPHiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_MFPHiE_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrG4LoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4LoE_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrG4M1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4M1E_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrG4M2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4M2E_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrG4HiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrG4HiE_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrINCLLoE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLLoE_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrINCLM1E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLM1E_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrINCLM2E_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLM2E_N</allowlist>
+    <allowlist type="spline"  apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="FrINCLHiE_N" tag="Cross-Section-FSI">GENIEReWeight_SBN_v3_FrINCLHiE_N</allowlist>
 
     <!--
     Here we configure flux systematics. These correspond to uncertainties in
@@ -324,9 +308,9 @@ knob value.
     <allowlist type="covariance" binning="var0" apply_to_subchannel="_(target|othercc|nuecc|nc)$" tag="Flux">kzero_Flux</allowlist>
 
     <!-- G4 Systematics -->
-    <allowlist type="covariance" apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="G4piminus" tag="G4">reinteractions_piminus_Geant4</allowlist>
-    <allowlist type="covariance" apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="G4piplus" tag="G4">reinteractions_piplus_Geant4</allowlist>
-    <allowlist type="covariance" apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var18" plotname="G4proton" tag="G4">reinteractions_proton_Geant4</allowlist>
+    <allowlist type="covariance" apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="G4piminus" tag="G4">reinteractions_piminus_Geant4</allowlist>
+    <allowlist type="covariance" apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="G4piplus" tag="G4">reinteractions_piplus_Geant4</allowlist>
+    <allowlist type="covariance" apply_to_subchannel="_(target|othercc|nuecc|nc)$" binning="var10" plotname="G4proton" tag="G4">reinteractions_proton_Geant4</allowlist>
 
     <!--
     Here we configure normalization systematics. We have two types of norms:
@@ -409,16 +393,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -437,16 +413,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -465,16 +433,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -493,16 +453,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -521,16 +473,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -549,16 +493,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -577,16 +513,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -605,16 +533,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -639,16 +559,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -667,16 +579,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -695,16 +599,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -723,16 +619,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -751,16 +639,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -779,16 +659,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -807,16 +679,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -835,16 +699,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -867,16 +723,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -895,16 +743,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -927,16 +767,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -955,16 +787,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -989,16 +813,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1017,16 +833,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1045,16 +853,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1073,16 +873,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1101,16 +893,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1129,16 +913,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1157,16 +933,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1185,16 +953,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1218,16 +978,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1246,16 +998,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1274,16 +1018,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1302,16 +1038,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1330,16 +1058,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1358,16 +1078,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1386,16 +1098,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1414,16 +1118,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1447,16 +1143,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1475,16 +1163,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1503,16 +1183,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1531,16 +1203,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1559,16 +1223,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1587,16 +1243,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1615,16 +1263,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1643,16 +1283,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1676,16 +1308,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1704,16 +1328,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1732,16 +1348,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1760,16 +1368,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1788,16 +1388,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1816,16 +1408,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1844,16 +1428,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1872,16 +1448,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
         <variable>true_neutrino_energy</variable>
     </branch>
@@ -1903,16 +1471,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -1931,16 +1491,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -1962,16 +1514,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -1990,16 +1534,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -2021,16 +1557,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -2049,16 +1577,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -2080,16 +1600,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
@@ -2108,16 +1620,8 @@ knob value.
         <variable>reco_dphiT</variable>
         <variable>reco_leading_muon_muon_softmax</variable>
         <variable>reco_leading_proton_proton_softmax</variable>
-        <variable>reco_leading_muon_primary_softmax</variable>
-        <variable>reco_leading_proton_primary_softmax</variable>
         <variable>reco_leading_proton_ke/1000</variable>
         <variable>reco_leading_muon_azimuthal_angle</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
-        <variable>reco_vertex_x</variable>
-        <variable>reco_vertex_y</variable>
-        <variable>reco_vertex_z</variable>
         <variable>0</variable>
         <variable>0</variable>
     </branch>
