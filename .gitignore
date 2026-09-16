@@ -26,7 +26,6 @@ autogen_*.ini
 # symlink work directory it populates. input/sources.list.example stays
 # tracked as the template.
 /work/
-/input/sources.list
 
 # Editor / OS
 .DS_Store
