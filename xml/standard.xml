@@ -322,7 +322,7 @@ knob value.
     -->
 
     <!-- Gain -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="Gain_sbnd_Run1"  xvar="var3" binning="var0" mirror="false" plotname="Gain SBND"       tag="Detector Systematics"></allowlist>
+    <!--<allowlist type="hist1d" apply_to_subchannel="_SBND_"       name="Gain_sbnd_Run1"  xvar="var3" binning="var0" mirror="false" plotname="Gain SBND"       tag="Detector Systematics"></allowlist>-->
 
     <!-- Charge-scale -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="ChargeScale_sbnd_Run1"            xvar="var3" binning="var0" plotname="ChargeScale SBND"             tag="Detector Systematics"></allowlist>
