@@ -1,0 +1,19 @@
+## Files from /pnfs/sbn/persistent/users/mueller/spineosc/v1.0.10 in case they are somehow missing
+
+# --- SBND Run 1 ---
+sbnd_run1_cvmc=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_sbnd_run1_v1.0.10_wsyst.root
+sbnd_run1_dirt=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_sbnd_run1_v1.0.10_dirt_wsyst.root
+sbnd_run1_data=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_sbnd_run1_v1.0.10_bnblight.root
+
+# --- ICARUS Run 2 ---
+icarus_run2_cvmc=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run2_v1.0.10_wsyst.root
+icarus_run2_dirt=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run2_v1.0.10_dirt_wsyst.root
+icarus_run2_data=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run2_v1.0.10_bnblight.root
+
+# --- ICARUS Run 4 ---
+icarus_run4_cvmc=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run4_v1.0.10_wsyst.root
+icarus_run4_dirt=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run4_v1.0.10_dirt_wsyst.root
+icarus_run4_data=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run4_v1.0.10_bnblight.root
+
+# --- Detector systematics ---
+detsys_main=/home/jmueller/spineosc/spineosc_analysis/detvar/detsys_v1.0.10.root
