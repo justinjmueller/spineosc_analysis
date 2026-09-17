@@ -103,7 +103,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_data"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
     >
         <variable>reco_dalphaT</variable>
         <variable>0</variable>
@@ -115,7 +115,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_data"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
     >
         <variable>reco_dalphaT</variable>
         <variable>0</variable>
