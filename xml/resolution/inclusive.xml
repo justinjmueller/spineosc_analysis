@@ -653,7 +653,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>

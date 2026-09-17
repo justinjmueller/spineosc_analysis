@@ -131,7 +131,7 @@ needed here, unlike the MC side in selected_test.xml.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_data"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
     >
         <variable>reco_visible_energy</variable>
         <variable>reco_pn/1000</variable>
@@ -149,7 +149,7 @@ needed here, unlike the MC side in selected_test.xml.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_data"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
     >
         <variable>reco_visible_energy</variable>
         <variable>reco_pn/1000</variable>

@@ -139,7 +139,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccdis"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2) && (true_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -152,7 +152,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccres"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1) && (true_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -165,7 +165,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccmec"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10) && (true_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -178,7 +178,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccqe"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0) && (true_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
