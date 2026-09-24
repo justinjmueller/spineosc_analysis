@@ -1,0 +1,69 @@
+# Systematic-GROUP importance scan against a single cache.
+#
+#   scripts/submit_fanout.sh --queue capacity --walltime 03:00:00 \
+#       --variants jobs/contours/scan_systgroup.variants \
+#       jobs/contours/contours_full.ini -- surface -g 30 --xlo 1e-2 --ylo 1e-1
+#
+# Companion to scan_detsyst.variants, which scans individual detector
+# systematics. This one removes whole groups: flux, the interaction model (as a
+# block and broken down), POT normalization, and G4 reinteractions.
+#
+# 16 variants = 16 nodes, exactly capacity's ceiling. Comment lines out
+# to shrink the batch.
+#
+# EXCLUDING BY TAG. --exclude-systs resolves a tag before a name, so naming a
+# tag drops every systematic carrying it - which is exactly what is wanted here.
+# The counts below are the entries each tag covers in contours_base.xml.
+#
+# TAGS WITH SPACES CANNOT BE USED. The exclude field is whitespace-separated, so
+# `POT Normalization` would arrive as two arguments, each matching nothing, each
+# silently excluding nothing. The POT and detector lines therefore enumerate
+# their member names instead. The same applies to `Cosmic Background
+# Normalization` (its plotname `CORSIKA` is space-free and works if you want it)
+# and `stat,MC Stats`.
+#
+# VERIFYING THESE IS NOT THE SAME AS FOR scan_detsyst.variants. Only spline,
+# norm and hist1d systematics become fitted parameters; covariance systematics
+# are marginalised analytically and never appear in global_fit.txt. So:
+#
+#   fitted   Cross-Section-QE/MEC/RES/DIS/COH/NCEL/FSI (spline), POT and
+#            detector systematics (hist1d)
+#            -> parameter count in global_fit.txt drops, as with the detsyst scan
+#   NOT      Flux, G4, Cross-Section-NonRES-nu/nubar, mcstat (covariance)
+#   fitted   -> parameter count is UNCHANGED even when the exclusion worked.
+#               Confirm those from the fractional systematics breakdown or the
+#               contour instead, not the parameter list.
+#
+# label            exclude
+# --- the three coarse groups ---
+noflux             Flux
+nointeraction      Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
+nopot              ToroidCalibration_sbnd_Run1 ToroidCalibration_icarus_Run2 ToroidCalibration_icarus_Run4 ProtonMiss_sbnd_Run1 ProtonMiss_icarus_Run2 ProtonMiss_icarus_Run4
+# --- G4 reinteractions ---
+nog4               G4
+# --- all detector systematics at once (scan_detsyst.variants does them singly) ---
+nodetsys           ChargeScale15_sbnd_Run1 ChargeScale_icarus_Run2 ChargeScale_icarus_Run4 SCE_icarus_Run2 SCE_icarus_Run4 TriggerEmulation_sbnd_Run1 TriggerEmulation_icarus_Run2 TriggerEmulation_icarus_Run4 WireModxThetaXW_sbnd_Run1 WireModxThetaXW_icarus_Run2 WireModxThetaXW_icarus_Run4 WireModYZ_sbnd_Run1 WireModYZ_icarus_Run2 WireModYZ_icarus_Run4 DENT_sbnd_Run1
+# --- cosmic background normalization ---
+# Its tag ("Cosmic Background Normalization") has spaces, but unlike the POT and
+# detector groups this is a single entry whose PLOTNAME is space-free, and
+# --exclude-systs falls back to the plotname map. It is a 30% norm on the SBND
+# out-of-time cosmics only (pattern .*SBND_.*cos), so expect a small effect.
+nocorsika          CORSIKA
+# --- MC statistical uncertainty ---
+# Addressed by its XML text content, not its tag or plotname: the tag is
+# "stat,MC Stats" (comma-joined, second half has a space) and the plotname
+# "MC Stats" has a space. `mcstat` is the key its covariance is registered
+# under - see PROconfig.h m_mcstat_systname and PROsyst.cxx syst_map. Removing
+# it shows how much of the contour width is finite MC statistics rather than
+# systematics. It is a Covariance, so the parameter count will NOT change.
+nomcstat           mcstat
+# --- interaction model, broken down (subsets of nointeraction above) ---
+noqe               Cross-Section-QE
+nomec              Cross-Section-MEC
+nores              Cross-Section-RES
+nononresnu         Cross-Section-NonRES-nu
+nononresnubar      Cross-Section-NonRES-nubar
+nodis              Cross-Section-DIS
+nocoh              Cross-Section-COH
+noncel             Cross-Section-NCEL
+nofsi              Cross-Section-FSI

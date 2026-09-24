@@ -1,0 +1,55 @@
+# Detector-systematic importance scan against a single cache.
+#
+#   scripts/submit_fanout.sh --queue capacity --walltime 03:00:00 \
+#       --variants jobs/contours/scan_detsyst.variants \
+#       jobs/contours/contours_full.ini -- surface -g 30 --xlo 1e-2 --ylo 1e-1
+#
+# Each line becomes one rank: the base config with those systematics removed
+# via --exclude-systs. All ranks share contours_full's tag and therefore its
+# cache, so the whole scan costs one fit's wall-clock and no processing -
+# --exclude-systs is applied at load time, not at process time.
+#
+# 10 variants = 10 nodes, within capacity's 16-node ceiling.
+#
+# FORMAT: whitespace-separated.
+#   label     becomes -o <label> and <label>.log, so it must be unique and
+#             contain no spaces
+#   exclude   one or more names passed to --exclude-systs
+#
+# ICARUS ENTRIES DROP BOTH RUNS. Every ICARUS detector systematic exists as a
+# separate _icarus_Run2 and _icarus_Run4 entry, but they are one physical
+# effect. Removing only one run leaves the other constraining the fit and
+# answers nothing, so each ICARUS line lists both.
+#
+# USE THE XML `name=`, NOT THE TAG OR PLOTNAME. --exclude-systs resolves a tag
+# first, so `Detector Systematics` would drop all 12 detector systematics rather
+# than one. Plotnames like "WireMod yz SBND" contain spaces and would be split
+# into separate arguments.
+#
+# WATCH THE BASE NAMES - THEY ARE NOT SYMMETRIC. SBND's charge-scale entry is
+# `ChargeScale15_sbnd_Run1` while ICARUS's are `ChargeScale_icarus_Run*`, and
+# DENT exists only for SBND while SCE exists only for ICARUS. Check against the
+# XML rather than assuming a naming pattern.
+#
+# SILENT FAILURE: a name matching nothing excludes nothing, and the run still
+# produces a perfectly plausible contour identical to the baseline. Verify each
+# variant dropped the expected number of fitted systematic parameters rather
+# than trusting the label. The `Excluding systematic X by command line
+# argument` log line only proves the argument was passed, not that it matched.
+#
+# Excluded from this scan: ToroidCalibration and ProtonMiss, which are tagged
+# POT Normalization rather than Detector Systematics.
+#
+# label            exclude
+# --- SBND ---
+nowmyz             WireModYZ_sbnd_Run1
+nowmxtxw           WireModxThetaXW_sbnd_Run1
+nochargescale      ChargeScale15_sbnd_Run1
+nodent             DENT_sbnd_Run1
+notrigemu          TriggerEmulation_sbnd_Run1
+# --- ICARUS (both runs per line) ---
+noicwmyz           WireModYZ_icarus_Run2        WireModYZ_icarus_Run4
+noicwmxtxw         WireModxThetaXW_icarus_Run2  WireModxThetaXW_icarus_Run4
+noicchargescale    ChargeScale_icarus_Run2      ChargeScale_icarus_Run4
+noicsce            SCE_icarus_Run2              SCE_icarus_Run4
+noictrigemu        TriggerEmulation_icarus_Run2 TriggerEmulation_icarus_Run4
