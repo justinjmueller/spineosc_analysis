@@ -5,7 +5,7 @@
 #
 # Usage:
 #   scripts/submit_fanout.sh [OPTIONS] <a.ini> <b.ini> ... -- <subcommand> [args...]
-#   scripts/submit_fanout.sh [OPTIONS] --variants <file> <base.ini> -- <subcommand> [args...]
+#   scripts/submit_fanout.sh [OPTIONS] --variants <file> <base.ini> [-- <subcommand> [args...]]
 #
 # Options:
 #   --walltime HH:MM:SS   default 04:00:00
@@ -13,7 +13,12 @@
 #   --shared-cache        permit configs that share a tag (see below)
 #   --variants FILE       expand ONE base config into many runs (implies --shared-cache).
 #                         Each line is `label` plus exclude / inject-systs /
-#                         inject-osc / syst-only
+#                         inject-osc / syst-only / poisson-throw / seed /
+#                         run sections - see
+#                         "variant expansion" below. With --variants the
+#                         `-- <subcommand>` is the default for lines without
+#                         `run`, and may be omitted if every line has one.
+#
 # Examples:
 #   scripts/submit_fanout.sh jobs/contours/*.ini -- surface -g 30 --xlo 1e-2 --ylo 1e-1
 #   scripts/submit_fanout.sh --shared-cache --variants jobs/contours/scan_detsyst.variants \
@@ -64,9 +69,10 @@ done
 SUBCOMMAND="${1:-}"; [ "$#" -gt 0 ] && shift || true
 EXTRA=("$@")
 
-if [ "${#INIS[@]}" -eq 0 ] || [ -z "$SUBCOMMAND" ]; then
+if [ "${#INIS[@]}" -eq 0 ] || { [ -z "$SUBCOMMAND" ] && [ -z "$VARIANTS" ]; }; then
     echo "usage: scripts/submit_fanout.sh [--walltime T] [--queue Q] [--shared-cache]" >&2
     echo "                                [--variants FILE] <ini>... -- <subcommand> [args...]" >&2
+    echo "       (with --variants, '-- <subcommand>' may be omitted if every line has 'run')" >&2
     exit 2
 fi
 
@@ -95,7 +101,7 @@ NCPUS="$(get_setting pbs_ncpus)"; NCPUS="${NCPUS:-104}"
 resolve() { local p="$1"; [ -f "$p" ] || p="$REPO_ROOT/$1"; [ -f "$p" ] || { echo "error: no such file: $1" >&2; exit 1; }; echo "$p"; }
 tag_of()  { grep -oP '^\s*tag\s*=\s*\K\S+' "$1" | tail -1; }
 
-BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND}_$(date +%Y%m%d_%H%M%S)"
+BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND:-mixed}_$(date +%Y%m%d_%H%M%S)"
 
 # ---- variant expansion: one base config becomes N per-variant configs --------
 # Globals like -o and --exclude-systs belong in the config, not after the
@@ -109,6 +115,38 @@ BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND}_$(date +%Y%m%d_%H%M%S)"
 #   inject-systs  <name> <sigma> [...]      -> inject-systs  = ...
 #   inject-osc    <param> <value> [...]     -> inject        = ...
 #   syst-only                               -> syst-only = true
+#   poisson-throw                           -> poisson-throw = true
+#   seed          <integer>                 -> seed = <integer>
+#   run           <subcommand> [args...]    -> this rank runs that instead of
+#                                              the `-- <subcommand> [args...]`
+#
+# `run` must be LAST on the line: everything after it, flags included, is the
+# subcommand and its arguments, verbatim. It replaces both the default
+# subcommand and the default args - nothing from after `--` is merged in.
+#
+#   null_qe   inject-systs QEIntf_dial0 1 syst-only   run global
+#   alt_qe    inject-systs QEIntf_dial0 1             run global
+#   fc_pt1    inject-osc dmsq 2.07 sinsq2thmm 0.116   run fc
+#   prof_pt1  inject-osc dmsq 2.07 sinsq2thmm 0.116   run profile
+#   baseline  run global                               (unmodified base)
+#
+# POISSON THROWS AND SEEDS. poisson-throw replaces the Asimov fake data with
+# one Poisson fluctuation of it, drawn from PROfit's global RNG. That RNG is
+# seeded by `seed`; PROfit's default (-1) is a fresh hardware seed per run, so
+# without one every rank throws a DIFFERENT dataset and the throw cannot be
+# reproduced. Give paired lines (null vs free fit of the same point) the SAME
+# seed so they fit the same throw, and different seeds for independent throws:
+#
+#   pt1_null_s1   inject-osc dmsq 2.07 sinsq2thmm 0.116 syst-only poisson-throw seed 1  run global
+#   pt1_s1        inject-osc dmsq 2.07 sinsq2thmm 0.116           poisson-throw seed 1  run global
+#
+# poisson-throw without a seed is allowed but warned about at submit time.
+# The throw only applies to fake data - with a <data> section or --data it does
+# nothing, like the injections.
+#
+# `process` is refused: every rank shares one cache, and N ranks rebuilding it
+# into the same directory would corrupt it. All ranks share ONE walltime, so
+# size --walltime for the slowest subcommand in the file (fc, typically).
 #
 #   nowmxtxw      exclude      WireModxThetaXW_sbnd_Run1
 #   inj_ffqe_p1   inject-systs VecFFCCQEshape 1
@@ -133,7 +171,7 @@ BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND}_$(date +%Y%m%d_%H%M%S)"
 # follow it; the dropped sections are listed in a comment. This also keeps the
 # generated keys out of any section, where PROfit would silently ignore them.
 # Pass subcommand options on the command line instead.
-declare -a LABELS=()
+declare -a LABELS=() SUBS=() ARGS=()
 if [ -n "$VARIANTS" ]; then
     [ "${#INIS[@]}" -eq 1 ] || { echo "error: --variants takes exactly one base config, got ${#INIS[@]}" >&2; exit 1; }
     VFILE="$(resolve "$VARIANTS")"
@@ -141,17 +179,38 @@ if [ -n "$VARIANTS" ]; then
     BASE_NAME="$(basename "${INIS[0]}" .ini)"
     mkdir -p "$BATCH"
     INIS=()
-    is_kw()  { case "$1" in exclude|inject-systs|inject-osc|syst-only) return 0 ;; *) return 1 ;; esac; }
+    is_kw()  { case "$1" in exclude|inject-systs|inject-osc|syst-only|poisson-throw|seed|run) return 0 ;; *) return 1 ;; esac; }
+    VALID_SUBS="surface profile global plot fc fc-adaptive mcmc"
+    check_sub() {
+        [ "$1" != process ] || vfail "run process is not allowed - every rank shares one cache and would rebuild it concurrently"
+        [[ " $VALID_SUBS " == *" $1 "* ]] || vfail "run '$1' is not a known subcommand (expected one of: $VALID_SUBS)"
+    }
     is_num() { [[ "$1" =~ ^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?$ ]]; }
     vfail()  { echo "error: $VARIANTS: variant '$label': $*" >&2; exit 1; }
-    ANY_SYSTONLY=0
+    [ -z "$SUBCOMMAND" ] || { label="(-- default)"; check_sub "$SUBCOMMAND"; }
     while IFS= read -r line || [ -n "$line" ]; do
         line="${line%%#*}"
         # shellcheck disable=SC2086
         set -- $line
         [ "$#" -eq 0 ] && continue
         label="$1"; shift
-        [ "$#" -ge 1 ] || vfail "no sections (expected exclude / inject-systs / inject-osc / syst-only)"
+        # Split off `run ...` first: what follows it is verbatim subcommand +
+        # args and must not be read as sections.
+        run_sub=""; run_args=""; pre=()
+        while [ "$#" -gt 0 ]; do
+            if [ "$1" = run ]; then
+                shift
+                [ "$#" -ge 1 ] || vfail "'run' with no subcommand"
+                run_sub="$1"; shift; run_args="$*"
+                check_sub "$run_sub"
+                break
+            fi
+            pre+=("$1"); shift
+        done
+        set -- ${pre[@]+"${pre[@]}"}
+        # A line with only `run` is allowed: the unmodified base under its own
+        # label and subcommand, e.g. `baseline run global` as a reference fit.
+        [ "$#" -ge 1 ] || [ -n "$run_sub" ] || vfail "no sections (expected exclude / inject-systs / inject-osc / syst-only / poisson-throw / seed / run)"
         for t in "$@"; do
             [ "$t" = inject ] && vfail "bare 'inject' is ambiguous - use inject-systs (systematic pulls) or inject-osc (physics parameters)"
         done
@@ -161,7 +220,7 @@ if [ -n "$VARIANTS" ]; then
         for t in "$@"; do
             case "$t" in *\"*|*\'*) vfail "'$t' contains a quote - names with spaces are not supported; list the member XML names instead" ;; esac
         done
-        is_kw "$1" || vfail "'$1' is not a section keyword - start with exclude, inject-systs, inject-osc or syst-only (e.g. '$label exclude $*')"
+        [ "$#" -eq 0 ] || is_kw "$1" || vfail "'$1' is not a section keyword - start with exclude, inject-systs, inject-osc, syst-only, poisson-throw, seed or run (e.g. '$label exclude $*')"
         for l in ${LABELS[@]+"${LABELS[@]}"}; do
             [ "$l" = "$label" ] && { echo "error: duplicate variant label '$label' - outputs would clobber" >&2; exit 1; }
         done
@@ -170,6 +229,7 @@ if [ -n "$VARIANTS" ]; then
         # split across configs - the ICARUS detector systematics each exist as
         # a _Run2 and a _Run4 entry, and dropping only one answers nothing.
         excl=(); inj=(); osc=(); systonly=0; set_excl=0; set_inj=0; set_osc=0; sect=""
+        pthrow=0; seed=""
         while [ "$#" -gt 0 ]; do
             tok="$1"; shift
             case "$tok" in
@@ -177,6 +237,11 @@ if [ -n "$VARIANTS" ]; then
                 inject-systs) [ "$set_inj" -eq 0 ] || vfail "'inject-systs' given twice"; sect=inject-systs; set_inj=1; continue ;;
                 inject-osc)   [ "$set_osc" -eq 0 ] || vfail "'inject-osc' given twice";   sect=inject-osc;   set_osc=1; continue ;;
                 syst-only) sect=""; systonly=1; continue ;;
+                poisson-throw) [ "$pthrow" -eq 0 ] || vfail "'poisson-throw' given twice"; sect=""; pthrow=1; continue ;;
+                seed)
+                    [ -z "$seed" ] || vfail "'seed' given twice"
+                    { [ "$#" -ge 1 ] && [[ "$1" =~ ^[0-9]+$ ]]; } || vfail "'seed' needs a non-negative integer, got '${1:-nothing}'"
+                    seed="$1"; shift; sect=""; continue ;;
             esac
             case "$sect" in
                 exclude) excl+=("$tok") ;;
@@ -187,13 +252,28 @@ if [ -n "$VARIANTS" ]; then
                     is_num "$1" || vfail "$sect '$tok' value '$1' is not a number"
                     if [ "$sect" = inject-systs ]; then inj+=("$tok" "$1"); else osc+=("$tok" "$1"); fi
                     shift ;;
-                *) vfail "'$tok' follows syst-only, which takes no arguments" ;;
+                *) vfail "'$tok' follows a section that takes no arguments (syst-only, poisson-throw, or seed's single value)" ;;
             esac
         done
         [ "$set_excl" -eq 0 ] || [ "${#excl[@]}" -gt 0 ] || vfail "'exclude' with no names"
         [ "$set_inj"  -eq 0 ] || [ "${#inj[@]}"  -gt 0 ] || vfail "'inject-systs' with no name/sigma pairs"
         [ "$set_osc"  -eq 0 ] || [ "${#osc[@]}"  -gt 0 ] || vfail "'inject-osc' with no param/value pairs"
-        [ "$systonly" -eq 1 ] && ANY_SYSTONLY=1
+        if [ -n "$run_sub" ]; then eff_sub="$run_sub"; eff_args="$run_args"
+        else
+            [ -n "$SUBCOMMAND" ] || vfail "no 'run' on this line and no default '-- <subcommand>' given"
+            eff_sub="$SUBCOMMAND"; eff_args="${EXTRA[*]:-}"
+        fi
+        if [ "$pthrow" -eq 1 ] && [ -z "$seed" ]; then
+            echo "warning: variant '$label': poisson-throw without seed - PROfit picks a random seed, so this" >&2
+            echo "         throw is not reproducible and differs from every other rank's." >&2
+        fi
+        # --syst-only pins the physics parameters at CV. PROfit's own surface
+        # code notes it makes no sense there: the grid fixes physics point by
+        # point anyway, so only the pre-fit global would change.
+        if [ "$systonly" -eq 1 ] && [ "$eff_sub" = surface ]; then
+            echo "warning: variant '$label': syst-only with 'surface' - PROfit only applies it to the pre-fit;" >&2
+            echo "         it is meant for global/profile. Submitting anyway." >&2
+        fi
 
         # Strip from the base only the keys this variant overrides.
         strip="output|log"
@@ -201,6 +281,8 @@ if [ -n "$VARIANTS" ]; then
         [ "$set_inj"  -eq 1 ] && strip+="|inject-systs"
         [ "$set_osc"  -eq 1 ] && strip+="|inject|i"
         [ "$systonly" -eq 1 ] && strip+="|syst-only"
+        [ "$pthrow"   -eq 1 ] && strip+="|poisson-throw"
+        [ -n "$seed" ]        && strip+="|seed|s"
 
         LABELS+=("$label")
         gen="$BATCH/${BASE_NAME}__${label}.ini"
@@ -212,6 +294,8 @@ if [ -n "$VARIANTS" ]; then
             [ "$set_inj"  -eq 1 ] && echo "inject-systs = ${inj[*]}"
             [ "$set_osc"  -eq 1 ] && echo "inject = ${osc[*]}"
             [ "$systonly" -eq 1 ] && echo "syst-only = true"
+            [ "$pthrow"   -eq 1 ] && echo "poisson-throw = true"
+            [ -n "$seed" ]        && echo "seed = $seed"
             echo "log = ${label}.log"
         } > "$globals"
         # Keep the base's global block only; record which sections were dropped.
@@ -223,17 +307,11 @@ if [ -n "$VARIANTS" ]; then
             cat "$globals"
         } > "$gen"
         rm -f "$globals"
-        INIS+=("$gen")
+        INIS+=("$gen"); SUBS+=("$eff_sub"); ARGS+=("$eff_args")
     done < "$VFILE"
     [ "${#INIS[@]}" -gt 0 ] || { echo "error: $VARIANTS contains no variants" >&2; exit 1; }
-
-    # --syst-only pins the physics parameters at CV. PROfit's own surface code
-    # notes it makes no sense there: the grid fixes physics point by point
-    # anyway, so only the pre-fit global would change.
-    if [ "$ANY_SYSTONLY" -eq 1 ] && [ "$SUBCOMMAND" = "surface" ]; then
-        echo "warning: syst-only variants with 'surface' - PROfit only applies it to the pre-fit;" >&2
-        echo "         it is meant for global/profile. Submitting anyway." >&2
-    fi
+else
+    for ini in "${INIS[@]}"; do SUBS+=("$SUBCOMMAND"); ARGS+=("${EXTRA[*]:-}"); done
 fi
 
 N="${#INIS[@]}"
@@ -283,7 +361,7 @@ if [ "$SHARED_CACHE" -eq 1 ]; then
             echo "       missing ${tag}_prop.bin / ${tag}_syst.bin in $rd" >&2
             echo "       Ranks sharing a tag with no cache would all process into it at once." >&2
             echo "       Build it first, e.g.:" >&2
-            echo "         scripts/profit_run.sh <that config> $SUBCOMMAND" >&2
+            echo "         scripts/profit_run.sh <that config> process" >&2
             exit 1
         fi
     done
@@ -299,14 +377,14 @@ fi
 mkdir -p "$BATCH"
 TASKS="$BATCH/tasks.txt"
 : > "$TASKS"
-for ini in "${INIS[@]}"; do
-    printf '%s %s %s %s\n' "$REPO_ROOT/scripts/profit_run.sh" "$(resolve "$ini")" "$SUBCOMMAND" "${EXTRA[*]}" >> "$TASKS"
+for i in "${!INIS[@]}"; do
+    printf '%s %s %s %s\n' "$REPO_ROOT/scripts/profit_run.sh" "$(resolve "${INIS[$i]}")" "${SUBS[$i]}" "${ARGS[$i]}" >> "$TASKS"
 done
 
 JOB_SCRIPT="$BATCH/fanout.pbs"
 cat > "$JOB_SCRIPT" <<EOF
 #!/bin/bash -l
-#PBS -N fanout_${SUBCOMMAND}
+#PBS -N fanout_${SUBCOMMAND:-mixed}
 #PBS -A $ACCOUNT
 #PBS -l select=$N
 #PBS -l place=scatter
@@ -345,9 +423,9 @@ mpiexec -n $N --ppn 1 --cpu-bind list:1-51,53-103 \\
 EOF
 
 echo "batch dir:  $BATCH"
-echo "tasks:      $N run(s), subcommand '$SUBCOMMAND' ${EXTRA[*]:-}"
+echo "tasks:      $N run(s), default subcommand '${SUBCOMMAND:-none}' ${EXTRA[*]:-}"
 for i in "${!INIS[@]}"; do
-    printf '  rank %-2s %-52s tag=%s\n' "$i" "$(basename "${INIS[$i]}")" "${TAGS[$i]}"
+    printf '  rank %-2s %-48s %-12s tag=%s\n' "$i" "$(basename "${INIS[$i]}")" "${SUBS[$i]}" "${TAGS[$i]}"
 done
 [ "$SHARED_CACHE" -eq 1 ] && echo "cache:      shared, verified present for $(printf '%s\n' "${TAGS[@]}" | sort -u | tr '\n' ' ')"
 echo "submitting: $N node(s), walltime $WALLTIME, queue $QUEUE"

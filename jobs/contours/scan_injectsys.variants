@@ -68,6 +68,9 @@ inj_specf_p1            inject-systs SF_q0bin0 1
 inj_specf_m1_null       inject-systs SF_q0bin0 -1 syst-only
 inj_specf_m1            inject-systs SF_q0bin0 -1
 
+inj_poisson_null        poisson-throw seed 104 syst-only
+inj_poisson             poisson-throw seed 104
+
 # --- injected oscillation signal at a few points ---
 osc_dm2p07_s0p116_null  inject-osc dmsq 2.07 sinsq2thmm 0.116 syst-only
 osc_dm2p07_s0p116       inject-osc dmsq 2.07 sinsq2thmm 0.116
