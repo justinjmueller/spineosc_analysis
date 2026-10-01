@@ -11,8 +11,9 @@
 #   --walltime HH:MM:SS   default 04:00:00
 #   --queue NAME          default from input/site.conf
 #   --shared-cache        permit configs that share a tag (see below)
-#   --variants FILE       expand ONE base config into many runs (implies --shared-cache)
-#
+#   --variants FILE       expand ONE base config into many runs (implies --shared-cache).
+#                         Each line is `label` plus exclude / inject-systs /
+#                         inject-osc / syst-only
 # Examples:
 #   scripts/submit_fanout.sh jobs/contours/*.ini -- surface -g 30 --xlo 1e-2 --ylo 1e-1
 #   scripts/submit_fanout.sh --shared-cache --variants jobs/contours/scan_detsyst.variants \
@@ -100,6 +101,38 @@ BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND}_$(date +%Y%m%d_%H%M%S)"
 # Globals like -o and --exclude-systs belong in the config, not after the
 # subcommand on the command line, so each variant gets a generated .ini in the
 # batch directory. Those files are also the provenance record for the batch.
+#
+# A variant line is a label followed by one or more keyword sections, in any
+# order. Every section is explicit - there is no default action:
+#
+#   exclude       <name> [<name>...]        -> exclude-systs = ...
+#   inject-systs  <name> <sigma> [...]      -> inject-systs  = ...
+#   inject-osc    <param> <value> [...]     -> inject        = ...
+#   syst-only                               -> syst-only = true
+#
+#   nowmxtxw      exclude      WireModxThetaXW_sbnd_Run1
+#   inj_ffqe_p1   inject-systs VecFFCCQEshape 1
+#   qe_p1_noqe    inject-systs VecFFCCQEshape 1   exclude Cross-Section-QE
+#   osc_1_0p5     inject-osc   dmsq 1 sinsq2thmm 0.5
+#
+# There is deliberately no bare `inject`: PROfit's `inject` key means physics
+# parameters while `inject-systs` means systematics, and a variant keyword
+# named `inject` would read naturally as either. A bare `inject` is rejected.
+#
+# A line whose second token is not a keyword is an error rather than being
+# guessed at, so an old-style `label name...` line fails loudly at submit
+# time instead of silently doing something else.
+#
+# OVERRIDE, NOT MERGE. A key the variant sets replaces the base config's value
+# for that key; a key it does not set is inherited from the base unchanged.
+#
+# SECTIONS IN THE BASE ARE DROPPED. A `[section]` activates that subcommand,
+# so a base carrying `[plot]` would make every rank run plot on top of the
+# subcommand given after `--`. Each generated .ini keeps only the base's global
+# block (everything above its first `[section]` header) and the variant's keys
+# follow it; the dropped sections are listed in a comment. This also keeps the
+# generated keys out of any section, where PROfit would silently ignore them.
+# Pass subcommand options on the command line instead.
 declare -a LABELS=()
 if [ -n "$VARIANTS" ]; then
     [ "${#INIS[@]}" -eq 1 ] || { echo "error: --variants takes exactly one base config, got ${#INIS[@]}" >&2; exit 1; }
@@ -108,33 +141,99 @@ if [ -n "$VARIANTS" ]; then
     BASE_NAME="$(basename "${INIS[0]}" .ini)"
     mkdir -p "$BATCH"
     INIS=()
+    is_kw()  { case "$1" in exclude|inject-systs|inject-osc|syst-only) return 0 ;; *) return 1 ;; esac; }
+    is_num() { [[ "$1" =~ ^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?$ ]]; }
+    vfail()  { echo "error: $VARIANTS: variant '$label': $*" >&2; exit 1; }
+    ANY_SYSTONLY=0
     while IFS= read -r line || [ -n "$line" ]; do
         line="${line%%#*}"
         # shellcheck disable=SC2086
         set -- $line
         [ "$#" -eq 0 ] && continue
-        # label, then one or more systematic names. Several names are needed
-        # whenever one physical effect is split across configs - the ICARUS
-        # detector systematics each exist as a _Run2 and a _Run4 entry, and
-        # dropping only one of them answers no useful question.
-        [ "$#" -ge 2 ] || { echo "error: $VARIANTS: expected 'label exclude [exclude...]', got: $line" >&2; exit 1; }
-        label="$1"; shift; excl="$*"
+        label="$1"; shift
+        [ "$#" -ge 1 ] || vfail "no sections (expected exclude / inject-systs / inject-osc / syst-only)"
+        for t in "$@"; do
+            [ "$t" = inject ] && vfail "bare 'inject' is ambiguous - use inject-systs (systematic pulls) or inject-osc (physics parameters)"
+        done
+        # Names cannot contain spaces: the line is split on whitespace and
+        # quotes are not interpreted. Reject them rather than passing a token
+        # like `"POT` through to PROfit.
+        for t in "$@"; do
+            case "$t" in *\"*|*\'*) vfail "'$t' contains a quote - names with spaces are not supported; list the member XML names instead" ;; esac
+        done
+        is_kw "$1" || vfail "'$1' is not a section keyword - start with exclude, inject-systs, inject-osc or syst-only (e.g. '$label exclude $*')"
         for l in ${LABELS[@]+"${LABELS[@]}"}; do
             [ "$l" = "$label" ] && { echo "error: duplicate variant label '$label' - outputs would clobber" >&2; exit 1; }
         done
+
+        # Several exclude names are needed whenever one physical effect is
+        # split across configs - the ICARUS detector systematics each exist as
+        # a _Run2 and a _Run4 entry, and dropping only one answers nothing.
+        excl=(); inj=(); osc=(); systonly=0; set_excl=0; set_inj=0; set_osc=0; sect=""
+        while [ "$#" -gt 0 ]; do
+            tok="$1"; shift
+            case "$tok" in
+                exclude)   [ "$set_excl" -eq 0 ] || vfail "'exclude' given twice"; sect=exclude; set_excl=1; continue ;;
+                inject-systs) [ "$set_inj" -eq 0 ] || vfail "'inject-systs' given twice"; sect=inject-systs; set_inj=1; continue ;;
+                inject-osc)   [ "$set_osc" -eq 0 ] || vfail "'inject-osc' given twice";   sect=inject-osc;   set_osc=1; continue ;;
+                syst-only) sect=""; systonly=1; continue ;;
+            esac
+            case "$sect" in
+                exclude) excl+=("$tok") ;;
+                inject-systs|inject-osc)
+                    # name/value pairs, checked here because PROfit's map parser
+                    # would otherwise pair the wrong tokens without complaint.
+                    { [ "$#" -ge 1 ] && ! is_kw "$1"; } || vfail "$sect '$tok' has no value"
+                    is_num "$1" || vfail "$sect '$tok' value '$1' is not a number"
+                    if [ "$sect" = inject-systs ]; then inj+=("$tok" "$1"); else osc+=("$tok" "$1"); fi
+                    shift ;;
+                *) vfail "'$tok' follows syst-only, which takes no arguments" ;;
+            esac
+        done
+        [ "$set_excl" -eq 0 ] || [ "${#excl[@]}" -gt 0 ] || vfail "'exclude' with no names"
+        [ "$set_inj"  -eq 0 ] || [ "${#inj[@]}"  -gt 0 ] || vfail "'inject-systs' with no name/sigma pairs"
+        [ "$set_osc"  -eq 0 ] || [ "${#osc[@]}"  -gt 0 ] || vfail "'inject-osc' with no param/value pairs"
+        [ "$systonly" -eq 1 ] && ANY_SYSTONLY=1
+
+        # Strip from the base only the keys this variant overrides.
+        strip="output|log"
+        [ "$set_excl" -eq 1 ] && strip+="|exclude-systs"
+        [ "$set_inj"  -eq 1 ] && strip+="|inject-systs"
+        [ "$set_osc"  -eq 1 ] && strip+="|inject|i"
+        [ "$systonly" -eq 1 ] && strip+="|syst-only"
+
         LABELS+=("$label")
         gen="$BATCH/${BASE_NAME}__${label}.ini"
+        globals="$BATCH/.${label}.globals"
         {
-            sed -E '/^[[:space:]]*(output|exclude-systs|log)[[:space:]]*=/d' "$BASE"
-            echo
             echo "# --- generated by submit_fanout.sh --variants $(basename "$VFILE") ---"
             echo "output = $label"
-            echo "exclude-systs = $excl"
+            [ "$set_excl" -eq 1 ] && echo "exclude-systs = ${excl[*]}"
+            [ "$set_inj"  -eq 1 ] && echo "inject-systs = ${inj[*]}"
+            [ "$set_osc"  -eq 1 ] && echo "inject = ${osc[*]}"
+            [ "$systonly" -eq 1 ] && echo "syst-only = true"
             echo "log = ${label}.log"
+        } > "$globals"
+        # Keep the base's global block only; record which sections were dropped.
+        sections="$( { grep -oE '^[[:space:]]*\[[^]]+\]' "$BASE" || true; } | tr -d ' \t' | tr '\n' ' ')"
+        {
+            sed -E "/^[[:space:]]*($strip)[[:space:]]*=/d" "$BASE" | awk '/^[[:space:]]*\[/ { exit } { print }'
+            echo
+            if [ -n "$sections" ]; then echo "# base sections dropped (would run as extra subcommands): $sections"; fi
+            cat "$globals"
         } > "$gen"
+        rm -f "$globals"
         INIS+=("$gen")
     done < "$VFILE"
     [ "${#INIS[@]}" -gt 0 ] || { echo "error: $VARIANTS contains no variants" >&2; exit 1; }
+
+    # --syst-only pins the physics parameters at CV. PROfit's own surface code
+    # notes it makes no sense there: the grid fixes physics point by point
+    # anyway, so only the pre-fit global would change.
+    if [ "$ANY_SYSTONLY" -eq 1 ] && [ "$SUBCOMMAND" = "surface" ]; then
+        echo "warning: syst-only variants with 'surface' - PROfit only applies it to the pre-fit;" >&2
+        echo "         it is meant for global/profile. Submitting anyway." >&2
+    fi
 fi
 
 N="${#INIS[@]}"

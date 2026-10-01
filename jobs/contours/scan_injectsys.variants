@@ -1,0 +1,77 @@
+# Injected-systematic/oscillation (fake-data) scan against a single cache.
+#
+#   scripts/submit_fanout.sh --queue capacity --walltime 03:00:00 \
+#       --variants jobs/contours/scan_inject.variants \
+#       jobs/contours/contours_full.ini -- surface -g 30 --xlo 1e-2 --ylo 1e-1
+#
+# Companion to scan_detsyst/scan_systgroup, which REMOVE systematics from the
+# fit. This one leaves the fit model alone and instead SHIFTS the fake data by
+# a pulled systematic (--inject-systs), so the question is "how far does the
+# contour move if the truth sits N sigma off CV in this knob". Optionally
+# combined with `exclude` to ask the harder question: the data is shifted AND
+# the fit has no knob to absorb it.
+#
+# Like --exclude-systs, --inject-systs is applied at load time (it builds the
+# fake-data parameter vector), so every rank shares contours_full's cache.
+#
+# FORMAT: keyword sections, any order after the label.
+#   label                          unique, no spaces -> -o <label>, <label>.log
+#   exclude      <name>...         -> exclude-systs  (names or tags, as before)
+#   inject-systs <name> <sigma>..  -> inject-systs   (systematic pulls, sigma)
+#   inject-osc   <param> <value>.. -> inject         (physics truth, e.g.
+#                                     dmsq 1 sinsq2thmm 0.5; linear units,
+#                                     PROfit takes log10 internally)
+#   syst-only                      -> syst-only = true (global/profile only)
+# A bare `inject` is rejected as ambiguous.
+# Every section needs its keyword - a line with no keyword after the label is
+# rejected at submit time. The other .variants files use the same format.
+#
+# INJECT-SYSTS TAKES XML NAMES OR PLOTNAMES, NOT TAGS. Unlike --exclude-systs there
+# is no tag resolution: `inject-systs Cross-Section-QE 1` matches nothing. Use the
+# plotname (space-free, e.g. VecFFCCQEshape) or the full XML name.
+#
+# ONLY FITTED (spline/norm/hist1d) SYSTEMATICS CAN BE INJECTED. Covariance
+# entries (Flux, G4, NonRES*, mcstat) have no parameter to shift. PROfit's
+# help text says "only spline systs are supported right now", so treat
+# norm/hist1d injection as unvalidated.
+#
+# SILENT FAILURE, AGAIN. An unrecognised inject-systs name logs
+# `Error: Unrecognized spline X. Ignoring this injected shift.` and the run
+# carries on as an unshifted Asimov - a plausible contour identical to the
+# baseline. grep each rank's log for that line, and confirm the
+# `Injected syst: X shifted by S` line appears for every injected knob.
+#
+# INJECT-OSC IS NOT SILENT. Unlike the systematic case, an unknown physics
+# parameter name makes PROfit exit(1) with the list of valid names, so a typo
+# shows up as a failed rank (rank_N.rc != 0), not a plausible contour.
+# Combine both freely: `inject-osc dmsq 1 sinsq2thmm 0.5 inject-systs MaCCRES 1`
+# puts a signal in the fake data AND pulls a knob.
+#
+# INJECTION ONLY TOUCHES FAKE DATA. If the XML has a <data> section (or you
+# pass --data), real data is used and the injection does nothing - add
+# --use-fake-data after the subcommand in that case. contours_base.xml has no
+# data section.
+#
+# SYST-ONLY pins the physics parameters at CV and fits nuisances only. It is
+# for `global` / `profile` (e.g. pull plots under an injection); with
+# `surface` PROfit only applies it to the pre-fit, and submit_fanout.sh warns.
+#
+# label                 sections
+# --- single-knob injections, +-1 sigma ---
+inj_qeint_p1_null       inject-systs QEIntf_dial0 1 syst-only
+inj_qeint_p1            inject-systs QEIntf_dial0 1
+inj_qeint_m1_null       inject-systs QEIntf_dial0 -1 syst-only
+inj_qeint_m1            inject-systs QEIntf_dial0 -1
+
+inj_specf_p1_null       inject-systs SF_q0bin0 1 syst-only
+inj_specf_p1            inject-systs SF_q0bin0 1
+inj_specf_m1_null       inject-systs SF_q0bin0 -1 syst-only
+inj_specf_m1            inject-systs SF_q0bin0 -1
+
+# --- injected oscillation signal at a few points ---
+osc_dm2p07_s0p116_null  inject-osc dmsq 2.07 sinsq2thmm 0.116 syst-only
+osc_dm2p07_s0p116       inject-osc dmsq 2.07 sinsq2thmm 0.116
+osc_dm3p5_s0p16_null    inject-osc dmsq 3.5 sinsq2thmm 0.16 syst-only
+osc_dm3p5_s0p16         inject-osc dmsq 3.5 sinsq2thmm 0.16
+osc_dm12p1_s0p187_null  inject-osc dmsq 12.1 sinsq2thmm 0.187 syst-only
+osc_dm12p1_s0p187       inject-osc dmsq 12.1 sinsq2thmm 0.187

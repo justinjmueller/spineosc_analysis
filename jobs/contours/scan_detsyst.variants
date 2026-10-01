@@ -40,16 +40,16 @@
 # Excluded from this scan: ToroidCalibration and ProtonMiss, which are tagged
 # POT Normalization rather than Detector Systematics.
 #
-# label            exclude
+# label            arguments
 # --- SBND ---
-nowmyz             WireModYZ_sbnd_Run1
-nowmxtxw           WireModxThetaXW_sbnd_Run1
-nochargescale      ChargeScale15_sbnd_Run1
-nodent             DENT_sbnd_Run1
-notrigemu          TriggerEmulation_sbnd_Run1
+nowmyz             exclude MattModYZ_sbnd_Run1
+nowmxtxw           exclude WireModxThetaXW_sbnd_Run1
+nochargescale      exclude ChargeScale15_sbnd_Run1
+nodent             exclude DENT_sbnd_Run1
+notrigemu          exclude TriggerEmulation_sbnd_Run1
 # --- ICARUS (both runs per line) ---
-noicwmyz           WireModYZ_icarus_Run2        WireModYZ_icarus_Run4
-noicwmxtxw         WireModxThetaXW_icarus_Run2  WireModxThetaXW_icarus_Run4
-noicchargescale    ChargeScale_icarus_Run2      ChargeScale_icarus_Run4
-noicsce            SCE_icarus_Run2              SCE_icarus_Run4
-noictrigemu        TriggerEmulation_icarus_Run2 TriggerEmulation_icarus_Run4
+noicwmyz           exclude WireModYZ_icarus_Run2        WireModYZ_icarus_Run4
+noicwmxtxw         exclude WireModxThetaXW_icarus_Run2  WireModxThetaXW_icarus_Run4
+noicchargescale    exclude ChargeScale_icarus_Run2      ChargeScale_icarus_Run4
+noicsce            exclude SCE_icarus_Run2              SCE_icarus_Run4
+noictrigemu        exclude TriggerEmulation_icarus_Run2 TriggerEmulation_icarus_Run4

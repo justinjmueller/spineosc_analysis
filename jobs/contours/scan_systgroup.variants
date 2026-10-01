@@ -34,21 +34,21 @@
 #               Confirm those from the fractional systematics breakdown or the
 #               contour instead, not the parameter list.
 #
-# label            exclude
+# label            arguments
 # --- the three coarse groups ---
-noflux             Flux
-nointeraction      Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
-nopot              ToroidCalibration_sbnd_Run1 ToroidCalibration_icarus_Run2 ToroidCalibration_icarus_Run4 ProtonMiss_sbnd_Run1 ProtonMiss_icarus_Run2 ProtonMiss_icarus_Run4
+noflux             exclude Flux
+nointeraction      exclude Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
+nopot              exclude ToroidCalibration_sbnd_Run1 ToroidCalibration_icarus_Run2 ToroidCalibration_icarus_Run4 ProtonMiss_sbnd_Run1 ProtonMiss_icarus_Run2 ProtonMiss_icarus_Run4
 # --- G4 reinteractions ---
-nog4               G4
+nog4               exclude G4
 # --- all detector systematics at once (scan_detsyst.variants does them singly) ---
-nodetsys           ChargeScale15_sbnd_Run1 ChargeScale_icarus_Run2 ChargeScale_icarus_Run4 SCE_icarus_Run2 SCE_icarus_Run4 TriggerEmulation_sbnd_Run1 TriggerEmulation_icarus_Run2 TriggerEmulation_icarus_Run4 WireModxThetaXW_sbnd_Run1 WireModxThetaXW_icarus_Run2 WireModxThetaXW_icarus_Run4 WireModYZ_sbnd_Run1 WireModYZ_icarus_Run2 WireModYZ_icarus_Run4 DENT_sbnd_Run1
+nodetsys           exclude ChargeScale15_sbnd_Run1 ChargeScale_icarus_Run2 ChargeScale_icarus_Run4 SCE_icarus_Run2 SCE_icarus_Run4 TriggerEmulation_sbnd_Run1 TriggerEmulation_icarus_Run2 TriggerEmulation_icarus_Run4 WireModxThetaXW_sbnd_Run1 WireModxThetaXW_icarus_Run2 WireModxThetaXW_icarus_Run4 MattModYZ_sbnd_Run1 WireModYZ_icarus_Run2 WireModYZ_icarus_Run4 DENT_sbnd_Run1
 # --- cosmic background normalization ---
 # Its tag ("Cosmic Background Normalization") has spaces, but unlike the POT and
 # detector groups this is a single entry whose PLOTNAME is space-free, and
 # --exclude-systs falls back to the plotname map. It is a 30% norm on the SBND
 # out-of-time cosmics only (pattern .*SBND_.*cos), so expect a small effect.
-nocorsika          CORSIKA
+nocorsika          exclude CORSIKA
 # --- MC statistical uncertainty ---
 # Addressed by its XML text content, not its tag or plotname: the tag is
 # "stat,MC Stats" (comma-joined, second half has a space) and the plotname
@@ -56,14 +56,14 @@ nocorsika          CORSIKA
 # under - see PROconfig.h m_mcstat_systname and PROsyst.cxx syst_map. Removing
 # it shows how much of the contour width is finite MC statistics rather than
 # systematics. It is a Covariance, so the parameter count will NOT change.
-nomcstat           mcstat
+nomcstat           exclude mcstat
 # --- interaction model, broken down (subsets of nointeraction above) ---
-noqe               Cross-Section-QE
-nomec              Cross-Section-MEC
-nores              Cross-Section-RES
-nononresnu         Cross-Section-NonRES-nu
-nononresnubar      Cross-Section-NonRES-nubar
-nodis              Cross-Section-DIS
-nocoh              Cross-Section-COH
-noncel             Cross-Section-NCEL
-nofsi              Cross-Section-FSI
+noqe               exclude Cross-Section-QE
+nomec              exclude Cross-Section-MEC
+nores              exclude Cross-Section-RES
+nononresnu         exclude Cross-Section-NonRES-nu
+nononresnubar      exclude Cross-Section-NonRES-nubar
+nodis              exclude Cross-Section-DIS
+nocoh              exclude Cross-Section-COH
+noncel             exclude Cross-Section-NCEL
+nofsi              exclude Cross-Section-FSI
