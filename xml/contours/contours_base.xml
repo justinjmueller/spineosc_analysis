@@ -339,7 +339,7 @@ knob value.
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireModxThetaXW_icarus_Run4"      xvar="var3" binning="var0" plotname="WireMod xThetaXW ICARUS Run4" tag="Detector Systematics"></allowlist>
 
     <!-- WireMod Y-Z -->
-    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="WireModYZ_sbnd_Run1"              xvar="var3" binning="var0" plotname="WireMod yz SBND"              tag="Detector Systematics"></allowlist>
+    <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="MattModYZ_sbnd_Run1"              xvar="var3" binning="var0" plotname="MattMod yz SBND"              tag="Detector Systematics"></allowlist>
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun2_" filename="work/detsys_main.root" name="WireModYZ_icarus_Run2"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run2"       tag="Detector Systematics"></allowlist>
     <allowlist type="hist1d" apply_to_subchannel="_ICARUSRun4_" filename="work/detsys_main.root" name="WireModYZ_icarus_Run4"            xvar="var3" binning="var0" plotname="WireMod yz ICARUS Run4"       tag="Detector Systematics"></allowlist>
     
@@ -356,6 +356,28 @@ knob value.
     <!-- SBND DENT Systematic -->
     <allowlist type="hist1d" apply_to_subchannel="_SBND_"       filename="work/detsys_main.root" name="DENT_sbnd_Run1"        xvar="var3" binning="var0" plotname="DENT SBND"        tag="Detector Systematics"></allowlist>
 
+
+
+
+    <!-- Binding energy, SHARED across SBND and both ICARUS runs.
+
+         It is one nuisance parameter, not three correlated ones. The binding
+         energy is a property of argon, so a per-detector parameter would be
+         wrong in principle; and expressing full correlation through
+         <correlation> entries at rho = 1 is not available in practice, because
+         the resulting prior block is rank deficient and Eigen's inverse()
+         returns inf/NaN silently rather than failing.
+
+         The ratio is pooled over all three detectors. Their individual
+         responses agree to 0.008 to 0.04 across the populated range (the shift
+         is N_struck x 25 MeV, which depends only on the interaction-mode mix),
+         so one shared histogram loses nothing real.
+
+         xvar="var3" is the 1D RecoE shadow. On the 2D RecoE-by-pn configs this
+         captures the energy shift but NOT the delta-p shift along the other
+         axis; contours_recoe.xml is 1D and has no such gap. -->
+    <allowlist type="hist1d" apply_to_subchannel="_(target|othercc|nuecc|nc)$" filename="work/detsys_main.root" name="BindingEnergy_SBN" xvar="var3" binning="var0" mirror="false" plotname="Binding Energy" tag="Nuclear-Model"></allowlist>
+
 </variation_list>
 
 <MCFile treename="events/sbnd/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.446590e+20">
@@ -366,7 +388,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -379,7 +401,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -392,7 +414,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -405,7 +427,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -418,7 +440,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -431,7 +453,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -444,7 +466,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -457,7 +479,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -476,7 +498,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -489,7 +511,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -502,7 +524,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -515,7 +537,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -528,7 +550,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -541,7 +563,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -554,7 +576,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -567,7 +589,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -584,7 +606,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -597,7 +619,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -614,7 +636,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -627,7 +649,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -646,7 +668,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -659,7 +681,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -672,7 +694,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -685,7 +707,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -698,7 +720,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -711,7 +733,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -724,7 +746,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -737,7 +759,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -755,7 +777,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -768,7 +790,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -781,7 +803,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -794,7 +816,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -807,7 +829,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -820,7 +842,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -833,7 +855,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -846,7 +868,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -864,7 +886,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -877,7 +899,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -890,7 +912,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -903,7 +925,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -916,7 +938,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -929,7 +951,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -942,7 +964,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -955,7 +977,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -973,7 +995,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -986,7 +1008,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -999,7 +1021,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -1012,7 +1034,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -1025,7 +1047,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -1038,7 +1060,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -1051,7 +1073,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -1064,7 +1086,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -1080,7 +1102,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -1093,7 +1115,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -1109,7 +1131,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -1122,7 +1144,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -1138,7 +1160,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -1151,7 +1173,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun2_nproton_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -1167,7 +1189,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -1180,7 +1202,7 @@ knob value.
     <branch
         associated_subchannel = "nu_ICARUSRun4_nproton_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
