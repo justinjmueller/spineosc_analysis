@@ -45,14 +45,17 @@ namespace detsys
         return
         {
             // Reconstructed visible energy, split by detector so that SBND alone
-            // also removes cathode crossers (vertex and muon endpoint on opposite
-            // sides of x = 0, the same definition as the *_xing/_stay subchannels
-            // below). Both entries keep the name "by_vis_energy" so the output
-            // files still match the by_vis_energy glob when hadd'ing; their
-            // per-detector filenames cannot collide.
+            // also removes cathode crossers, using the ntuples' own
+            // reco_cathode_crosser flag. (This is NOT the vertex-times-endpoint-x
+            // product used by the *_xing/_stay subchannels below, which misses
+            // ~6% of the flagged crossers; and in ICARUS the flag marks ~39% of
+            // events -- two cryostats -- so it must not be applied there.) Both
+            // entries keep the name "by_vis_energy" so the output files still
+            // match the by_vis_energy glob when hadd'ing; their per-detector
+            // filenames cannot collide.
             {
                 "by_vis_energy",
-                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) >= 0",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && reco_cathode_crosser == 0",
                 "reco_visible_energy",
                 {0.3, 0.4, 0.46, 0.52, 0.58, 0.64, 0.70, 0.76, 0.82, 0.88, 0.94, 1.0, 1.06, 1.13, 1.2, 1.3, 1.5, 2.0},
                 {"sbnd_run1"}
