@@ -44,69 +44,149 @@ namespace detsys
     {
         return
         {
+            // Reconstructed visible energy, split by detector so that SBND alone
+            // also removes cathode crossers (vertex and muon endpoint on opposite
+            // sides of x = 0, the same definition as the *_xing/_stay subchannels
+            // below). Both entries keep the name "by_vis_energy" so the output
+            // files still match the by_vis_energy glob when hadd'ing; their
+            // per-detector filenames cannot collide.
+            {
+                "by_vis_energy",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) >= 0",
+                "reco_visible_energy",
+                {0.3, 0.4, 0.46, 0.52, 0.58, 0.64, 0.70, 0.76, 0.82, 0.88, 0.94, 1.0, 1.06, 1.13, 1.2, 1.3, 1.5, 2.0},
+                {"sbnd_run1"}
+            },
             {
                 "by_vis_energy",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_visible_energy",
-                {0.3, 0.4, 0.46, 0.52, 0.58, 0.64, 0.70, 0.76, 0.82, 0.88, 0.94, 1.0, 1.06, 1.13, 1.2, 1.3, 1.5, 2.0}
+                {0.3, 0.4, 0.46, 0.52, 0.58, 0.64, 0.70, 0.76, 0.82, 0.88, 0.94, 1.0, 1.06, 1.13, 1.2, 1.3, 1.5, 2.0},
+                {"icarus_run2", "icarus_run4"}
             },
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_score",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_muon_muon_softmax",
                 {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00}
             },
+#endif  // TOGGLE
+            // SBND-only split of by_muon_score on whether the leading muon
+            // track crosses the cathode (reco_vertex_x and
+            // reco_leading_muon_end_x on opposite sides of x = 0). DENT's
+            // ratio is close to flat for non-crossers but collapses sharply
+            // for crossers at low muon-score -- these two subchannels exist
+            // to give that split its own DENT ratio histogram instead of the
+            // crosser/non-crosser-mixed one above, for the dent_crosser
+            // data-access study under xml/detector_data_access/sbnd_run1/.
+#if 0  // TOGGLE: already computed, not re-run
+            {
+                "by_muon_score_xing",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) < 0",
+                "reco_leading_muon_muon_softmax",
+                {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00},
+                {"sbnd_run1"}
+            },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
+            {
+                "by_muon_score_stay",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) >= 0",
+                "reco_leading_muon_muon_softmax",
+                {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00},
+                {"sbnd_run1"}
+            },
+#endif  // TOGGLE
+            // Crossers split further by direction: which side of the cathode
+            // the track ENDS on (reco_leading_muon_end_x sign). "plusx" ends
+            // positive-x, "minusx" ends negative-x. Only DENT gets its own
+            // ratio per direction for the dent_crosser study's directional
+            // check -- ChargeScale15/WireModxThetaXW/MattModYZ/TriggerEmulation
+            // keep using the combined by_muon_score_xing above, since their
+            // apply_to_subchannel="_xing_" substring-matches both directions'
+            // channel names too.
+#if 0  // TOGGLE: already computed, not re-run
+            {
+                "by_muon_score_xing_plusx",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) < 0 && reco_leading_muon_end_x > 0",
+                "reco_leading_muon_muon_softmax",
+                {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00},
+                {"sbnd_run1"}
+            },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
+            {
+                "by_muon_score_xing_minusx",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) < 0 && reco_leading_muon_end_x < 0",
+                "reco_leading_muon_muon_softmax",
+                {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00},
+                {"sbnd_run1"}
+            },
+#endif  // TOGGLE
             // The remaining score variables share the muon-score axis: a uniform
             // 0.00-1.00 covers a softmax's full domain, so no event can fall
             // outside the ratio histogram and be silently forced to weight 1.
             // This is deliberately decoupled from the XML channel binning, which
             // may start well above zero without affecting the lookup.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_proton_score",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_proton_proton_softmax",
                 {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_primary_score",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_muon_primary_softmax",
                 {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_proton_primary_score",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_proton_primary_softmax",
                 {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00}
             },
+#endif  // TOGGLE
             // The range/momentum agreement variables are signed residuals, not
             // softmaxes, so the "0-1 covers the whole domain" argument above does
             // NOT transfer: each needs an axis wide enough to contain its own
             // tails, or events falling outside are silently forced to weight 1.
             // The calorimetric-vs-CSDA residuals are well behaved and sit inside
             // [-1, 1] for >99.99% of events in every detector/run.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_calo_csda",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_muon_calo_csda_diff",
                 {-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_proton_calo_csda",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_proton_calo_csda_diff",
                 {-1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0}
             },
+#endif  // TOGGLE
             // MCS-vs-CSDA needs a wider, asymmetric axis than the calorimetric
             // pair: its positive tail is long (SBND p99 ~ 2.8, max ~ 700), and a
             // [-1, 1] axis would hold only 97.2% of SBND events. [-1, 3] holds
             // 99.47% (SBND) / 99.87% (ICARUS Run 2) / 99.86% (ICARUS Run 4).
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_mcs_csda",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_muon_mcs_csda_diff",
                 {-1.0, -0.8, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0}
             },
+#endif  // TOGGLE
             // Transverse-kinematic-imbalance and single-particle kinematics.
             // These are kept in the ntuples' NATIVE units (MeV, MeV/c, rad)
             // rather than the GeV convention of xml/varset1_devsample.xml:
@@ -115,91 +195,125 @@ namespace detsys
             // "reco_pn/1000" is not available here. The XML channel binning
             // is kept in the same native units so that the fit variable and
             // this ratio axis cannot disagree.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_proton_ke",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_proton_ke",
                 {0.0, 60.0, 120.0, 180.0, 240.0, 300.0, 360.0, 420.0, 480.0, 540.0, 600.0, 660.0, 720.0, 780.0, 840.0, 900.0, 960.0, 1020.0, 1080.0, 1140.0, 1200.0}
             },
+#endif  // TOGGLE
             // Leading-proton momentum, in the same native MeV/c as the KE axis
             // above. The analysis binning (xml/sbnd_data_access/proton_p.xml)
             // is 300-1200 MeV/c; this ratio axis runs to 1800 so the sparse
             // upper tail still lands on a defined bin rather than in overflow.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_proton_p",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_proton_p",
                 {300.0, 375.0, 450.0, 525.0, 600.0, 675.0, 750.0, 825.0, 900.0, 975.0, 1050.0, 1125.0, 1200.0, 1275.0, 1350.0, 1425.0, 1500.0, 1575.0, 1650.0, 1725.0, 1800.0}
             },
+#endif  // TOGGLE
             // ---- phase1-tier2: single-particle muon kinematics -------------
             // Ratio axes are deliberately wider than the analysis binning so no
             // event falls outside and is silently given weight 1. Verified on
             // the nominal sample: no empty bins on any of these.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_polar_angle",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_muon_polar_angle",
                 {0.0, 0.16, 0.32, 0.48, 0.64, 0.80, 0.96, 1.12, 1.28, 1.44, 1.60, 1.76, 1.92, 2.08, 2.24, 2.40, 2.56, 2.72, 2.88, 3.04, 3.20}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_p",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_muon_p",
                 {225.0, 300.0, 375.0, 450.0, 525.0, 600.0, 675.0, 750.0, 825.0, 900.0, 975.0, 1050.0, 1125.0, 1200.0, 1275.0, 1350.0, 1425.0, 1500.0, 1575.0, 1650.0, 1725.0}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_opening_angle",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_bivar_muon_proton_opening_angle",
                 {0.0, 0.16, 0.32, 0.48, 0.64, 0.80, 0.96, 1.12, 1.28, 1.44, 1.60, 1.76, 1.92, 2.08, 2.24, 2.40, 2.56, 2.72, 2.88, 3.04, 3.20}
             },
+#endif  // TOGGLE
+            // Muon kinetic energy, the KE counterpart of by_muon_p. Range 140 to
+            // 1100 MeV covers 99.93 percent of events with no empty cells
+            // (minimum occupancy 528); the few above 1100 fall outside and take
+            // weight 1, which is documented rather than silent.
+#if 0  // TOGGLE: already computed, not re-run
+            {
+                "by_muon_ke",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
+                "reco_leading_muon_ke",
+                {140.0, 188.0, 236.0, 284.0, 332.0, 380.0, 428.0, 476.0, 524.0, 572.0, 620.0, 668.0, 716.0, 764.0, 812.0, 860.0, 908.0, 956.0, 1004.0, 1052.0, 1100.0}
+            },
+#endif  // TOGGLE
             // ---- phase1-tier3: energy estimators ----------------------------
             // The visible-energy subchannel already exists above. energy_qel has
             // pathological tails (min -10142, max +2433 GeV), so its axis starts
             // at 0.15 (a 0.0 start leaves the first bin empty); ~1.5% of events
             // fall outside it, which is the price of a usable axis.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_energy_qel",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_energy_qel",
                 {0.15, 0.30, 0.45, 0.60, 0.75, 0.90, 1.05, 1.20, 1.35, 1.50, 1.65, 1.80, 1.95, 2.10, 2.25, 2.40, 2.55, 2.70, 2.85, 3.00}
             },
+#endif  // TOGGLE
             // reco_pn is the full momentum imbalance (delta p); it agrees
             // bin-for-bin with sqrt(dpT^2 + dpL^2) computed from the ntuples.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_dp",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_pn",
                 {0.0, 100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1100.0, 1200.0, 1300.0, 1400.0, 1500.0, 1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_dpt",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_dpT",
                 {0.0, 100.0, 200.0, 300.0, 400.0, 500.0, 600.0, 700.0, 800.0, 900.0, 1000.0, 1100.0, 1200.0, 1300.0, 1400.0, 1500.0, 1600.0, 1700.0, 1800.0, 1900.0, 2000.0}
             },
+#endif  // TOGGLE
             // The angular variables span [0, pi] (or [-pi, pi]) exactly. The
             // axis is carried out to 3.2 instead of pi so the bin edges stay
             // round while still containing pi, and a handful of events with a
             // non-finite dalphaT/dphiT (< 0.1%) simply fail to fill.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_dalphat",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_dalphaT",
                 {0.0, 0.16, 0.32, 0.48, 0.64, 0.80, 0.96, 1.12, 1.28, 1.44, 1.60, 1.76, 1.92, 2.08, 2.24, 2.40, 2.56, 2.72, 2.88, 3.04, 3.20}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_dphit",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_dphiT",
                 {0.0, 0.16, 0.32, 0.48, 0.64, 0.80, 0.96, 1.12, 1.28, 1.44, 1.60, 1.76, 1.92, 2.08, 2.24, 2.40, 2.56, 2.72, 2.88, 3.04, 3.20}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_azimuth",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
                 "reco_leading_muon_azimuthal_angle",
                 {-3.20, -2.88, -2.56, -2.24, -1.92, -1.60, -1.28, -0.96, -0.64, -0.32, 0.0, 0.32, 0.64, 0.96, 1.28, 1.60, 1.92, 2.24, 2.56, 2.88, 3.20}
             },
+#endif  // TOGGLE
             // ----------------------------------------------------------------
             // Position variables: interaction vertex and muon track endpoint.
             //
@@ -224,6 +338,7 @@ namespace detsys
             // --- SBND: x,y span the full -200..200 cathode-to-cathode extent;
             //     z runs 0..450 (vertex) and 0..500 (muon endpoint, which
             //     exits downstream of its own vertex and reaches 490).
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_vertexx_sbnd",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -231,6 +346,8 @@ namespace detsys
                 {-200.0, -180.0, -160.0, -140.0, -120.0, -100.0, -80.0, -60.0, -40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0},
                 {"sbnd_run1"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_vertexy_sbnd",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -238,6 +355,8 @@ namespace detsys
                 {-200.0, -180.0, -160.0, -140.0, -120.0, -100.0, -80.0, -60.0, -40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0},
                 {"sbnd_run1"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_vertexz_sbnd",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -245,6 +364,8 @@ namespace detsys
                 {0.0, 25.0, 50.0, 75.0, 100.0, 125.0, 150.0, 175.0, 200.0, 225.0, 250.0, 275.0, 300.0, 325.0, 350.0, 375.0, 400.0, 425.0, 450.0},
                 {"sbnd_run1"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_endx_sbnd",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -252,6 +373,32 @@ namespace detsys
                 {-200.0, -180.0, -160.0, -140.0, -120.0, -100.0, -80.0, -60.0, -40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0},
                 {"sbnd_run1"}
             },
+#endif  // TOGGLE
+            // SBND-only split of by_muon_endx_sbnd on whether the leading
+            // muon track crosses the cathode, mirroring by_muon_score_xing/
+            // _stay -- for re-scoping ChargeScale15/WireModxThetaXW/
+            // MattModYZ/DENT by population in the muon_endx_zoom_crosser
+            // data-access study under xml/detector_data_access/sbnd_run1/,
+            // the same fix already applied to dent_crosser/muon_score.xml.
+#if 0  // TOGGLE: already computed, not re-run
+            {
+                "by_muon_endx_sbnd_stay",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) >= 0",
+                "reco_leading_muon_end_x",
+                {-200.0, -180.0, -160.0, -140.0, -120.0, -100.0, -80.0, -60.0, -40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0},
+                {"sbnd_run1"}
+            },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
+            {
+                "by_muon_endx_sbnd_xing",
+                "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1 && (reco_vertex_x * reco_leading_muon_end_x) < 0",
+                "reco_leading_muon_end_x",
+                {-200.0, -180.0, -160.0, -140.0, -120.0, -100.0, -80.0, -60.0, -40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0},
+                {"sbnd_run1"}
+            },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_endy_sbnd",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -259,6 +406,8 @@ namespace detsys
                 {-200.0, -180.0, -160.0, -140.0, -120.0, -100.0, -80.0, -60.0, -40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0, 160.0, 180.0, 200.0},
                 {"sbnd_run1"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_endz_sbnd",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -266,6 +415,7 @@ namespace detsys
                 {0.0, 25.0, 50.0, 75.0, 100.0, 125.0, 150.0, 175.0, 200.0, 225.0, 250.0, 275.0, 300.0, 325.0, 350.0, 375.0, 400.0, 425.0, 450.0, 475.0, 500.0},
                 {"sbnd_run1"}
             },
+#endif  // TOGGLE
 
             // --- ICARUS (Run 2 and Run 4 share a geometry, so one subchannel
             //     each): |x| 70..350, y -185..125, z -900..900 across both
@@ -276,6 +426,7 @@ namespace detsys
             //     that PROfit's empty-bin check rejects. The branch is an
             //     expression, JIT-compiled by compute_ratio_hist; the XMLs use
             //     the TTreeFormula spelling abs(...) for the same quantity.
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_vertexx_icarus",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -283,6 +434,8 @@ namespace detsys
                 {70.0, 105.0, 140.0, 175.0, 210.0, 245.0, 280.0, 315.0, 350.0},
                 {"icarus_run2", "icarus_run4"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_vertexy_icarus",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -290,6 +443,8 @@ namespace detsys
                 {-185.0, -169.5, -154.0, -138.5, -123.0, -107.5, -92.0, -76.5, -61.0, -45.5, -30.0, -14.5, 1.0, 16.5, 32.0, 47.5, 63.0, 78.5, 94.0, 109.5, 125.0},
                 {"icarus_run2", "icarus_run4"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_vertexz_icarus",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -297,6 +452,8 @@ namespace detsys
                 {-900.0, -810.0, -720.0, -630.0, -540.0, -450.0, -360.0, -270.0, -180.0, -90.0, 0.0, 90.0, 180.0, 270.0, 360.0, 450.0, 540.0, 630.0, 720.0, 810.0, 900.0},
                 {"icarus_run2", "icarus_run4"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_endx_icarus",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -304,6 +461,8 @@ namespace detsys
                 {70.0, 105.0, 140.0, 175.0, 210.0, 245.0, 280.0, 315.0, 350.0},
                 {"icarus_run2", "icarus_run4"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_endy_icarus",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -311,6 +470,8 @@ namespace detsys
                 {-185.0, -169.5, -154.0, -138.5, -123.0, -107.5, -92.0, -76.5, -61.0, -45.5, -30.0, -14.5, 1.0, 16.5, 32.0, 47.5, 63.0, 78.5, 94.0, 109.5, 125.0},
                 {"icarus_run2", "icarus_run4"}
             },
+#endif  // TOGGLE
+#if 0  // TOGGLE: already computed, not re-run
             {
                 "by_muon_endz_icarus",
                 "reco_fiducialize_cathode == 1 && reco_veto_sbnd_highy_highz == 1",
@@ -318,6 +479,7 @@ namespace detsys
                 {-900.0, -810.0, -720.0, -630.0, -540.0, -450.0, -360.0, -270.0, -180.0, -90.0, 0.0, 90.0, 180.0, 270.0, 360.0, 450.0, 540.0, 630.0, 720.0, 810.0, 900.0},
                 {"icarus_run2", "icarus_run4"}
             }
+#endif  // TOGGLE
         };
     }
 
@@ -349,18 +511,10 @@ namespace detsys
             "sbnd",
             "Run1",
             {
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("SCE0x", "sbnd_detvar_sce0x"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("SCE2x", "sbnd_detvar_sce2x"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("ChargeScale", "sbnd_detvar_charge_scale"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("ChargeScale15", "sbnd_detvar_smear15"),
-#endif  // TOGGLE
                 // v1.1.0 now reproduces both WireMod samples, so these no longer fall
                 // back to v1.0.10. WireModYZ is still COMPUTED (keeping the detvar
                 // files complete and allowing a comparison against MattModYZ) but the
@@ -368,27 +522,17 @@ namespace detsys
                 // double-count one physical effect.
                 detvar_syst("WireModxThetaXW", "sbnd_detvar_wiremod_xthetaxw"),
                 detvar_syst("WireModYZ", "sbnd_detvar_wiremod_yz"),
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("MattModYZ", "sbnd_detvar_mattmod_yz"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("GainHigh", "sbnd_detvar_p5_gain"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("GainLow", "sbnd_detvar_m5_gain"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 {"DENT", detvar_file, "sbnd_detvar_newdent", detvar_file, "sbnd_detvar_newcv"},
-#endif  // TOGGLE
             },
             { },
             {
                 // Trigger emulation: PE-to-threshold calibration, its one-sigma
                 // uncertainty, and the PE-equivalent threshold. Detector/run
                 // specific and supplied directly -- not derivable from the ntuples.
-#if 0  // TOGGLE: already computed, not re-run
                 {"TriggerEmulation", nosyst_file, nosyst_key, "event_largest_flash_pe", 0.647, 0.004, 2000},
-#endif  // TOGGLE
             },
         };
     }
@@ -427,15 +571,9 @@ namespace detsys
             "icarus",
             run_label,
             {
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("SCE0x", "icarus_detvar_sce0x"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("SCE2x", "icarus_detvar_sce2x"),
-#endif  // TOGGLE
-#if 0  // TOGGLE: already computed, not re-run
                 detvar_syst("ChargeScale", "icarus_detvar_charge_scale"),
-#endif  // TOGGLE
                 detvar_syst("WireModxThetaXW", "icarus_wiremod_xthetaxw"),
                 detvar_syst("WireModYZ", "icarus_wiremod_yz"),
             },
@@ -444,10 +582,8 @@ namespace detsys
                 // Trigger emulation: PE-to-threshold calibration, its one-sigma
                 // uncertainty, and the PE-equivalent threshold. Detector/run
                 // specific and supplied directly -- not derivable from the ntuples.
-#if 0  // TOGGLE: already computed, not re-run
                 {"TriggerEmulation", nosyst_file, nosyst_key, "event_largest_flash_pe",
                  trigger_scale, trigger_sigma, trigger_threshold},
-#endif  // TOGGLE
             },
         };
     }
