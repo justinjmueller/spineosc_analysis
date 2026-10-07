@@ -42,7 +42,8 @@ notebooks/*
 config/archive
 
 # Specific to this project
-detsys/profit_systematics/*.root
+detsys/profit_systematics*/*.root
 *.bin
 *.pdf
 *PROplot*.root
+*_surf.root
