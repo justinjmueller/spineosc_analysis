@@ -1,0 +1,3 @@
+[submodule "reBruce"]
+	path = reBruce
+	url = https://github.com/gputnam/reBruce.git
