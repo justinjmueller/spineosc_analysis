@@ -1,0 +1,160 @@
+# XML manifest: every analysis XML (and its _plot.ini / _data.xml siblings) belongs to exactly one family below.
+# The most specific (longest) matching pattern wins. Check with:  python scripts/xml_manifest.py --check
+#
+# status:
+#   active       used whenever the technote products are regenerated; keep working and current
+#   frozen       belongs to a section that is intentionally not updated (do not modify; regenerate only to reproduce)
+#   reference    documentation/template, not run to make products
+#   archived     superseded or finished, kept for provenance; not expected to run against current inputs
+#   deprecated   development copy or abandoned; candidate for deletion once confirmed
+#   needs-review classification not yet decided (owner to confirm)
+# "generated = true": produced by `producer`; the generator and this entry are the source of truth, the files are reproducible.
+# Fields: pattern, status, purpose, producer, consumer (notebook/script that reads the PROfit output), technote (sections), superseded_by, regenerate, notes, reviewed (YYYY-MM-DD; a *proposed* entry says so).
+
+[[family]]
+pattern = "xml/selected/*"
+status = "active"
+purpose = "Selected-event composition and efficiency inputs (inclusive and exclusive), v1.1.0 selection with SBND crosser and end-point cuts"
+producer = "scripts/update_selected_signal_xmls.py"
+consumer = "plotting/notebook.ipynb"
+technote = "signal_and_selection"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/signal/*"
+status = "active"
+purpose = "Signal-definition inputs (inclusive and exclusive), truth-level end-point cut"
+producer = "scripts/update_selected_signal_xmls.py"
+consumer = "plotting/signal.ipynb"
+technote = "signal_and_selection"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/systematics/systematics_suite.xml"
+status = "active"
+purpose = "Full systematic suite (reco and true energy) with the detector ratios of detvar/detsys-v1.1.0v2.root"
+producer = "scripts/systematics_suite_from_recoe.py"
+consumer = "plotting/systematics.ipynb"
+technote = "systematics"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/systematics/systematics_suite_endx4.xml"
+status = "deprecated"
+purpose = "Development copy of the suite with the end-point cut; promoted into systematics_suite.xml"
+superseded_by = "xml/systematics/systematics_suite.xml"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/contours/contours_base.xml"
+status = "active"
+purpose = "Sensitivity contours, base configuration"
+consumer = "plotting/surface.ipynb"
+technote = "sensitivity_studies, fake_data"
+notes = "Contour/fake-data reruns with the v1.1.0 selection are still pending."
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/contours/contours_recoe.xml"
+status = "active"
+purpose = "Sensitivity contours in reconstructed energy; source of the systematics suite"
+consumer = "plotting/surface.ipynb"
+technote = "sensitivity_studies, fake_data"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/contours/sbnd_scanmatch.xml"
+status = "frozen"
+purpose = "SBND scan-match contours"
+reviewed = "2026-10-08 "
+
+[[family]]
+pattern = "xml/contours/contours_pn.xml"
+status = "frozen"
+purpose = "Contours in the transverse-momentum variable (older exploration)"
+reviewed = "2026-10-08 "
+
+[[family]]
+pattern = "xml/contours/contours_sbnd2d.xml"
+status = "frozen"
+purpose = "SBND two-dimensional contour exploration"
+reviewed = "2026-10-08 "
+
+[[family]]
+pattern = "xml/resolution/*"
+status = "active"
+generated = false
+purpose = "Resolution (bias) studies for the inclusive and exclusive selections, v1.1.0 inputs (cvrw + cvwgt, SBND crosser and end-point cuts); migrated with scripts/update_selected_signal_xmls.py:fix_selected"
+regenerate = "../profit-asymmetric/build/bin/PROfit --config xml/resolution/{inclusive,exclusive}_plot.ini plot"
+consumer = "plotting/resolution.ipynb"
+technote = "signal_and_selection (12 resolution figures)"
+reviewed = "2026-10-08"
+
+[[family]]
+pattern = "xml/standard.xml"
+status = "reference"
+purpose = "Annotated template documenting the XML options"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/coverage/*"
+status = "active"
+generated = true
+purpose = "Data/MC coverage comparisons (SBND Run 1, ICARUS Run 2), v1.1.0 inputs, crosser and end-point cuts on SBND. The single maintained copy (the v1.0.10-era versions are in git history)."
+producer = "scripts/dent_study/build_cov_v2.py (one-time migration, already applied)"
+regenerate = "python scripts/dent_study/run_cov_v2.py"
+consumer = "detsys/plotting/datamc.ipynb"
+technote = "data_sim_comparisons"
+reviewed = "2026-10-08"
+
+[[family]]
+pattern = "xml/detector_data_access/sbnd_run1/*"
+status = "active"
+generated = true
+purpose = "SBND Run 1 detector data access studies with the crosser and end-point cuts (incl. APA-gap and cathode zooms). The single maintained copy."
+producer = "scripts/dent_study/build_da_v2.py (one-time migration, already applied)"
+regenerate = "python scripts/dent_study/run_da_v2.py"
+consumer = "detsys/plotting/dataaccess.ipynb"
+technote = "detector_data_access"
+reviewed = "2026-10-08"
+
+[[family]]
+pattern = "xml/detector_data_access/icarus_run2/*"
+status = "active"
+generated = true
+purpose = "ICARUS Run 2 detector data access studies (cvwgt-weighted, shape-only). ICARUS has no DENT variation, so these are the only ICARUS detector-access XMLs."
+producer = "scripts/dent_study/build_xmls.py"
+consumer = "detsys/plotting/dataaccess.ipynb"
+technote = "detector_data_access"
+notes = "Tags keep the dent_icarus_run2_* prefix so the existing outputs in runs/dent_study stay valid."
+reviewed = "2026-10-08"
+
+[[family]]
+pattern = "xml/dent_study/native_detvar_prototype/*"
+status = "deprecated"
+purpose = "Prototype of native detector-variation handling in PROfit"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/dent_study/*"
+status = "archived"
+generated = true
+purpose = "Overnight PROfit DENT data/MC study (wide-net observables, variants); narrative in docs/dent_study/"
+producer = "scripts/dent_study/build_xmls.py, scripts/dent_study/build_dd_xmls.py"
+regenerate = "see docs/dent_study/README / scripts/dent_study/run_study.py"
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/sbnd_data_access/*"
+status = "frozen"
+purpose = "SBND data access section (release detector-access file), intentionally not updated for the v1.1.0 cuts"
+technote = "sbnd_data_access"
+notes = "Do not modify. Regenerate only to reproduce the published section."
+reviewed = "2026-10-08 (proposed)"
+
+[[family]]
+pattern = "xml/archive/coverage/*"
+status = "archived"
+purpose = "Pre-v1.1.0 coverage studies that were not migrated (dp shifted/vanilla variants, dp15, dp25, calo/csda residuals)"
+superseded_by = "xml/coverage/"
+reviewed = "2026-10-08"
