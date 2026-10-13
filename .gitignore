@@ -80,3 +80,6 @@ spinefd/.geproj/
 /docs/**/*.toc
 /docs/**/*.out
 /docs/**/*.log
+
+# Figure products written by the notebooks
+/figures/
