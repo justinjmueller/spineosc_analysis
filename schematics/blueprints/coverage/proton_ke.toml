@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "proton_ke"
+channel_label = "Reconstructed Proton KE [MeV]"
+fit_variable  = "reco_leading_proton_ke"
+fit_bins      = "<bins unit=\"Proton KE [MeV]\" min=\"40.0\" max=\"600.0\" nbins=\"20\"/>"

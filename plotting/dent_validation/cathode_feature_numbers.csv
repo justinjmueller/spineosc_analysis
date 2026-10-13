@@ -1,0 +1,7 @@
+feature,sample,value,err
+crosser fraction [%],data,27.46232894048563,0.18334060917299236
+"pile-up fraction (non-crosser, |x_end|<5cm) [%]",data,1.9523142601623271,0.056833149083228056
+crosser fraction [%],cv,27.921415045292225,0.08739215799702162
+"pile-up fraction (non-crosser, |x_end|<5cm) [%]",cv,2.06898383748686,0.027729325447721255
+crosser fraction [%],dent,25.359009965691882,0.08792525922327543
+"pile-up fraction (non-crosser, |x_end|<5cm) [%]",dent,3.780428034634863,0.038544375399431965

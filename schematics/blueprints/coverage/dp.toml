@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "dp"
+channel_label = "Reconstructed $\\delta p$ [MeV/c]"
+fit_variable  = "reco_pn"
+fit_bins      = "<bins unit=\"dp [MeV/c]\" min=\"0.0\" max=\"1000.0\" nbins=\"20\"/>"

@@ -1,0 +1,19 @@
+{
+ "n_matched": 208456,
+ "n_crossers_cv": 56954,
+ "n_flipped": 2545,
+ "flip_fraction": 0.044685184534887804,
+ "reverse_flips": 57,
+ "true_crosser_fraction_flipped": 0.963064833005894,
+ "median_dL_flipped": 6.311999999999983,
+ "mean_dL_flipped": 30.15092110019646,
+ "frac_dL_gt50": 0.17917485265225933,
+ "frac_dL_lt2": 0.29390962671905696,
+ "tail_share_of_missing_length": 0.8230267413516952,
+ "muon_driven": 0.6852652259332024,
+ "non_muon_flag": 0.3139489194499018,
+ "endpoint_within5_flipped_dent": 0.6852652259332024,
+ "endpoint_within5_flipped_cv": 0.519056974459725,
+ "endpoint_within5_noncrossers": 0.02984581861401829,
+ "median_end_x_flipped_dent": 1.95001
+}
