@@ -1,0 +1,53 @@
+{
+ "nominal": {
+  "band_frac_signal": 0.041114165197804926,
+  "band_frac_background": 0.11422445660209966,
+  "signal_share_in_band": 0.7335288030355295,
+  "signal_share_outside": 0.8922297347945369,
+  "n": 350909
+ },
+ "Charge scale": {
+  "n_pairs": 325647,
+  "boost_band_nom": 0.0443517059883862,
+  "boost_band_var": 0.022112901393226407,
+  "muon_region_boost_nom": 1.0,
+  "muon_region_boost_var": 1.0,
+  "muon_region_argmax_nom": 0.9556482940116138,
+  "muon_region_argmax_var": 0.9778870986067736,
+  "mean_mu_nom": 0.8271465785917295,
+  "mean_mu_var": 0.8597548764390964
+ },
+ "WireMod X-$\\theta_{xW}$": {
+  "n_pairs": 261886,
+  "boost_band_nom": 0.03805472610219714,
+  "boost_band_var": 0.040196879558281086,
+  "muon_region_boost_nom": 1.0,
+  "muon_region_boost_var": 1.0,
+  "muon_region_argmax_nom": 0.9619452738978028,
+  "muon_region_argmax_var": 0.9598031204417189,
+  "mean_mu_nom": 0.8320664246556956,
+  "mean_mu_var": 0.8305238791856887
+ },
+ "Non-uniformity": {
+  "n_pairs": 329025,
+  "boost_band_nom": 0.041908669553985256,
+  "boost_band_var": 0.051032596307271486,
+  "muon_region_boost_nom": 1.0,
+  "muon_region_boost_var": 1.0,
+  "muon_region_argmax_nom": 0.9580913304460147,
+  "muon_region_argmax_var": 0.9489674036927285,
+  "mean_mu_nom": 0.8274624983236407,
+  "mean_mu_var": 0.8163021582341485
+ },
+ "DENT": {
+  "n_pairs": 148478,
+  "boost_band_nom": 0.03825482563073317,
+  "boost_band_var": 0.03609288918223575,
+  "muon_region_boost_nom": 1.0,
+  "muon_region_boost_var": 1.0,
+  "muon_region_argmax_nom": 0.9617451743692669,
+  "muon_region_argmax_var": 0.9639071108177643,
+  "mean_mu_nom": 0.8334741398254966,
+  "mean_mu_var": 0.8376504609745391
+ }
+}
