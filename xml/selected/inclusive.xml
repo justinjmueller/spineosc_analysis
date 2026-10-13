@@ -6,6 +6,15 @@ neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
 here since SBND and ICARUS have only run in neutrino mode, but it's good to be
 explicit.
 -->
+<!--
+v1.1.0 update. The beam MC is read from the CV-reweighted files (work/*_cvrw.root, written by reweight/) and its branches
+multiply cvwgt into their weight; the reweighted files hold only the beam `selected` trees, so the dirt, off-beam and nonmatched blocks keep
+their original files. Every branch applies the cathode fiducialization and the SBND high-y/high-z veto (reco_veto_sbnd_highy_highz);
+SBND branches also remove cathode crossers (reco_cathode_crosser == 0) and muons whose end point is within 4 cm of the cathode
+(abs(reco_leading_muon_end_x) >= 4). Neither is applied to ICARUS (two cryostats; the crosser flag is set for ~39% of its events). No systematics beyond mcstat are configured. Exposures are the v1.1.0 values from
+plotting/summarize_exposure.ipynb.
+-->
+
 <mode name="nu" />
 
 <!-- 
@@ -88,13 +97,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     
 </variation_list>
 
-<MCFile treename="events/sbnd/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.446590e+20">
+<MCFile treename="events/sbnd_large/selected" filename="work/sbnd_run1_cvrw.root" scale = "1.0" pot="5.593437e+20">
 
     <!-- SBND, inclusive (>=1p), Neutral Current -->
     <branch
         associated_subchannel = "nu_SBND_numu_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -107,7 +116,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_SBND_numu_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -120,7 +129,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_SBND_numu_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -133,7 +142,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_SBND_numu_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -144,13 +153,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/sbnd_dirt/selected" filename="work/sbnd_run1_dirt.root" scale = "1.0" pot="2.325245e+20">
+<MCFile treename="events/sbnd_dirt/selected" filename="work/sbnd_run1_dirt.root" scale = "1.0" pot="3.021459e+20">
 
     <!-- SBND, inclusive (>=1p), Neutral Current -->
     <branch
         associated_subchannel = "nu_SBND_numu_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -163,7 +172,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_SBND_numu_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -176,7 +185,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_SBND_numu_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -189,7 +198,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_SBND_numu_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -200,13 +209,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/sbnd_offbeam/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="3.790752e+20">
+<MCFile treename="events/sbnd_offbeam/selected" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="3.983079e+20">
 
     <!-- SBND, inclusive (>=1p), in-time cosmics -->
     <branch
         associated_subchannel = "nu_SBND_numu_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -217,13 +226,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/sbnd/selected_nonmatched" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.446590e+20">
+<MCFile treename="events/sbnd_large/selected_nonmatched" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.593437e+20">
 
     <!-- SBND, inclusive (>=1p), cosmics -->
     <branch
         associated_subchannel = "nu_SBND_numu_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -234,13 +243,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.052781e+21">
+<MCFile treename="events/icarus_run2/selected" filename="work/icarus_run2_cvrw.root" scale = "1.0" pot="1.040833e+21">
 
     <!-- ICARUS Run 2, inclusive (>=1p), Neutral Current -->
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "(true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -253,7 +262,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "(true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -266,7 +275,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -279,7 +288,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -290,13 +299,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.689644e+21">
+<MCFile treename="events/icarus_run4/selected" filename="work/icarus_run4_cvrw.root" scale = "1.0" pot="1.772140e+21">
 
     <!-- ICARUS Run 4, inclusive (>=1p), Neutral Current -->
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -309,7 +318,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -322,7 +331,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -335,7 +344,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -346,13 +355,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_dirt_run2/selected" filename="work/icarus_run2_dirt.root" scale = "1.0" pot="8.933430e+20">
+<MCFile treename="events/icarus_dirt_run2/selected" filename="work/icarus_run2_dirt.root" scale = "1.0" pot="1.276535e+21">
 
     <!-- ICARUS Run 2, inclusive (>=1p), Neutral Current -->
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -365,7 +374,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -378,7 +387,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -391,7 +400,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -402,13 +411,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_dirt_run4/selected" filename="work/icarus_run4_dirt.root" scale = "1.0" pot="1.426472e+21">
+<MCFile treename="events/icarus_dirt_run4/selected" filename="work/icarus_run4_dirt.root" scale = "1.0" pot="1.774677e+21">
 
     <!-- ICARUS Run 4, inclusive (>=1p), Neutral Current -->
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -421,7 +430,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -434,7 +443,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -447,7 +456,7 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -458,13 +467,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_offbeam_run2/selected" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.969203e+20">
+<MCFile treename="events/icarus_offbeam_run2/selected" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.979496e+20">
 
     <!-- ICARUS Run 2, inclusive (>=1p), in-time cosmics -->
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -475,13 +484,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_offbeam_run4/selected" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="3.414582e+19">
+<MCFile treename="events/icarus_offbeam_run4/selected" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="3.422616e+19">
 
     <!-- ICARUS Run 4, inclusive (>=1p), in-time cosmics -->
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -492,13 +501,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_run2/selected_nonmatched" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.052781e+21">
+<MCFile treename="events/icarus_run2/selected_nonmatched" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.040833e+21">
 
     <!-- ICARUS Run 2, inclusive (>=1p), cosmics -->
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
+        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -509,13 +518,13 @@ two exclusive channels it replaces use different binnings (0.3-1.5 and
 
 </MCFile>
 
-<MCFile treename="events/icarus_run4/selected_nonmatched" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.689644e+21">
+<MCFile treename="events/icarus_run4/selected_nonmatched" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.772140e+21">
 
     <!-- ICARUS Run 4, inclusive (>=1p), cosmics -->
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>

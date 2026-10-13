@@ -388,7 +388,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "(true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -401,7 +401,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "(true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -414,7 +414,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -427,7 +427,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -440,7 +440,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "(true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -453,7 +453,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "(true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -466,7 +466,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -479,7 +479,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_target"
         model_rule            = "1"
-        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
+        additional_weight     = "(true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))) * cvwgt"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -498,7 +498,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -511,7 +511,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -524,7 +524,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -537,7 +537,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -550,7 +550,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nc"
         model_rule            = "1"
-        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -563,7 +563,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_nuecc"
         model_rule            = "0"
-        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -576,7 +576,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_othercc"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -589,7 +589,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_target"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>
@@ -606,7 +606,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)"
         incl_systematics      = "false"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -619,7 +619,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_intime"
         model_rule            = "0"
-        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0)"
+        additional_weight     = "(true_neutrino_id != true_neutrino_id) && (reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -636,7 +636,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_ccqelike_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable2D>reco_visible_energy;reco_pn/1000</variable2D>
@@ -649,7 +649,7 @@ knob value.
     <branch
         associated_subchannel = "nu_SBND_nproton_cos"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
         incl_systematics      = "true"
     >
         <variable>reco_visible_energy</variable>

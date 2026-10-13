@@ -6,6 +6,12 @@ neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
 here since SBND and ICARUS have only run in neutrino mode, but it's good to be
 explicit.
 -->
+<!--
+v1.1.0 update. The signal definition uses truth quantities only: true_fiducialize_cathode and the SBND true_veto_sbnd_highy_highz
+in every branch, true_cathode_crosser == 0 and abs(true_leading_muon_end_x) >= 4 on SBND branches only (not applied to ICARUS: two cryostats), and
+true_user_containment_cut_filterEE on ICARUS Run 2. The signal tree is not CV-reweighted, so there is no cvwgt here.
+-->
+
 <mode name="nu" />
 
 <!--
@@ -78,12 +84,12 @@ The per-MCFile POT below is the POT of the underlying production file. The
 signal and selected trees live in the same physical file, so these are the same
 values the selection-level XMLs declare for events/<key>/selected.
 -->
-<MCFile treename="events/sbnd/signal" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.446590e+20">
+<MCFile treename="events/sbnd_large/signal" filename="work/sbnd_run1_cvmc.root" scale = "1.0" pot="5.593437e+20">
 
     <branch
         associated_subchannel = "nu_SBND_numu_ccdis"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1) && (true_cathode_crosser == 0) && (abs(true_leading_muon_end_x) >= 4)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -96,7 +102,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_SBND_numu_ccres"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1) && (true_cathode_crosser == 0) && (abs(true_leading_muon_end_x) >= 4)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -109,7 +115,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_SBND_numu_ccmec"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1) && (true_cathode_crosser == 0) && (abs(true_leading_muon_end_x) >= 4)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -122,7 +128,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_SBND_numu_ccqe"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1) && (true_cathode_crosser == 0) && (abs(true_leading_muon_end_x) >= 4)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -134,12 +140,12 @@ values the selection-level XMLs declare for events/<key>/selected.
 
 </MCFile>
 
-<MCFile treename="events/icarus_run2/signal" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.052781e+21">
+<MCFile treename="events/icarus_run2/signal" filename="work/icarus_run2_cvmc.root" scale = "1.0" pot="1.040833e+21">
 
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccdis"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2) && (true_user_containment_cut_filterEE == 1)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2) && (true_user_containment_cut_filterEE == 1) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -152,7 +158,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccres"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1) && (true_user_containment_cut_filterEE == 1)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1) && (true_user_containment_cut_filterEE == 1) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -165,7 +171,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccmec"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10) && (true_user_containment_cut_filterEE == 1)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10) && (true_user_containment_cut_filterEE == 1) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -178,7 +184,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun2_numu_ccqe"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0) && (true_user_containment_cut_filterEE == 1)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0) && (true_user_containment_cut_filterEE == 1) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -190,12 +196,12 @@ values the selection-level XMLs declare for events/<key>/selected.
 
 </MCFile>
 
-<MCFile treename="events/icarus_run4/signal" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.689644e+21">
+<MCFile treename="events/icarus_run4/signal" filename="work/icarus_run4_cvmc.root" scale = "1.0" pot="1.772140e+21">
 
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_ccdis"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 2) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -208,7 +214,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_ccres"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 1) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -221,7 +227,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_ccmec"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 10) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
@@ -234,7 +240,7 @@ values the selection-level XMLs declare for events/<key>/selected.
     <branch
         associated_subchannel = "nu_ICARUSRun4_numu_ccqe"
         model_rule            = "1"
-        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0)"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_proton_multiplicity >= 1) && (true_interaction_mode == 0) && (true_fiducialize_cathode == 1) && (true_veto_sbnd_highy_highz == 1)"
         incl_systematics      = "false"
     >
         <variable>reco_visible_energy</variable>
