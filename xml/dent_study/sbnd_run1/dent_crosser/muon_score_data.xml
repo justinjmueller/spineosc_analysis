@@ -1,0 +1,184 @@
+<?xml version="1.0" ?>
+
+<!--
+DENT cathode-crosser validation: SBND Run 1, muon_score, data overlay
+companion for muon_score.xml in this same directory. Six channels:
+{ccqelike, nproton} x {stay, xing_plusx, xing_minusx} (see muon_score.xml's
+header for the population definitions), each with a single flat "data"
+subchannel. Reco-level selection only - no truth-level cuts - and no
+systematics.
+
+Muon-score axis starts at 0.2, not 0.0 (see muon_score.xml's header).
+
+Generated from xml/detector_data_access/sbnd_run1/muon_score_exclusive_data.xml.
+-->
+
+<mode name="nu" />
+
+<!--
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Here, the POT matches muon_score.xml's <detector> block exactly:
+-->
+<detector name="SBND" pot="1.0e+19" />
+
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<channel name="ccqelike_stay" unit="Reconstructed Muon Score">
+
+    <bins unit="Reco Muon Score" min="0.20" max="1.0" nbins="16"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="ccqelike_xing_plusx" unit="Reconstructed Muon Score">
+
+    <bins unit="Reco Muon Score" min="0.20" max="1.0" nbins="16"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="ccqelike_xing_minusx" unit="Reconstructed Muon Score">
+
+    <bins unit="Reco Muon Score" min="0.20" max="1.0" nbins="16"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="nproton_stay" unit="Reconstructed Muon Score">
+
+    <bins unit="Reco Muon Score" min="0.20" max="1.0" nbins="16"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="nproton_xing_plusx" unit="Reconstructed Muon Score">
+
+    <bins unit="Reco Muon Score" min="0.20" max="1.0" nbins="16"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="nproton_xing_minusx" unit="Reconstructed Muon Score">
+
+    <bins unit="Reco Muon Score" min="0.20" max="1.0" nbins="16"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<MCFile treename="events/sbnd_bnblight_full/selected" filename="work/sbnd_run1_dataaccess.root" scale = "1.0" pot="1.0e+19">
+
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_stay_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_vertex_x * reco_leading_muon_end_x) >= 0"
+    >
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_xing_plusx_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_vertex_x * reco_leading_muon_end_x) < 0 && reco_leading_muon_end_x > 0"
+    >
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_xing_minusx_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_vertex_x * reco_leading_muon_end_x) < 0 && reco_leading_muon_end_x < 0"
+    >
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_nproton_stay_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_vertex_x * reco_leading_muon_end_x) >= 0"
+    >
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_nproton_xing_plusx_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_vertex_x * reco_leading_muon_end_x) < 0 && reco_leading_muon_end_x > 0"
+    >
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_nproton_xing_minusx_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_vertex_x * reco_leading_muon_end_x) < 0 && reco_leading_muon_end_x < 0"
+    >
+        <variable>reco_leading_muon_muon_softmax</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+</MCFile>

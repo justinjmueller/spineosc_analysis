@@ -29,8 +29,8 @@ different POT than the target POT.
 
 Here, the POT matches the development sample POT in data for SBND and ICARUS Run 2 and Run 4:
 -->
-<detector name="ICARUSRun2" pot="1.806050e+19" />
-<detector name="ICARUSRun4" pot="1.713296e+19" />
+<detector name="ICARUSRun2" pot="1.965837e+19" />
+<detector name="ICARUSRun4" pot="1.887259e+19" />
 
 <!--
 Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
@@ -79,7 +79,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
 
 </channel>
 
-<MCFile treename="events/icarus_bnblight_run2/selected" filename="work/icarus_run2_data.root" scale = "1.0" pot="1.806050e+19">
+<MCFile treename="events/icarus_bnblight_run2/selected" filename="work/icarus_run2_data.root" scale = "1.0" pot="1.965837e+19">
 
     <branch
         associated_subchannel = "nu_ICARUSRun2_ccqelike_data"
@@ -106,7 +106,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
     </branch>
 </MCFile>
 
-<MCFile treename="events/icarus_bnblight_run4/selected" filename="work/icarus_run4_data.root" scale = "1.0" pot="1.713296e+19">
+<MCFile treename="events/icarus_bnblight_run4/selected" filename="work/icarus_run4_data.root" scale = "1.0" pot="1.887259e+19">
 
     <branch
         associated_subchannel = "nu_ICARUSRun4_ccqelike_data"

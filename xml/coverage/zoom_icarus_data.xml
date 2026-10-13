@@ -1,0 +1,167 @@
+<?xml version="1.0" ?>
+
+<!--
+ZOOM on the ICARUS detector features, for data/MC coverage.
+  var0  vertex z      around the TPC module boundary at z = 0 (+/-50 cm, 10 cm bins)
+  var5  muon end z    same window
+  var6  |vertex x|    around the cathode at |x| = 210.12 (+/-50 cm, 5 cm bins)
+  var7  |muon end x|  same window
+The two cathode adjacent bins are merged into one 10 cm bin [205.12, 215.12]:
+reco_fiducialize_cathode empties [210.12, 215.12] entirely and leaves only a
+handful of vertices in [205.12, 210.12], and an empty CV bin would abort the
+empty bin check. The muon endpoint has no such hole.
+Derived from vertexz_icarus_data.xml. Systematics are deliberately off for this
+first pass (mcstat only, incl_systematics is false): the point is the binning,
+and the detvar ratio histograms are binned for the wide coverage axes anyway.
+-->
+
+<!--
+SINGLE-DETECTOR (ICARUS Run 2 and Run 4) coverage config for Vertex Z [cm], generated from
+muon_score_data.xml. A position coordinate only means something in its own
+geometry, so the other detector's samples, systematics and correlations are
+removed and the channel binning matches the detvar calculator's
+by_vertexz_icarus subchannel exactly. Prose below inherited from the
+three-detector template may still mention both detectors.
+-->
+
+<!--
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!--
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Here, the POT matches the development sample POT in data for SBND and ICARUS Run 2 and Run 4:
+-->
+<detector name="ICARUSRun2" pot="1.965837e+19" />
+<detector name="ICARUSRun4" pot="1.887259e+19" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+Data overlay companion for coverage/vertexz_icarus.xml
+- data carries no interaction-model systematics
+Two channels split by reconstructed proton multiplicity (ccqelike = 1p,
+nproton = Np), each with a single flat "data" subchannel. Reco-level
+selection only - no truth-level cuts - and no systematics.
+
+ICARUS data (events/icarus_bnblight_run2, events/icarus_bnblight_run4) is
+already split into separate per-run trees upstream, so it gets two MCFile
+blocks (detector="ICARUSRun2"/"ICARUSRun4").
+-->
+
+<channel name="ccqelike" unit="Reconstructed Vertex Z [cm]">
+
+    <bins unit="Vertex Z [cm]" edges="-50 -40 -30 -20 -10 0 10 20 30 40 50"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+    <bins unit="Muon End Z [cm]" edges="-50 -40 -30 -20 -10 0 10 20 30 40 50"/>
+    <bins unit="|Vertex X| [cm]" edges="160.12 165.12 170.12 175.12 180.12 185.12 190.12 195.12 200.12 205.12 215.12 220.12 225.12 230.12 235.12 240.12 245.12 250.12 255.12 260.12"/>
+    <bins unit="|Muon End X| [cm]" edges="160.12 165.12 170.12 175.12 180.12 185.12 190.12 195.12 200.12 205.12 215.12 220.12 225.12 230.12 235.12 240.12 245.12 250.12 255.12 260.12"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="nproton" unit="Reconstructed Vertex Z [cm]">
+
+    <bins unit="Vertex Z [cm]" edges="-50 -40 -30 -20 -10 0 10 20 30 40 50"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+    <bins unit="Muon End Z [cm]" edges="-50 -40 -30 -20 -10 0 10 20 30 40 50"/>
+    <bins unit="|Vertex X| [cm]" edges="160.12 165.12 170.12 175.12 180.12 185.12 190.12 195.12 200.12 205.12 215.12 220.12 225.12 230.12 235.12 240.12 245.12 250.12 255.12 260.12"/>
+    <bins unit="|Muon End X| [cm]" edges="160.12 165.12 170.12 175.12 180.12 185.12 190.12 195.12 200.12 205.12 215.12 220.12 225.12 230.12 235.12 240.12 245.12 250.12 255.12 260.12"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<MCFile treename="events/icarus_bnblight_run2/selected" filename="work/icarus_run2_data.root" scale = "1.0" pot="1.965837e+19">
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_ccqelike_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
+    >
+        <variable>reco_vertex_z</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+        <variable>reco_leading_muon_end_z</variable>
+        <variable>abs(reco_vertex_x)</variable>
+        <variable>abs(reco_leading_muon_end_x)</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_nproton_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
+    >
+        <variable>reco_vertex_z</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+        <variable>reco_leading_muon_end_z</variable>
+        <variable>abs(reco_vertex_x)</variable>
+        <variable>abs(reco_leading_muon_end_x)</variable>
+    </branch>
+</MCFile>
+
+<MCFile treename="events/icarus_bnblight_run4/selected" filename="work/icarus_run4_data.root" scale = "1.0" pot="1.887259e+19">
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_ccqelike_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+    >
+        <variable>reco_vertex_z</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+        <variable>reco_leading_muon_end_z</variable>
+        <variable>abs(reco_vertex_x)</variable>
+        <variable>abs(reco_leading_muon_end_x)</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_ICARUSRun4_nproton_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+    >
+        <variable>reco_vertex_z</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+        <variable>reco_leading_muon_end_z</variable>
+        <variable>abs(reco_vertex_x)</variable>
+        <variable>abs(reco_leading_muon_end_x)</variable>
+    </branch>
+</MCFile>

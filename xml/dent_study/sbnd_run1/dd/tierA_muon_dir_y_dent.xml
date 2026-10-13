@@ -1,0 +1,157 @@
+<?xml version="1.0" ?>
+
+<!--
+DETECTOR-ACCESS comparison: SBND Run 1, muon_score, inclusive, area normalized.
+Generated from xml/coverage/muon_score{,_data}.xml, which supplies var0 and the
+full systematics suite; everything belonging to the other detectors is
+removed. Variable indices follow the coverage convention (var0 observable,
+var1 L/E, var2 True E, var3 RecoE shadow, var4 Count), so plots want
+counter_index = 4.
+
+POT is BOGUS (1.0e+19) on both sides: the comparison is area normalized.
+MC and data are both v1.1.0 production (tree names, veto cut, and MattModYZ were migrated; see fix history).
+-->
+
+<!-- 
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!--
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Finally, we have two separate ICARUS runs, which mechanically are treated as
+two separate detectors due to the different collection of detector model
+systematics and the different POT.
+
+This is the data/MC comparison companion to coverage/muon_score_data.xml, so
+the target POT here is set to the actual collected data POT for each detector
+(matching muon_score_data.xml's <detector> block exactly) rather than a
+future-sensitivity target - PROfit requires the data and MC configs to agree
+on POT per detector.
+-->
+<detector name="SBND"       pot="1.0e+19" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+==================================
+= Exclusive final-state analysis =
+==================================
+Two channels split by reconstructed proton multiplicity:
+ - ccqelike: exactly one reconstructed proton
+ - nproton:  more than one reconstructed proton
+-->
+<channel name="numu" unit="Muon direction y">
+
+    <bins unit="muon_dir_y" edges="-0.987 -0.882 -0.771 -0.665 -0.566 -0.472 -0.38 -0.288 -0.196 -0.104 -0.00862 0.0883 0.184 0.279 0.373 0.466 0.563 0.662 0.769 0.881 0.987"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
+    <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
+    <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffed"/>
+    <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
+    <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
+
+</channel>
+
+<!--
+Declare the histogram-based detector systematics. These are the detector model
+systematics that are applied to the MC samples in the analysis. Each detector
+systematic is represented by a <HistVarSection> containing one or more
+<variation> elements, which specify the histogram file, histogram name, and
+knob value.
+-->
+<variation_list>
+    <allowlist type="mcstat" plotname="MC Stats" tag="stat,MC Stats">mcstat</allowlist>
+</variation_list>
+
+<MCFile treename="events/sbnd_detvar_newdent/selected" filename="work/sbnd_run1_detvar.root" scale = "1.0" pot="1.0e+19">
+
+    <!-- SBND, single-proton, Neutral Current -->
+    
+    <!-- SBND, single-proton, Electron Neutrino Charged Current -->
+
+    <!-- SBND, single-proton, Other Charged Current -->
+
+    <!-- SBND, single-proton, Target -->
+
+    <!-- SBND, single-proton, Neutral Current -->
+
+    <!-- SBND, single-proton, Electron Neutrino Charged Current -->
+
+    <!-- SBND, single-proton, Other Charged Current -->
+
+    <!-- SBND, single-proton, Target -->
+    <branch
+        associated_subchannel = "nu_SBND_numu_nc"
+        model_rule            = "1"
+        additional_weight     = "true_cc == 0 && true_neutrino_id >= 0 && true_category == 8 && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_leading_muon_start_dir_y</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+    <branch
+        associated_subchannel = "nu_SBND_numu_nuecc"
+        model_rule            = "0"
+        additional_weight     = "true_cc && (true_pdg == 12 || true_pdg == -12) && true_neutrino_id >= 0 && (true_category == 6 || true_category == 7) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_leading_muon_start_dir_y</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+    <branch
+        associated_subchannel = "nu_SBND_numu_othercc"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 1 || true_category == 3 || (true_category >= 4 && true_category < 8)) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_leading_muon_start_dir_y</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+    <branch
+        associated_subchannel = "nu_SBND_numu_target"
+        model_rule            = "1"
+        additional_weight     = "true_cc && (true_pdg == 14 || true_pdg == -14) && true_neutrino_id >= 0 && (true_category == 0 || true_category == 2) && (reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))"
+        incl_systematics      = "false"
+    >
+        <variable>reco_leading_muon_start_dir_y</variable>
+        <variable>true_baseline / (1000 * true_neutrino_energy)</variable>
+        <variable>true_neutrino_energy</variable>
+        <variable>reco_visible_energy</variable>
+        <variable>0.5</variable>
+    </branch>
+</MCFile>

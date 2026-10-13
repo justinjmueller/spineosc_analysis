@@ -51,7 +51,7 @@ detsys/profit_systematics*/*.root
 
 # fake-data tooling
 spinefd/.geproj/
-archive/
+/archive/
 
 # ---------------------------------------------------------------------------
 # Run products. PROfit writes these into the working directory (the repo root when run
