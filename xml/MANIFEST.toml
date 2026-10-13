@@ -158,3 +158,10 @@ status = "archived"
 purpose = "Pre-v1.1.0 coverage studies that were not migrated (dp shifted/vanilla variants, dp15, dp25, calo/csda residuals)"
 superseded_by = "xml/coverage/"
 reviewed = "2026-10-08"
+
+[[family]]
+pattern = "xml/fakedata/*"
+status = "needs-review"
+purpose = "Fake-data injection XMLs (spinefd work, set aside; not yet committed)"
+notes = "Classify (active/development) once the fake-data work resumes."
+reviewed = "2026-10-13"
