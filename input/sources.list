@@ -1,19 +1,123 @@
-## Files from /pnfs/sbn/persistent/users/mueller/spineosc/v1.0.10 in case they are somehow missing
+# Machine-specific file map for mueller@fnal.gov's local checkout.
+#
+# Key pattern: <detector>_<runX>_<type>, type in {cvmc, dirt, data}.
+# SBND is entirely run1. ICARUS is run2 and run4.
+#
+# ICARUS run2/run4 pairs (and the two icarus_data lines) intentionally
+# point at the SAME physical file per type: Run 2 and Run 4 are read out
+# of one underlying production file, but PROfit needs each to see a
+# distinct path, so both are aliased explicitly here instead of relying
+# on one "primary" name plus a manually-made symlink for the other.
 
 # --- SBND Run 1 ---
-sbnd_run1_cvmc=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_sbnd_run1_v1.0.10_wsyst.root
-sbnd_run1_dirt=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_sbnd_run1_v1.0.10_dirt_wsyst.root
-sbnd_run1_data=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_sbnd_run1_v1.0.10_bnblight.root
+sbnd_run1_cvmc=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_wsyst.root
+sbnd_run1_dirt=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_dirt_wsyst.root
+sbnd_run1_data=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_sbnd_access_DONOTLOOK.root
+# CV-reweighted beam sample (cvwgt injected by reweight/; holds only events/sbnd_large/{selected,multisigma,multisim}).
+# sbnd_run1_cvmc stays the full wsyst file: the offbeam and nonmatched trees are read from it.
+sbnd_run1_cvrw=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_wsyst_cvrw.root
+# detvar CV/DENT samples (no weights); used directly by the DENT study's Tier A
+sbnd_run1_detvar=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root
 
 # --- ICARUS Run 2 ---
-icarus_run2_cvmc=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run2_v1.0.10_wsyst.root
-icarus_run2_dirt=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run2_v1.0.10_dirt_wsyst.root
-icarus_run2_data=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run2_v1.0.10_bnblight.root
+icarus_run2_cvmc=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run2_v1.1.0_wsyst.root
+icarus_run2_dirt=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run2_v1.1.0_dirt_wsyst.root
+icarus_run2_data=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run2_v1.1.0_bnblight.root
+# CV-reweighted beam sample (cvwgt injected by reweight/; holds only events/icarus_run2/{selected,multisigma,multisim})
+icarus_run2_cvrw=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run2_v1.1.0_wsyst_cvrw.root
 
 # --- ICARUS Run 4 ---
-icarus_run4_cvmc=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run4_v1.0.10_wsyst.root
-icarus_run4_dirt=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run4_v1.0.10_dirt_wsyst.root
-icarus_run4_data=/flare/neutrinoGPU/jmueller/data/v1.0.10/spineosc_numu_icarus_run4_v1.0.10_bnblight.root
+icarus_run4_cvmc=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run4_v1.1.0_wsyst.root
+icarus_run4_dirt=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run4_v1.1.0_dirt_wsyst.root
+icarus_run4_data=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run4_v1.1.0_bnblight.root
+# CV-reweighted beam sample (cvwgt injected by reweight/; holds only events/icarus_run4/{selected,multisigma,multisim})
+icarus_run4_cvrw=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_run4_v1.1.0_wsyst_cvrw.root
 
 # --- Detector systematics ---
-detsys_main=/home/jmueller/spineosc/spineosc_analysis/detvar/detsys_v1.0.10.root
+detsys_main=/Users/mueller/Projects/spineosc/detvar/detsys-v1.1.0v2.root
+detsys_muon_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_score.root
+detsys_muon_score_xing=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_score_xing.root
+detsys_muon_score_stay=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_score_stay.root
+detsys_muon_score_xing_plusx=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_score_xing_plusx.root
+detsys_muon_score_xing_minusx=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_score_xing_minusx.root
+detsys_muon_endx_stay=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endx_stay.root
+detsys_muon_endx_xing=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endx_xing.root
+detsys_proton_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_proton_score.root
+detsys_muon_primary_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_primary_score.root
+detsys_proton_primary_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_proton_primary_score.root
+detsys_muon_calo_csda=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_calo_csda.root
+detsys_proton_calo_csda=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_proton_calo_csda.root
+detsys_muon_mcs_csda=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_mcs_csda.root
+detsys_proton_ke=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_proton_ke.root
+detsys_dp=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_dp.root
+detsys_dpt=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_dpt.root
+detsys_dalphat=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_dalphat.root
+detsys_dphit=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_dphit.root
+detsys_muon_azimuth=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_azimuth.root
+# --- Detector systematics: position variables (single-detector) ---
+detsys_vertexx_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_vertexx_sbnd.root
+detsys_vertexy_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_vertexy_sbnd.root
+detsys_vertexz_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_vertexz_sbnd.root
+detsys_muon_endx_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endx_sbnd.root
+detsys_muon_endy_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endy_sbnd.root
+detsys_muon_endz_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endz_sbnd.root
+detsys_vertexx_icarus=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_vertexx_icarus.root
+detsys_vertexy_icarus=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_vertexy_icarus.root
+detsys_vertexz_icarus=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_vertexz_icarus.root
+detsys_muon_endx_icarus=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endx_icarus.root
+detsys_muon_endy_icarus=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endy_icarus.root
+detsys_muon_endz_icarus=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_endz_icarus.root
+
+# --- v1.1.0 detector-access data (full beam data; see xml/detector_data_access/) ---
+sbnd_run1_dataaccess=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_release-v1.1.0_detector_access_DONOTLOOK.root
+icarus_run2_dataaccess=/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_icarus_release-v1.1.0_detector_access_DONOTLOOK.root
+
+# --- added for phase1 tier2/tier3 and the 2D binding energy ---
+detsys_be2d=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_be2d.root
+detsys_dp_be=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_dp_be.root
+detsys_energy_qel=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_energy_qel.root
+detsys_muon_p=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_p.root
+detsys_muon_polar_angle=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_polar_angle.root
+detsys_opening_angle=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_opening_angle.root
+detsys_proton_p=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_proton_p.root
+detsys_muon_ke=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0_muon_ke.root
+
+# --- DENT study: per-observable detector-variation ratios (scripts/dent_study/build_dd_detsys.py) ---
+detsys_dd_muon_calo_csda=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_calo_csda.root
+detsys_dd_muon_len3d=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_len3d.root
+detsys_dd_muon_abs_endx=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_abs_endx.root
+detsys_dd_crosser_flag=/Users/mueller/Projects/spineosc/detvar/detsys_dd_crosser_flag.root
+detsys_dd_muon_endx_full=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_endx_full.root
+detsys_dd_vertexx_full=/Users/mueller/Projects/spineosc/detvar/detsys_dd_vertexx_full.root
+detsys_dd_proton_endx_full=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_endx_full.root
+detsys_dd_muon_startx_full=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_startx_full.root
+detsys_dd_proton_calo_csda=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_calo_csda.root
+detsys_dd_muon_proton_score=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_proton_score.root
+detsys_dd_muon_pion_score=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_pion_score.root
+detsys_dd_proton_mip_score=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_mip_score.root
+detsys_dd_proton_pion_score=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_pion_score.root
+detsys_dd_proton_muon_score=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_muon_score.root
+detsys_dd_muon_endy=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_endy.root
+detsys_dd_vertexy=/Users/mueller/Projects/spineosc/detvar/detsys_dd_vertexy.root
+detsys_dd_proton_endy=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_endy.root
+detsys_dd_proton_endz=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_endz.root
+detsys_dd_muon_dir_x=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_dir_x.root
+detsys_dd_muon_dir_y=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_dir_y.root
+detsys_dd_muon_dir_z=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_dir_z.root
+# v1.1.0v2: SBND ratios recomputed with the crosser and 4 cm muon end-point cuts (detsys/calculator_da); ICARUS and generic unchanged
+detsys_v2_muon_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_muon_score.root
+detsys_v2_proton_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_proton_score.root
+detsys_v2_muon_primary_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_muon_primary_score.root
+detsys_v2_proton_primary_score=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_proton_primary_score.root
+detsys_v2_vertexx_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_vertexx_sbnd.root
+detsys_v2_vertexz_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_vertexz_sbnd.root
+detsys_v2_muon_endx_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_muon_endx_sbnd.root
+detsys_v2_muon_endz_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_muon_endz_sbnd.root
+detsys_v2_proton_ke=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_proton_ke.root
+detsys_v2_dp=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_dp.root
+detsys_v2_dpt=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_dpt.root
+detsys_v2_dalphat=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_dalphat.root
+detsys_v2_dphit=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_dphit.root
+detsys_v2_muon_azimuth=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_muon_azimuth.root
+detsys_v2_vertexy_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_vertexy_sbnd.root
+detsys_v2_muon_endy_sbnd=/Users/mueller/Projects/spineosc/detvar/detsys_v1.1.0v2_muon_endy_sbnd.root

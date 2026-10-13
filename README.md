@@ -172,11 +172,36 @@ re-`process`; forcing past it yields silently wrong normalization.
 - Type: `cvmc` (central-value signal MC, "wsyst"), `dirt` (dirt MC),
   or `data` (beam-on data, "bnblight")
 
-Plus one detector-independent key, `detsys_main`, for the ROOT file
-holding the detector-systematics histograms referenced by
-`<HistVarFiles>` and the `hist1d` allowlist entries in the XML configs.
+Plus a set of detector-independent `detsys_*` keys, one per ROOT file of
+detector-systematics histograms referenced by `<HistVarFiles>` and the
+`hist1d` allowlist entries in the XML configs:
 
-That's 9 detector/run/type keys + `detsys_main` = 10 lines in
+- `detsys_main` - the histograms binned in reconstructed visible energy,
+  used by the main analysis XMLs.
+- One `detsys_<variable>` per coverage study under `xml/coverage/` -
+  the same 27 systematics re-binned in that study's fit variable.
+  Currently the PID scores (`muon_score`, `proton_score`,
+  `muon_primary_score`, `proton_primary_score`), the range/momentum
+  agreement variables (`muon_calo_csda`, `proton_calo_csda`,
+  `muon_mcs_csda`), and the kinematic/TKI variables (`proton_ke`, `dp`,
+  `dpt`, `dalphat`, `dphit`, `muon_azimuth`).
+
+  The kinematic set is binned in the ntuples' native units - MeV, MeV/c
+  and radians - rather than the GeV convention used by
+  `xml/varset1_devsample.xml`. The detvar calculator hands the subchannel
+  branch straight to RDataFrame as a column name, so a scaling expression
+  like `reco_pn/1000` cannot be used there; keeping the XML channel
+  binning in those same native units is what guarantees the fit variable
+  and the systematic ratio axis agree.
+
+Each is produced by `detsys/calculator` and then combined with e.g.
+
+```
+hadd detvar/detsys_v1.0.10_muon_score.root \
+     detsys/profit_systematics/*_by_muon_score.root
+```
+
+That's 9 detector/run/type keys + 14 `detsys_*` keys = 23 lines in
 `input/sources.list`.
 
 **ICARUS Run 2 and Run 4 read out of the same underlying production
