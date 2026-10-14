@@ -147,6 +147,21 @@ Request Nupur to update the labels on the N-1 studies so that they match the lab
 watermark and version stamps). I did not find "N-1" in the technote's `.tex` files, so the figures may be absent from the current text or live elsewhere; confirm where they
 are and which labels differ before sending the request.
 
+### Remove leftover files (follow up)
+Opened 2026-10-13.
+
+Deletion of the untracked, git-ignored root files `test_detsysonly.ini` and `test_detsysonly.xml` was blocked by the permission classifier, so they remain. Remove them by hand. Not yet decided (kept for now): `runs/xml_backup_20261008.tgz` (delete once the XML consolidation is confirmed), the one-time migration scripts `build_cov_v2.py` / `build_da_v2.py` (archive), and the remaining root ROOT outputs listed in `docs/root_bin_candidates.md`. The technote's `efficiency_icarus_run*_muon_azimuthal_angle (1).pdf` duplicate is already gone.
+
+### Verify the plotting/studies scripts and retire the notebooks
+Opened 2026-10-13.
+
+The 13 notebooks in `plotting/` were ported to `plotting/studies/*.py` (see its README). Each part was run once on real inputs but figures were not compared with the notebooks'. To do: compare outputs, then retire the notebooks and the `plotting/scripts/build_*_notebook.py` generators. Known items:
+- `conditional_constraint.py` default input `runs/legacy_root/contours_recoe_covar_PROplot.root` does not exist (regenerate with `plot --with-covar` or point at `contours_recoe_v1_PROplot.root`); the script was only linted.
+- `data_access.py`: phase 1 p-value axis says "Shape-only" though phase 1 is area-normalised; confirm `ENABLED_TIERS` (notebook value (1, 2, 3), comments say (1,)). Phase 2 panels and `sbnd_scan.py --figure ratio` were not run.
+- `sbnd_scan.py` reads the CV envelope from `sbnd_scanmatch_v1_PROplot_histograms.root` (the notebook's file is missing); not compared with the original.
+- `plotting/dent_study/dentstudy.py` and `replica.py` hard-code `/Users/mueller/Projects/spineosc`; `dent_study.py --only ablation` prints a stray UserWarning; `panels` stage not run.
+- Output destinations changed: scripts write to `--output`, not the technote or unblinding-request directories; `systematics.py` replaced the `SYSTS_*` environment variables with options; `fakedata_injection.py` no longer launches PROfit unless `--run-profit`.
+
 ## Done
 
 (none yet)
