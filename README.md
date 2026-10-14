@@ -4,21 +4,26 @@ PROfit XML configs for the SBND + ICARUS oscillation analysis.
 
 ## Repo layout
 
-```
-xml/                   PROfit XML configs (contours_base.xml, exclusive_selected_1d.xml, varset*_mc.xml, varset*_devsample*.xml)
-jobs/                  per-study job configs (*.ini), read directly by PROfit --config
-input/
-  sources.list.example  checked-in template listing every file key the XML configs expect
-  sources.list           your machine's actual file paths (gitignored - you create this)
-  site.conf.example      checked-in template for this machine's paths and batch settings
-  site.conf              your PROfit build, output area and PBS settings (gitignored - you create this)
-scripts/
-  deploy.sh              populates work/ from input/sources.list
-  profit_run.sh          runs one PROfit subcommand for one job config
-  submit_pbs.sh          submits the same thing as a single-node PBS job
-work/                   symlinks the XML configs read from (generated, gitignored)
-detvar/detsys.root     detector systematics histograms (tracked in git)
-```
+| Path | Purpose | Entry point / docs |
+|---|---|---|
+| `xml/` | PROfit XML and `.ini` configs, grouped by study (`contours`, `coverage`, `detector_data_access`, `dent_study`, `resolution`, `fakedata`, ...) | `xml/MANIFEST.toml`, `python scripts/xml_manifest.py --check` |
+| `jobs/` | per-study job configs read by PROfit `--config` | see "Job configs" |
+| `input/` | `sources.list.example` / `site.conf.example` templates and the machine file maps | see "First-time setup" |
+| `scripts/` | deploy, XML generators and linter, notebook runner, study drivers (`scripts/dent_study/`) | `scripts/deploy.sh` |
+| `plotting/studies/` | documented plotting scripts that replace the analysis notebooks | `plotting/studies/README.md` |
+| `plotting/`, `detsys/plotting/` | legacy analysis notebooks, kept until the scripts are verified | `docs/RESIDUAL_TASKS.md` |
+| `detsys/`, `detvar/` | detector-systematics calculator and the ratio-histogram ROOT files | `detsys/calculator*/` |
+| `reweight/`, `reBruce/` | event reweighting (`reweight/Makefile`) and the `reBruce` submodule | submodule README |
+| `spinefd/` | fake-data generation on the CV MC | `spinefd/README.md` |
+| `docs/` | study reports, audits and `RESIDUAL_TASKS.md` (open work) | `docs/RESIDUAL_TASKS.md` |
+| `runs/`, `figures/`, `work/` | generated run products, figures and symlinks (git-ignored) | |
+
+Python environment: see `pyproject.toml` (Python >= 3.11; the study scripts also need the `mutools`
+package, installed from `/Users/mueller/Projects/mutools` with `uv sync`).
+
+Note: the PROfit wrappers `scripts/profit_run.sh` and `scripts/submit_pbs.sh` described below
+are not present on this branch (they live in the commit history of another branch); the PROfit
+build and `input/site.conf` settings are described in "Running PROfit".
 
 The XML configs never hardcode an absolute, machine-specific path. Every
 `filename="..."` attribute in `xml/*.xml` points at a relative

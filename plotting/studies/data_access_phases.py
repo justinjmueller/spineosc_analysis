@@ -61,8 +61,9 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import common  # noqa: E402
 from data_access import CHANNEL_TOKENS, RUNS_DIR  # noqa: E402
+
+import common  # noqa: E402
 
 #: Selection value of the "total" subchannel in the histogram trees.
 TOTAL_SUBCHANNEL = 4294967295
