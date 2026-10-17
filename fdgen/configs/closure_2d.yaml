@@ -1,0 +1,22 @@
+# 2D analysis (contours_base: ccqelike in reco E x pn). Downselected output keeps only events in an analysis branch and only the branches the
+# XML expressions reference (that includes reco_pn through <variable2D>reco_visible_energy;reco_pn/1000</variable2D>) plus reco_proton_multiplicity.
+# Asimov closure: identity, the by-hand oscillation point, and one standard dial.
+dataset:
+  name: closure_2d
+  mc_xml: xml/contours/contours_base.xml
+  base_dir: runs/fakedata_data          # the XML's work/ paths resolve here
+  outdir: output/fdgen/closure_2d
+  seed: 6
+  poisson: false
+  shuffle: false
+  output:
+    selection: xml
+    branches: needed
+    keep_extra: []
+
+scenarios:
+  - id: identity
+  - id: osc_a
+    oscillation: {dmsq: 2.0, sinsq2thmm: 0.2}
+  - id: std_maccres
+    effects: [{source: standard, dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES, sigma: 1.0}]

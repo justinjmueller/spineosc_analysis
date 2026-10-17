@@ -1,0 +1,20 @@
+# Downselected output: only the events that fall in an analysis branch and only the branches the XML expressions need (+ proton multiplicity).
+# Same scenarios as crosscheck_dials.yaml (xs_A = xc_A: one dial; xs_G = xc_G: oscillation only); PROfit must give the same fake-data histograms as with the full copy.
+dataset:
+  name: crosscheck_sel
+  mc_xml: xml/systematics/systematics_suite.xml
+  base_dir: runs/fakedata_data
+  outdir: output/fdgen/crosscheck_sel
+  seed: 4
+  poisson: false
+  shuffle: false
+  output:
+    selection: xml            # "xml" = events in any branch of the XML, or a TFormula string
+    branches: needed          # the branches referenced by the XML expressions + the selection + reco_proton_multiplicity + keep_extra
+    keep_extra: []
+scenarios:
+- id: xs_A
+  effects:
+  - {source: standard, dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES, sigma: 1.0}
+- id: xs_G
+  oscillation: {dmsq: 2.0, sinsq2thmm: 0.2}

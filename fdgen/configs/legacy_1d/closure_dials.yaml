@@ -1,0 +1,28 @@
+# Dial closure tests (Asimov): each dial alone, and combined with the oscillation. Shifts sit on a knot (+1 sigma) so the
+# per-event interpolation equals the stored weight and PROfit's per-bin spline agrees at the knot.
+dataset:
+  name: closure_dials
+  mc_xml: xml/systematics/systematics_suite.xml
+  base_dir: runs/fakedata_data
+  outdir: output/fdgen/closure_dials
+  seed: 2
+  poisson: false
+  shuffle: false
+  rebruce_files:                        # spinefd slim files holding selected_fakedataTree, by tree directory
+    events/sbnd_large: output/sbnd_run1_fakedata_slim.root
+    events/icarus_run2: output/icarus_run2_fakedata_slim.root
+    events/icarus_run4: output/icarus_run4_fakedata_slim.root
+
+scenarios:
+  - id: std_maccres                     # a standard dial that is also a nuisance parameter in the fit ("MaCCRES")
+    effects: [{source: standard, dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES, sigma: 1.0}]
+  - id: osc_std                         # oscillation + the same standard dial (PROfit can inject both itself)
+    oscillation: {dmsq: 2.0, sinsq2thmm: 0.2}
+    effects: [{source: standard, dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES, sigma: 1.0}]
+  - id: rebruce_mec                     # a reBruce dial (no nuisance parameter in the fit)
+    effects: [{source: rebruce, dial: multisigma_fdwgt_mec_bdt, sigma: 1.0}]
+  - id: mix                             # all three at once
+    oscillation: {dmsq: 2.0, sinsq2thmm: 0.2}
+    effects:
+      - {source: standard, dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES, sigma: 1.0}
+      - {source: rebruce, dial: multisigma_fdwgt_mec_bdt, sigma: 1.0}

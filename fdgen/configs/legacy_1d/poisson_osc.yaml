@@ -1,0 +1,14 @@
+# Poisson-thrown counts (mysterycntNN) for the identity and the by-hand oscillation point.
+dataset:
+  name: poisson_osc
+  mc_xml: xml/systematics/systematics_suite.xml
+  base_dir: runs/fakedata_data
+  outdir: output/fdgen/poisson_osc
+  seed: 3
+  poisson: true
+  shuffle: false
+
+scenarios:
+  - id: identity
+  - id: osc_a
+    oscillation: {dmsq: 2.0, sinsq2thmm: 0.2}

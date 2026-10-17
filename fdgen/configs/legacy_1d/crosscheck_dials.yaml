@@ -1,0 +1,113 @@
+# Cross-check of the Asimov mode against PROfit's own --inject / --inject-systs for several dial combinations.
+# profit_inject = the equivalent PROfit arguments (plotnames of the spline systematics); fdgen ignores it. All shifts sit on a knot.
+dataset:
+  name: crosscheck_dials
+  mc_xml: xml/systematics/systematics_suite.xml
+  base_dir: runs/fakedata_data
+  outdir: output/fdgen/crosscheck_dials
+  seed: 4
+  poisson: false
+  shuffle: false
+scenarios:
+- id: xc_A
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  profit_inject:
+  - --inject-systs
+  - MaCCRES
+  - '1'
+- id: xc_B
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_NormCCMEC
+    sigma: -1.0
+  profit_inject:
+  - --inject-systs
+  - NormCCMEC
+  - '-1'
+- id: xc_C
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MvCCRES
+    sigma: -1.0
+  profit_inject:
+  - --inject-systs
+  - MaCCRES
+  - '1'
+  - MvCCRES
+  - '-1'
+- id: xc_D
+  effects:
+  - source: standard
+    dial: QEInterference_SBN_v3_QEIntf_dial_0
+    sigma: 2.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_FrAbs_pi
+    sigma: -1.0
+  profit_inject:
+  - --inject-systs
+  - QEIntf_dial0
+  - '2'
+  - FrAbs_pi
+  - '-1'
+- id: xc_E
+  oscillation:
+    dmsq: 2.0
+    sinsq2thmm: 0.2
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_NormCCMEC
+    sigma: -1.0
+  profit_inject:
+  - -i
+  - dmsq
+  - '2'
+  - sinsq2thmm
+  - '0.2'
+  - --inject-systs
+  - MaCCRES
+  - '1'
+  - NormCCMEC
+  - '-1'
+- id: xc_F
+  effects:
+  - source: standard
+    dial: ZExpPCAWeighter_SBN_v3_MvA_b1
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_CV1uBY
+    sigma: -2.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_DecayAngMEC
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_FrAbs_pi
+    sigma: 1.0
+  profit_inject:
+  - --inject-systs
+  - MvAZExp_b1
+  - '1'
+  - CV1uBY
+  - '-2'
+  - DecayAngMEC
+  - '1'
+  - FrAbs_pi
+  - '1'
+- id: xc_G
+  oscillation:
+    dmsq: 2.0
+    sinsq2thmm: 0.2
+  profit_inject:
+  - -i
+  - dmsq
+  - '2'
+  - sinsq2thmm
+  - '0.2'
