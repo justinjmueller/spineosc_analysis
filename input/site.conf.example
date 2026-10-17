@@ -1,0 +1,14 @@
+# input/site.conf.example - template for input/site.conf (machine-specific settings read by scripts/submit_fanout.sh).
+# Copy to input/site.conf and edit. The tracked input/site.conf is the maintainer's ALCF Aurora setup.
+
+# Directory containing the PROfit binary.
+profit_bin=/path/to/PROfit/build/bin
+
+# Directory for PROfit outputs and caches. A single tag's .bin files run to several GB, so keep this off the repo and $HOME.
+output_root=/path/to/profit_out
+
+# PBS batch settings; only used when submitting jobs.
+pbs_account=<allocation>
+pbs_queue=debug
+pbs_filesystems=<filesystems>
+pbs_ncpus=104

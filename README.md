@@ -86,9 +86,11 @@ differs per machine.
    in its directory and runs as `./run_detsys <sbnd|icarus|generic|all> <output_dir>`. Binaries built
    before this change still carry the old path and need rebuilding.
 
-`input/sources.list`, `input/site.conf` and `work/` are all gitignored -
-they're machine-specific and fully reproducible from the checked-in
-`.example` templates plus your local data, so there's nothing to commit.
+`input/sources.list` and `input/site.conf` are tracked as the maintainer's own
+environments (a local checkout and ALCF Aurora); `input/sources.list.alcf` is the file
+map for the ALCF workflows, and `input/sources.list.example` / `input/site.conf.example`
+are the templates to copy on any other machine. `work/` is gitignored: it is rebuilt
+from `input/sources.list` by `scripts/deploy.sh`.
 
 ## Running PROfit
 
