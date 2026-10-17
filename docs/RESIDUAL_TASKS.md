@@ -4,47 +4,6 @@ Open items that are not blocking the current work. Add new entries at the bottom
 
 ## Open
 
-### Follow-up on why the charge-scale / resolution systematic jumps at high energies
-Opened 2026-10-07.
-
-**Observation.** In the SBND multi-proton reconstructed-energy uncorrelated-systematics figure
-(`docs/systematics_v1.1.0/systematics_sbnd_run1_uncorrelated_recoe_multip.pdf`), the "Charge Scale / Resolution" curve rises
-smoothly to about 0.05 at 1.4-1.5 GeV, then jumps to about 0.14 in the last bins (1.5-1.7 and 1.7-2.0 GeV). That step
-dominates the total uncertainty (0.148) and is what set the new `YLIM['uncorrelated']` maximum.
-
-**Why it matters.** A step this sharp, aligned with the bin edge at 1.5 GeV, looks more like a binning or statistics
-artefact than a physical energy dependence.
-
-**Things to check.**
-- MC statistics in the 1.5-1.7 and 1.7-2.0 GeV bins of the detvar samples (CV and varied) behind the ratio histograms.
-- Whether the bins were merged at 1.5 GeV in the `contours_recoe.xml` / suite binning, and whether the detsys ratio
-  histograms use the same merging.
-- Whether the effect is also present in the single-proton channel and in true-energy binning.
-- Whether ICARUS shows the same feature.
-- Sensitivity to the cathode-crosser and high-y/z cuts, since the detvar ratios were rebuilt with them
-  (`detvar/detsys-v1.1.0v1.root`).
-- The origin of the variation (an overall energy-scale shift versus a resolution smearing migrating events across the
-  last bin edge).
-
-**Findings (2026-10-07).** SBND uses `ChargeScale15` (`sbnd_detvar_smear15` against `sbnd_large`). The ratio histogram has one 1.5-2.0 GeV bin
-(0.867), so the two analysis bins above 1.5 GeV (1.5-1.7 and 1.7-2.0) get the same value. The ratio was reproduced from the ntuples and the
-drop is a selection effect, not an energy shift: of the 624 CV events in that bin, 102 are selected only in CV and 29 only in the varied sample
-(net -11.7%), while energy migration of events selected in both samples is only about -1.3%. The fraction of CV-selected events missing from the
-varied selected tree rises with energy (about 7% below 1.3 GeV, 10% at 1.3-1.5, 17% at 1.5-2.0, against about 5% in the reverse direction), and
-the lost events have more protons (25% with five or more, against 15% for the kept events). The cut is the pion veto (`reco_pion_multiplicity == 0`): 12 of the 21 lost events that can be traced
-through the varied sample's signal tree fail it, and in truth terms about 30-38% of selected events with a true pion leave the selection at
-every energy, against 4-7% of events without one. The share of true-pion events in the selected sample rises steeply with energy (about 5% at
-0.7-1.0 GeV to 32% of non-crossers at 1.5-2.0 GeV), and the crosser cut removes crossers, which are less pion-rich (20%). Still open: whether
-to split or smooth the high-energy ratio bin, and why the varied reconstruction identifies pions the CV missed.
-
-**Resolution (2026-10-07, `plotting/dent_study/chargescale_highE.py`).** With paired-bootstrap errors on the current selection (crosser and 4 cm end-point cuts), splitting the 1.5-2.0 GeV
-bin gives 0.870 +- 0.027 (1.5-1.7 GeV) and 0.856 +- 0.068 (1.7-2.0 GeV), consistent with the single-bin value 0.868 +- 0.022, so a split adds no information. The step from the 1.3-1.5 GeV bin
-(0.953 +- 0.009) to 1.5-2.0 GeV is significant (about 3.5 sigma) and lies about 3 sigma below a linear trend fitted above 0.7 GeV, so a smooth fit would understate it. Recommendation: keep the
-single bin, document the pion-veto origin in the note, and do not smooth. Awaiting a decision.
-
-**Where to look.** Detvar calculator `detsys/calculator/configuration.h`; ratio histograms in `detvar/`; frac_syst trees
-in `runs/systematics/`; plotting in `plotting/systematics.ipynb`.
-
 ### Technote plots to update to v1.1.0
 Opened 2026-10-07. Technote: `/Users/mueller/Projects/spineosc_technote` (figures under `figures/`, referenced from `sections/*.tex`).
 
@@ -91,6 +50,9 @@ and exposure tables and the systematics table need the v1.1.0 numbers.
 
 **Binding Energy (done 2026-10-07).** The `BindingEnergy_*` histograms in `detvar/detsys-v1.1.0v1.root` were regenerated from the v1.1.0 `_cvrw` files with `cvwgt` and the v1 selection (`detsys/binding_energy/make_be_v1.py`, `inject_be.C`). The 2D, delta-p and QE-energy Binding Energy histograms used by the `sbnd_data_access` XMLs were not regenerated.
 
+**Update (2026-10-17).** The resolution group is done (see the overnight log). The tracked fake-data plotting scripts (`plotting/studies/fakedata_*.py`, `plotting/scripts/build_fakedata_*`, `fd2d.py`) and the `spinefd` study were moved to `archive/fakedata_2026-10/` (git-ignored), so the `fake_data` figures have no tracked producer; regenerate with `fdgen` plus new plotting code, or restore from the archive. `sensitivity_studies` is produced by `plotting/studies/surface.py` (verified).
+
+
 ### Re-add updated fractional uncertainty plots on the near/far ratio
 Opened 2026-10-07.
 
@@ -102,6 +64,9 @@ detector pair (SBND with ICARUS Run 2 and Run 4), and new text.
 
 ### Cover the SBND APA gap in the detector data access section
 Opened 2026-10-07.
+
+**Status (2026-10-07 overnight).** APA-gap figures (vertex z and muon end z, gap at z = 250 cm confirmed) and text were added to `detector_data_access.tex`. Still open: the angular dependence of the position comparisons.
+
 
 The conveners recommended checking data/simulation agreement in the vertex and muon end point positions near the SBND cathode **and APA gaps**, including
 the dependence on track angle. `sections/detector_data_access.tex` currently covers only the cathode (and says in the Results introduction that the
@@ -148,23 +113,73 @@ watermark and version stamps). I did not find "N-1" in the technote's `.tex` fil
 are and which labels differ before sending the request.
 
 ### Remove leftover files (follow up)
-Opened 2026-10-13.
+Opened 2026-10-13. Updated 2026-10-17.
 
-Deletion of the untracked, git-ignored root files `test_detsysonly.ini` and `test_detsysonly.xml` was blocked by the permission classifier, so they remain. Remove them by hand. Not yet decided (kept for now): `runs/xml_backup_20261008.tgz` (delete once the XML consolidation is confirmed), the one-time migration scripts `build_cov_v2.py` / `build_da_v2.py` (archive), and the remaining root ROOT outputs listed in `docs/root_bin_candidates.md`. The technote's `efficiency_icarus_run*_muon_azimuthal_angle (1).pdf` duplicate is already gone.
+Still to remove by hand (the permission classifier blocked deletion): the untracked, git-ignored root files `test_detsysonly.ini` and `test_detsysonly.xml`. Not yet decided: `runs/xml_backup_20261008.tgz` (delete once the XML consolidation is confirmed), the one-time migration scripts `build_cov_v2.py` / `build_da_v2.py` (archive), and the remaining root ROOT outputs listed in `docs/root_bin_candidates.md`. Archived 2026-10-17: `tmp_debug/` (`archive/tmp_debug_2026-10/`).
 
-### Verify the plotting/studies scripts and retire the notebooks
-Opened 2026-10-13.
+### Verify the remaining plotting/studies scripts and retire their notebooks
+Opened 2026-10-13. Updated 2026-10-17.
 
-The 13 notebooks in `plotting/` were ported to `plotting/studies/*.py` (see its README). Each part was run once on real inputs but figures were not compared with the notebooks'. To do: compare outputs, then retire the notebooks and the `plotting/scripts/build_*_notebook.py` generators. Known items:
-- `conditional_constraint.py` default input `runs/legacy_root/contours_recoe_covar_PROplot.root` does not exist (regenerate with `plot --with-covar` or point at `contours_recoe_v1_PROplot.root`); the script was only linted.
-- `data_access.py`: phase 1 p-value axis says "Shape-only" though phase 1 is area-normalised; confirm `ENABLED_TIERS` (notebook value (1, 2, 3), comments say (1,)). Phase 2 panels and `sbnd_scan.py --figure ratio` were not run.
-- `sbnd_scan.py` reads the CV envelope from `sbnd_scanmatch_v1_PROplot_histograms.root` (the notebook's file is missing); not compared with the original.
-- `plotting/dent_study/dentstudy.py` and `replica.py` hard-code `/Users/mueller/Projects/spineosc`; `dent_study.py --only ablation` prints a stray UserWarning; `panels` stage not run.
-- Output destinations changed: scripts write to `--output`, not the technote or unblinding-request directories; `systematics.py` replaced the `SYSTS_*` environment variables with options; `fakedata_injection.py` no longer launches PROfit unless `--run-profit`.
+Verified 2026-10-17 by running the notebooks headless on scratch copies and comparing pixel by pixel (see `plotting/studies/README.md`): `exposure`, `signal_selection` (histograms and efficiency), `systematics`, `surface` and `resolution` reproduce their notebooks exactly, and those notebooks are retired. `resolution.py` uses the house saver settings (300 dpi, rasterized, `ytick_precision=2`) rather than the notebook's defaults; the data are identical. The comparison tool was a scratch script (not in the repo).
+
+Still to check, with the notebooks kept in `plotting/` until then:
+- `conditional_constraint.py`: the notebook's input `runs/legacy_root/contours_recoe_covar_PROplot.root` does not exist (regenerate with `plot --with-covar`); `contours_recoe_v1_PROplot.root` has no covariance, so a comparison needs a new PROfit run. Only linted so far.
+- `sbnd_scan.py`: the notebook fails 3 cells because `sbnd_scanmatch_v1_PROplot.root` is missing; the script reads the `errorband` tree of `sbnd_scanmatch_v1_PROplot_histograms.root` instead, so the envelope figure cannot be compared. The spectra, ratio and deficit figures were not compared (the notebook only displays them).
+- `data_access.py`, `data_access_phases.py`: the notebook reads the deleted `dp_test09142026_v1_PROplot.root`. Phase 1 p-value axis says "Shape-only" though phase 1 is area-normalised; confirm `ENABLED_TIERS` (notebook (1, 2, 3), comments say (1,)). Phase 2 panels not run.
+- `dent_study.py`: not compared. `plotting/dent_study/dentstudy.py` and `replica.py` hard-code `/Users/mueller/Projects/spineosc`; `--only ablation` prints a stray UserWarning; `panels` stage not run. Inputs for the four removed disallowed variables no longer exist.
+- Output destinations changed: scripts write to `--output`, not the technote or unblinding-request directories; `systematics.py` replaced the `SYSTS_*` environment variables with options.
 
 ## Done
 
-(none yet)
+* 2026-10-07: Binding Energy histograms regenerated from the v1.1.0 `_cvrw` files (details in the technote item above).
+* 2026-10-07: Resolution XMLs migrated and the 12 resolution figures regenerated (overnight log).
+* 2026-10-13: Root-level ROOT outputs moved to `runs/legacy_root/`; classes C, D, F outputs deleted (`docs/root_output_audit.md`).
+* 2026-10-14: Disallowed detector-data-access results (muon length and direction) removed (`docs/dent_study/REMOVED_DISALLOWED.md`).
+* 2026-10-17: Fake-data work (except `fdgen/`) archived to `archive/fakedata_2026-10/`; `xml/dent_improvement` and `tmp_debug` archived; manifest and README updated.
+* 2026-10-17: Notebooks `summarize_exposure`, `signal`, `resolution`, `systematics`, `surface` and `notebook` verified against their `plotting/studies` scripts and retired.
+
+### Follow-up on why the charge-scale / resolution systematic jumps at high energies (closed)
+Opened 2026-10-07.
+
+**Observation.** In the SBND multi-proton reconstructed-energy uncorrelated-systematics figure
+(`docs/systematics_v1.1.0/systematics_sbnd_run1_uncorrelated_recoe_multip.pdf`), the "Charge Scale / Resolution" curve rises
+smoothly to about 0.05 at 1.4-1.5 GeV, then jumps to about 0.14 in the last bins (1.5-1.7 and 1.7-2.0 GeV). That step
+dominates the total uncertainty (0.148) and is what set the new `YLIM['uncorrelated']` maximum.
+
+**Why it matters.** A step this sharp, aligned with the bin edge at 1.5 GeV, looks more like a binning or statistics
+artefact than a physical energy dependence.
+
+**Things to check.**
+- MC statistics in the 1.5-1.7 and 1.7-2.0 GeV bins of the detvar samples (CV and varied) behind the ratio histograms.
+- Whether the bins were merged at 1.5 GeV in the `contours_recoe.xml` / suite binning, and whether the detsys ratio
+  histograms use the same merging.
+- Whether the effect is also present in the single-proton channel and in true-energy binning.
+- Whether ICARUS shows the same feature.
+- Sensitivity to the cathode-crosser and high-y/z cuts, since the detvar ratios were rebuilt with them
+  (`detvar/detsys-v1.1.0v1.root`).
+- The origin of the variation (an overall energy-scale shift versus a resolution smearing migrating events across the
+  last bin edge).
+
+**Findings (2026-10-07).** SBND uses `ChargeScale15` (`sbnd_detvar_smear15` against `sbnd_large`). The ratio histogram has one 1.5-2.0 GeV bin
+(0.867), so the two analysis bins above 1.5 GeV (1.5-1.7 and 1.7-2.0) get the same value. The ratio was reproduced from the ntuples and the
+drop is a selection effect, not an energy shift: of the 624 CV events in that bin, 102 are selected only in CV and 29 only in the varied sample
+(net -11.7%), while energy migration of events selected in both samples is only about -1.3%. The fraction of CV-selected events missing from the
+varied selected tree rises with energy (about 7% below 1.3 GeV, 10% at 1.3-1.5, 17% at 1.5-2.0, against about 5% in the reverse direction), and
+the lost events have more protons (25% with five or more, against 15% for the kept events). The cut is the pion veto (`reco_pion_multiplicity == 0`): 12 of the 21 lost events that can be traced
+through the varied sample's signal tree fail it, and in truth terms about 30-38% of selected events with a true pion leave the selection at
+every energy, against 4-7% of events without one. The share of true-pion events in the selected sample rises steeply with energy (about 5% at
+0.7-1.0 GeV to 32% of non-crossers at 1.5-2.0 GeV), and the crosser cut removes crossers, which are less pion-rich (20%). Still open: whether
+to split or smooth the high-energy ratio bin, and why the varied reconstruction identifies pions the CV missed.
+
+**Resolution (2026-10-07, `plotting/dent_study/chargescale_highE.py`).** With paired-bootstrap errors on the current selection (crosser and 4 cm end-point cuts), splitting the 1.5-2.0 GeV
+bin gives 0.870 +- 0.027 (1.5-1.7 GeV) and 0.856 +- 0.068 (1.7-2.0 GeV), consistent with the single-bin value 0.868 +- 0.022, so a split adds no information. The step from the 1.3-1.5 GeV bin
+(0.953 +- 0.009) to 1.5-2.0 GeV is significant (about 3.5 sigma) and lies about 3 sigma below a linear trend fitted above 0.7 GeV, so a smooth fit would understate it. Recommendation: keep the
+single bin, document the pion-veto origin in the note, and do not smooth.
+
+**Decision (2026-10-13).** Keep the single, unsmoothed 1.5-2.0 GeV bin (smoothing is not obviously more physical). Still to do in the technote: a sentence on the pion-veto origin of the step.
+
+**Where to look.** Detvar calculator `detsys/calculator/configuration.h`; ratio histograms in `detvar/`; frac_syst trees
+in `runs/systematics/`; plotting in `plotting/systematics.ipynb`.
 
 ## Overnight log (2026-10-07)
 * Azimuth scan redone (`plotting/dent_study/azimuth_scan.py`, `azimuth_systematics.py`): short labels, proton scores vs proton azimuth, only active SBND variations (charge scale, WireMod, non-uniformity, DENT). Muon PID azimuth pattern follows the charge-scale shape; proton PID dips near +-90 deg exceed every active variation.

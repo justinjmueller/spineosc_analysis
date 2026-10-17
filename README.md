@@ -6,7 +6,7 @@ PROfit XML configs for the SBND + ICARUS oscillation analysis.
 
 | Path | Purpose | Entry point / docs |
 |---|---|---|
-| `xml/` | PROfit XML and `.ini` configs, grouped by study (`contours`, `coverage`, `detector_data_access`, `dent_study`, `resolution`, `fakedata`, ...) | `xml/MANIFEST.toml`, `python scripts/xml_manifest.py --check` |
+| `xml/` | PROfit XML and `.ini` configs, grouped by study (`contours`, `coverage`, `detector_data_access`, `dent_study`, `resolution`, ...) | `xml/MANIFEST.toml`, `python scripts/xml_manifest.py --check` |
 | `jobs/` | per-study job configs read by PROfit `--config` | see "Job configs" |
 | `input/` | `sources.list.example` / `site.conf.example` templates and the machine file maps | see "First-time setup" |
 | `scripts/` | deploy, XML generators and linter, notebook runner, study drivers (`scripts/dent_study/`) | `scripts/deploy.sh` |
@@ -14,9 +14,9 @@ PROfit XML configs for the SBND + ICARUS oscillation analysis.
 | `plotting/`, `detsys/plotting/` | legacy analysis notebooks, kept until the scripts are verified | `docs/RESIDUAL_TASKS.md` |
 | `detsys/`, `detvar/` | detector-systematics calculator and the ratio-histogram ROOT files | `detsys/calculator*/` |
 | `reweight/`, `reBruce/` | event reweighting (`reweight/Makefile`) and the `reBruce` submodule | submodule README |
-| `spinefd/` | fake-data generation on the CV MC | `spinefd/README.md` |
+| `fdgen/` | YAML-driven fake-data weight generator following PROfit's osc/Poisson recipe | `fdgen/README.md` |
 | `docs/` | study reports, audits and `RESIDUAL_TASKS.md` (open work) | `docs/RESIDUAL_TASKS.md` |
-| `runs/`, `figures/`, `work/` | generated run products, figures and symlinks (git-ignored) | |
+| `runs/`, `figures/`, `work/`, `archive/` | generated run products, figures, symlinks and set-aside work such as the Oct 2026 `spinefd` fake-data study (git-ignored) | |
 
 Python environment: see `pyproject.toml` (Python >= 3.11; the study scripts also need the `mutools`
 package, installed from `/Users/mueller/Projects/mutools` with `uv sync`).

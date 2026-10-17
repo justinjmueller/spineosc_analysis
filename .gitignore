@@ -91,3 +91,6 @@ spinefd/.geproj/
 /docs/fakedata_review/**/*.png
 /jobs/fakedata/**/*.log
 /jobs/fakedata/**/*.root
+
+# DENT-improvement study results (kept locally for now; see docs/dent_improvement/README.md)
+/docs/dent_improvement/
