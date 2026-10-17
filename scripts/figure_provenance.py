@@ -4,6 +4,7 @@
     python scripts/figure_provenance.py list  figures/ docs/
     python scripts/figure_provenance.py check figures/ --technote ../spineosc_technote
     python scripts/figure_provenance.py coverage docs/ figures/ --technote ../spineosc_technote
+    python scripts/figure_provenance.py manifest docs/ figures/ --technote ../spineosc_technote
     python scripts/figure_provenance.py show  figures/x.pdf.prov.json       # the steps that remake it
     python scripts/figure_provenance.py restore figures/x.pdf.prov.json DIR  # write the recorded ini and XML
 
@@ -83,9 +84,37 @@ def coverage(technote: Path, search: list[str]) -> int:
     return 0
 
 
+def manifest_report(technote: Path | None, search: list[str]) -> int:
+    """Per manifest family: its status and technote section, the figures with provenance that come from it."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import xml_manifest
+
+    families = xml_manifest.load_families()
+    counts = {}
+    for sidecar in find_sidecars(search):
+        rec = json.loads(sidecar.read_text())
+        status, _ = provenance.check(sidecar)
+        patterns = {e["xml"].get("manifest", {}).get("pattern") for e in rec.get("profit", [])} - {None}
+        for pattern in patterns:  # once per figure, however many inis share the tag
+            bucket = counts.setdefault(pattern, {"OK": 0, "other": 0})
+            bucket["OK" if status == "OK" else "other"] += 1
+    print(f"{'status':10s} {'technote section':30s} {'figs OK':>7s} {'not OK':>7s} {'section figs':>12s}  family")
+    for fam in families:
+        section = fam.get("technote", "")
+        have = counts.get(fam["pattern"], {"OK": 0, "other": 0})
+        total = ""
+        folders = [re.sub(r"\s*\(.*\)", "", part).strip() for part in section.split(",")]
+        if technote and any((technote / "figures" / f).is_dir() for f in folders if f):
+            total = str(sum(len([p for p in (technote / "figures" / f).rglob("*") if p.suffix in (".pdf", ".png")])
+                            for f in folders if f and (technote / "figures" / f).is_dir()))
+        print(f"{fam['status']:10s} {section[:30]:30s} {have['OK']:7d} {have['other']:7d} {total:>12s}  {fam['pattern']}"
+              + ("  (proposed)" if "(proposed)" in fam.get("reviewed", "") else ""))
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=("list", "check", "coverage", "show", "restore"))
+    parser.add_argument("command", choices=("list", "check", "coverage", "manifest", "show", "restore"))
     parser.add_argument("paths", nargs="+", help="directories (searched recursively) or sidecar files; for restore: SIDECAR DIR")
     parser.add_argument("--technote", type=Path, help="technote repository, to compare its copies of the figures")
     args = parser.parse_args(argv)
@@ -94,6 +123,8 @@ def main(argv=None) -> int:
         for path in provenance.restore(Path(args.paths[0]), Path(args.paths[1])):
             print(f"wrote {path}")
         return 0
+    if args.command == "manifest":
+        return manifest_report(args.technote, args.paths)
     if args.command == "coverage":
         if not args.technote:
             parser.error("coverage needs --technote")

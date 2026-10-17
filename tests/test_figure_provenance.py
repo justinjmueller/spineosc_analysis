@@ -134,3 +134,31 @@ def test_prefix_matching_finds_the_tag_of_an_output_with_an_output_tag(tmp_path)
     out = repo / "out" / "mystudy_cvrw_phase2_PROplot.root"
     assert [e["tag"] for e in provenance.profit_recipe(out, repo)] == ["mystudy"]
     assert provenance.profit_recipe(repo / "out" / "other_v1_PROplot.root", repo) == []
+
+
+def add_manifest(repo, status="active", consumer="make.py", extra=""):
+    (repo / "xml" / "MANIFEST.toml").write_text(
+        f'[[family]]\npattern = "xml/study.xml"\nstatus = "{status}"\npurpose = "demo"\nconsumer = "{consumer}"\n'
+        f'technote = "demo_section"\nregenerate = "python build.py"\n{extra}')
+    provenance._manifest.cache_clear()
+
+
+def test_manifest_family_is_recorded_and_checked(tmp_path):
+    repo, figure, _ = make_profit_repo(tmp_path)
+    add_manifest(repo)
+    sidecar = provenance.record(figure, [repo / "out" / "mystudy_v1_PROplot_histograms.root"], repo / "make.py", repo=repo)
+    (entry,) = json.loads(sidecar.read_text())["profit"]
+    assert entry["xml"]["manifest"]["status"] == "active" and entry["xml"]["manifest"]["technote"] == "demo_section"
+    assert provenance.check(sidecar, repo) == ("OK", [])
+    assert any("python build.py" in step for step in provenance.remake_steps(sidecar))
+
+
+def test_archived_family_makes_the_figure_stale_and_consumer_mismatch_is_a_note(tmp_path):
+    repo, figure, _ = make_profit_repo(tmp_path)
+    add_manifest(repo, consumer="other_script.py")
+    sidecar = provenance.record(figure, [repo / "out" / "mystudy_v1_PROplot_histograms.root"], repo / "make.py", repo=repo)
+    status, reasons = provenance.check(sidecar, repo)
+    assert status == "OK" and any("manifest consumer" in r for r in reasons)
+    add_manifest(repo, status="archived", extra='superseded_by = "xml/new.xml"\n')
+    status, reasons = provenance.check(sidecar, repo)
+    assert status == "STALE" and any("now archived" in r and "xml/new.xml" in r for r in reasons)

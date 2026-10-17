@@ -127,6 +127,11 @@ Still to check, with the notebooks kept in `plotting/` until then (deferred 2026
 - `sbnd_scan.py`: the notebook fails 3 cells because `sbnd_scanmatch_v1_PROplot.root` is missing, and there are no `sbnd_scanmatch` caches, so regenerating it needs `process` then `plot` (`jobs/contours/sbnd_scanmatch.ini`). The spectra, ratio and deficit figures were not compared (the notebook only displays them).
 - Known leftovers: `plotting/dent_study/replica.py`/`dentstudy.py` paths fixed; output destinations changed (scripts write to `--output`, not the technote or unblinding-request directories); `systematics.py` replaced the `SYSTS_*` environment variables with options.
 
+### Confirm the proposed manifest families
+Opened 2026-10-17.
+
+`xml/MANIFEST.toml` classifies all 837 XML and ini files (0 unclassified, no `needs-review` left after the fake-data and DENT-improvement XMLs were archived), but 10 families are still marked "(proposed)" in `reviewed` and need the owner's confirmation. List them with `python scripts/figure_provenance.py manifest <dirs>` or `grep proposed xml/MANIFEST.toml`.
+
 ## Done
 
 * 2026-10-17: `scripts/detvar_smoothing/` (closure, held-out, smoother bias/variance, split closure) archived to `archive/cleanup_2026-10/scripts_detvar_smoothing/` together with the DENT-improvement XMLs and scripts it depended on; the smoothing reports in `docs/detvar_smoothing/` and `plotting/studies/detvar_smoothing_figures.py` stay. Restore all three archives to rerun the study.

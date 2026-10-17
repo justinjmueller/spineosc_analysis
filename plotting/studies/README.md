@@ -68,6 +68,13 @@ python scripts/figure_provenance.py restore figures/provenance_demo/sensitivity_
 file was replaced or edited) or MISSING, and exits non-zero otherwise; `--technote` also says whether the technote's copy is the
 recorded one. `common.configure_style` fixes `SOURCE_DATE_EPOCH`, so identical inputs give byte-identical PDFs.
 
+Manifest link (`xml/MANIFEST.toml`): each recorded ini and XML carries its manifest family (pattern, status, purpose, consumer, technote section,
+regenerate command, reviewed). `check` then flags a figure as STALE when its XML's family is now `archived` or `deprecated` (naming
+`superseded_by`), and adds a note when the figure's script is not the family's `consumer` or the family's status changed since the figure was
+made; `show` adds the family's `regenerate` command. `scripts/figure_provenance.py manifest <dirs> --technote ...` lists every family with its
+status, its technote section (the `figures/<section>` folder is counted), the figures with provenance that come from it and whether they are OK.
+`scripts/xml_manifest.py --check` now also requires each family's `consumer` to exist.
+
 Not recorded: the PROfit binary itself (only the version string, when a log exists), the cache contents (PROfit's cache key covers
 the XML but not the ini flags, so the checker compares modification times), and how the `work/` inputs were made upstream
 (for example the `cvrw` files from `reweight/`).

@@ -7,7 +7,7 @@ Usage::
     python scripts/xml_manifest.py            summary per status and per family
     python scripts/xml_manifest.py --list S   list families whose status is S
     python scripts/xml_manifest.py --check    exit 1 if a file is unclassified, a family has no
-                                              files, a producer is missing, or two patterns tie
+                                              files, a producer or consumer is missing, or two patterns tie
 
 Matching uses ``fnmatch`` on the repository-relative path; the most specific pattern (the longest
 once ``*`` is removed) wins. Covers ``*.xml`` and ``*.ini``.
@@ -30,6 +30,9 @@ SUFFIXES = (".xml", ".ini")
 
 #: Producer suffixes whose existence is checked.
 PRODUCER_SUFFIXES = (".py", ".sh", ".C")
+
+#: Consumer suffixes whose existence is checked (the script or notebook that reads the PROfit output).
+CONSUMER_SUFFIXES = (".py", ".ipynb", ".sh", ".C")
 
 
 def load_families(repo: Path = REPO) -> list[dict]:
@@ -118,6 +121,10 @@ def problems(result: dict, repo: Path = REPO) -> list[str]:
             name = producer.strip().split(" ")[0]
             if name.endswith(PRODUCER_SUFFIXES) and not (repo / name).exists():
                 bad.append(f"missing producer {name} for {fam['pattern']}")
+        for consumer in str(fam.get("consumer", "")).split(","):
+            name = consumer.strip().split(" ")[0]
+            if name.endswith(CONSUMER_SUFFIXES) and not (repo / name).exists():
+                bad.append(f"missing consumer {name} for {fam['pattern']}")
     return bad
 
 

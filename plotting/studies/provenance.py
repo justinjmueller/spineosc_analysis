@@ -124,13 +124,45 @@ def _ini_key(text: str, key: str) -> str:
     return ""
 
 
+
+# ----------------------------------------------------------------------
+# xml/MANIFEST.toml: the family (status, purpose, technote section) of an XML or ini
+# ----------------------------------------------------------------------
+#: Manifest fields copied into a sidecar.
+MANIFEST_FIELDS = ("pattern", "status", "purpose", "consumer", "technote", "regenerate", "superseded_by", "reviewed")
+
+
+@functools.lru_cache(maxsize=4)
+def _manifest(repo: Path):
+    """(``match`` function, families) of ``xml/MANIFEST.toml``, or ``None`` if the repository has none."""
+    manifest = Path(repo) / "xml" / "MANIFEST.toml"
+    if not manifest.is_file():
+        return None
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("xml_manifest", REPO / "scripts" / "xml_manifest.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.match, module.load_families(Path(repo))
+
+
+def manifest_family(path: str, repo: Path = REPO) -> dict:
+    """The manifest family of a repository-relative path (only the fields in ``MANIFEST_FIELDS``), or ``{}``."""
+    loaded = _manifest(Path(repo))
+    if loaded is None:
+        return {}
+    family, _tie = loaded[0](path, loaded[1])
+    return {key: family[key] for key in MANIFEST_FIELDS if family and key in family}
+
+
 def _file_state(path: Path, repo: Path, embed_if_unversioned: bool) -> dict:
     """A configuration file: hash, git commit, and the content itself when git cannot restore it."""
     rel = _relative(path, repo)
     info = describe_input(path, repo)
     tracked = _git("ls-files", "--error-unmatch", rel, repo=repo) != ""
     clean = tracked and _git("status", "--porcelain", "--", rel, repo=repo) == ""
-    info.update(git_commit=_git("log", "-1", "--format=%h", "--", rel, repo=repo) if tracked else "", git_clean=clean)
+    info.update(git_commit=_git("log", "-1", "--format=%h", "--", rel, repo=repo) if tracked else "", git_clean=clean,
+                manifest=manifest_family(rel, repo))
     if embed_if_unversioned and not clean:
         info["content_gz_b64"] = base64.b64encode(gzip.compress(path.read_bytes())).decode()
     return info
@@ -351,6 +383,18 @@ def check(sidecar: Path, repo: Path = REPO) -> tuple[str, list[str]]:
             elif sha256(path) != state["sha256"]:
                 worse("STALE")
                 reasons.append(f"{kind} {state['path']} changed since the figure was made")
+        family = manifest_family(entry["xml"]["path"], repo)
+        if family.get("status") in ("archived", "deprecated"):
+            worse("STALE")
+            why = f"; superseded by {family['superseded_by']}" if "superseded_by" in family else ""
+            reasons.append(f"manifest: {entry['xml']['path']} is now {family['status']} ({family['pattern']}){why}")
+        recorded = entry["xml"].get("manifest", {})
+        if recorded and family and recorded.get("status") != family.get("status"):
+            reasons.append(f"note: manifest status of {entry['xml']['path']} was {recorded.get('status')}, now {family.get('status')}")
+        consumers = [c.strip() for c in family.get("consumer", "").split(",") if c.strip()]
+        if consumers and rec["script"]["path"] not in consumers:
+            reasons.append(f"note: manifest consumer of {family['pattern']} is {', '.join(consumers)}, "
+                           f"but this figure was made by {rec['script']['path']}")
         for item in entry["work_files"]:
             path = Path(item["path"]) if Path(item["path"]).is_absolute() else repo / item["path"]
             if not path.exists():
@@ -366,9 +410,9 @@ def check(sidecar: Path, repo: Path = REPO) -> tuple[str, list[str]]:
         for cache in entry["caches"]:
             path = Path(cache["path"]) if Path(cache["path"]).is_absolute() else repo / cache["path"]
             if path.exists() and path.stat().st_mtime_ns < config_mtime:
-                worse("STALE")
-                reasons.append(f"cache {cache['path']} is older than the ini or XML (PROfit does not hash the ini)")
-    return status, reasons
+                # PROfit's cache key covers the XML but not the ini flags, so this is only a hint.
+                reasons.append(f"note: cache {cache['path']} is older than the ini or XML (check that the cache matches)")
+    return status, list(dict.fromkeys(reasons))
 
 
 def remake_steps(sidecar: Path) -> list[str]:
@@ -377,6 +421,9 @@ def remake_steps(sidecar: Path) -> list[str]:
     steps = [f"use the repository at commit {rec['script']['git_commit']}   # script and helpers as they were (script clean when run: {rec['script']['git_clean']})"]
     for entry in rec.get("profit", []):
         steps.append(f"scripts/figure_provenance.py restore {Path(sidecar).name} DIR   # writes {entry['ini']['path']} and {entry['xml']['path']}")
+        regenerate = entry["xml"].get("manifest", {}).get("regenerate")
+        if regenerate:
+            steps.append(f"or regenerate the XML (manifest {entry['xml']['manifest']['pattern']}): {regenerate}")
         keys = ", ".join(w["work_key"] for w in entry["work_files"])
         steps.append(f"scripts/deploy.sh   # work/ must map: {keys}")
         for hint in entry["run_hints"] or [f"PROfit --config {entry['ini']['path']} process; PROfit --config {entry['ini']['path']} plot"]:

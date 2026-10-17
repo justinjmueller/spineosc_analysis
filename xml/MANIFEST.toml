@@ -9,7 +9,7 @@
 #   deprecated   development copy or abandoned; candidate for deletion once confirmed
 #   needs-review classification not yet decided (owner to confirm)
 # "generated = true": produced by `producer`; the generator and this entry are the source of truth, the files are reproducible.
-# Fields: pattern, status, purpose, producer, consumer (notebook/script that reads the PROfit output), technote (sections), superseded_by, regenerate, notes, reviewed (YYYY-MM-DD; a *proposed* entry says so).
+# Fields: pattern, status, purpose, producer, consumer (script/notebook that reads the PROfit output; checked to exist), technote (sections; also the figures/<section> folder the provenance report counts), superseded_by, regenerate, notes, reviewed (YYYY-MM-DD; a *proposed* entry says so).
 
 [[family]]
 pattern = "xml/selected/*"
