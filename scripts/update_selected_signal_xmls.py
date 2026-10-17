@@ -64,7 +64,7 @@ multiply cvwgt into their weight; the reweighted files hold only the beam `selec
 their original files. Every branch applies the cathode fiducialization and the SBND high-y/high-z veto (reco_veto_sbnd_highy_highz);
 SBND branches also remove cathode crossers (reco_cathode_crosser == 0) and muons whose end point is within 4 cm of the cathode
 (abs(reco_leading_muon_end_x) >= 4). Neither is applied to ICARUS (two cryostats; the crosser flag is set for ~39% of its events). No systematics beyond mcstat are configured. Exposures are the v1.1.0 values from
-plotting/summarize_exposure.ipynb.
+plotting/studies/exposure.py.
 -->
 """
 NOTE_SIG = """<!--

@@ -22,11 +22,13 @@ Run with the mutools environment from the repository root:
 | `sbnd_scan.py` | `sbnd_data_access.ipynb` | oscillation-scan spectra, deficit, bins outside the CV band |
 | `conditional_constraint.py` | `conditional_constraint.ipynb` | SBND -> ICARUS conditional constraint |
 | `dent_study.py` | `dent_study.ipynb` | DENT data/MC study tables and figures |
-| `fakedata_injection.py` | `fakedata_injection.ipynb` | injection panels, closure, detectability, pulls |
-| `fakedata_channel.py` | `fakedata_channel_studies.ipynb` | single-channel fake-data questions |
-| `fakedata_2d.py` | `fakedata_2d_studies.ipynb` | 2D-configuration fake-data fits |
 
-The fake-data scripts take `--section` and `--list-sections`. Figures default to `figures/` (or the
+Figures default to `figures/` (or the
 study's own folder), never to the technote; copy reviewed ones across by hand.
 
-The original notebooks are still in `plotting/` until the scripts' output has been checked against them.
+Checked against their notebooks (2026-10-17, headless runs compared pixel by pixel): `exposure`, `signal_selection`,
+`systematics`, `surface` and `resolution` reproduce the notebooks' figures and tables exactly, so those notebooks are
+retired (recoverable from commit `d888bdd`). `resolution.py` uses the house saver settings of `common.configure_style`
+(300 dpi, rasterized, `ytick_precision=2`), which differ from the resolution notebook's defaults; its data are identical.
+Still to check: `sbnd_scan`, `conditional_constraint` (missing PROfit inputs), `data_access*` and `dent_study`, whose
+notebooks remain in `plotting/`.
