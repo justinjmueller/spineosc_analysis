@@ -117,11 +117,6 @@ Opened 2026-10-13. Updated 2026-10-17.
 
 Done 2026-10-17: removed `test_detsysonly.{ini,xml}` and `runs/xml_backup_20261008.tgz`; archived the one-time migration scripts `build_cov_v2.py` / `build_da_v2.py` (`archive/cleanup_2026-10/`); the tier 1 and 2 caches of `docs/root_bin_candidates.md` were already deleted. Kept: tier 3 (active XMLs, minutes to regenerate), tier 4 (read by the conditional-constraint notebook) and tier 5 (frozen SBND data-access caches, hours to regenerate); delete tier 3 or 5 only if the space is needed.
 
-### Detvar smoothing scripts depend on archived DENT-improvement XMLs
-Opened 2026-10-17.
-
-`scripts/detvar_smoothing/closure.py` and `make_energy_study.py` read `xml/dent_improvement/sbnd_run1`, and `closure.py` expects the inis from `scripts/dent_improvement/build_xmls.py`. Both the XMLs and the generator were archived (`archive/dent_improvement_2026-10/`, `archive/cleanup_2026-10/scripts_dent_improvement/`) because the DENT-improvement study is not used in the technote. Either restore them to rerun the smoothing study, or archive `scripts/detvar_smoothing/` as well.
-
 ### Verify the remaining plotting/studies scripts and retire their notebooks
 Opened 2026-10-13. Updated 2026-10-17.
 
@@ -136,6 +131,7 @@ Still to check, with the notebooks kept in `plotting/` until then:
 
 ## Done
 
+* 2026-10-17: `scripts/detvar_smoothing/` (closure, held-out, smoother bias/variance, split closure) archived to `archive/cleanup_2026-10/scripts_detvar_smoothing/` together with the DENT-improvement XMLs and scripts it depended on; the smoothing reports in `docs/detvar_smoothing/` and `plotting/studies/detvar_smoothing_figures.py` stay. Restore all three archives to rerun the study.
 * 2026-10-07: Binding Energy histograms regenerated from the v1.1.0 `_cvrw` files (details in the technote item above).
 * 2026-10-07: Resolution XMLs migrated and the 12 resolution figures regenerated (overnight log).
 * 2026-10-13: Root-level ROOT outputs moved to `runs/legacy_root/`; classes C, D, F outputs deleted (`docs/root_output_audit.md`).
