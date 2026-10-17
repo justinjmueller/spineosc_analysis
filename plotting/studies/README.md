@@ -38,16 +38,29 @@ because their PROfit inputs are missing.
 
 ## Figure provenance (prototype)
 
-`provenance.record()` writes `<figure>.prov.json` next to a figure: the figure's hash, the producing script (path, hash, git
-commit), the command line, the arguments that select the figure, and the input files (size, mtime and, if small, a hash).
-Hooked so far: `surface.py`, the efficiency plots of `signal_selection.py` and the overlays of `resolution.py`.
+`provenance.record()` writes `<figure>.prov.json` next to a figure so that it can be remade from the sidecar alone:
+
+* the figure's hash; the producing script (path, hash, git commit), the command line and the arguments that select the figure;
+* every input file (size, mtime and, if under 64 MB, a hash);
+* for inputs that are PROfit outputs (`<tag>_v1_PROplot*.root`, `<tag>_v1_surf.root`; found from the file name): the ini with
+  that `tag` (full text), the XML it names (hash, git commit, and the content itself when it is not committed), the
+  `work/<key>.root` files the XML reads resolved to real paths, the cache files, the PROfit version (from the logs) and the run
+  commands noted in the ini header.
+
+Hooked so far: `surface.py`, the efficiency plots of `signal_selection.py` and the overlays of `resolution.py`; the PROfit
+recipe is picked up automatically from any hooked input.
 
 ```
-python scripts/figure_provenance.py list  figures/provenance_demo
-python scripts/figure_provenance.py check figures/provenance_demo --technote ../spineosc_technote
+python scripts/figure_provenance.py list    figures/provenance_demo
+python scripts/figure_provenance.py check   figures/provenance_demo --technote ../spineosc_technote
+python scripts/figure_provenance.py show    figures/provenance_demo/sensitivity_baseline.pdf.prov.json   # the steps that remake it
+python scripts/figure_provenance.py restore figures/provenance_demo/sensitivity_baseline.pdf.prov.json DIR   # writes the recorded ini and XML
 ```
 
-`check` reports OK, STALE (script or an input changed since the figure was made), MODIFIED (the figure file was replaced or
-edited) or MISSING, and exits non-zero otherwise; `--technote` also says whether the technote's copy is the recorded one.
-`common.configure_style` fixes `SOURCE_DATE_EPOCH`, so identical inputs give byte-identical PDFs (otherwise the creation date
-makes every run differ). The XML, ini and cache link is not recorded yet; see the design notes in the session history.
+`check` reports OK, STALE (the script, ini, XML or an input changed, or a cache is older than the ini or XML), MODIFIED (the figure
+file was replaced or edited) or MISSING, and exits non-zero otherwise; `--technote` also says whether the technote's copy is the
+recorded one. `common.configure_style` fixes `SOURCE_DATE_EPOCH`, so identical inputs give byte-identical PDFs.
+
+Not recorded: the PROfit binary itself (only the version string, when a log exists), the cache contents (PROfit's cache key covers
+the XML but not the ini flags, so the checker compares modification times), and how the `work/` inputs were made upstream
+(for example the `cvrw` files from `reweight/`).

@@ -6,6 +6,12 @@ hash, the producing script (path, hash, git commit), the command line, the input
 modification time and, for small files, a hash) and the selection and code versions.
 ``scripts/figure_provenance.py`` reads these back to list the figures and to flag the stale ones.
 
+Inputs that are PROfit outputs (``<tag>_v1_PROplot.root``, ``<tag>_v1_surf.root``, ...) get a ``profit``
+entry as well, found from the file name: the ini with ``tag = <tag>``, the XML it names (hash, git commit,
+and the content itself when it is not committed), the ``work/<key>.root`` files the XML reads resolved to
+real paths, the cache files, the PROfit version from the logs and the run commands noted in the ini header.
+``restore()`` writes the recorded ini and XML back out so the figure can be remade from the sidecar alone.
+
 Large inputs (the release ntuples run to GB) are identified by size and modification time; files
 up to ``HASH_LIMIT`` bytes are also hashed, so touching a small file without changing it is not
 reported as a change.
@@ -13,9 +19,13 @@ reported as a change.
 
 from __future__ import annotations
 
+import base64
 import datetime
+import functools
+import gzip
 import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -40,10 +50,10 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def describe_input(path: Path) -> dict:
+def describe_input(path: Path, repo: Path = REPO) -> dict:
     """Identify an input file: path, size, mtime and, when small, the hash."""
     path = Path(path)
-    info = {"path": _relative(path)}
+    info = {"path": _relative(path, repo)}
     if not path.exists():
         return {**info, "missing": True}
     stat = path.stat()
@@ -53,20 +63,139 @@ def describe_input(path: Path) -> dict:
     return info
 
 
-def _relative(path: Path) -> str:
+def _relative(path: Path, repo: Path = REPO) -> str:
     path = Path(path).resolve()
     try:
-        return str(path.relative_to(REPO))
+        return str(path.relative_to(Path(repo).resolve()))
     except ValueError:
         return str(path)
 
 
-def _git(*args: str) -> str:
+def _git(*args: str, repo: Path = REPO) -> str:
     try:
-        out = subprocess.run(["git", "-C", str(REPO), *args], capture_output=True, text=True, check=True)
+        out = subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True, check=True)
     except (OSError, subprocess.CalledProcessError):
         return ""
     return out.stdout.strip()
+
+
+
+# ----------------------------------------------------------------------
+# PROfit recipe: ini, XML, work/ file map, caches
+# ----------------------------------------------------------------------
+_OUTPUT = re.compile(r"^(?P<tag>.+?)_v\d+[._]")
+_WORK = re.compile(r"work/([\w.+-]+\.root)")
+
+
+@functools.lru_cache(maxsize=4)
+def _ini_index(repo: Path) -> dict:
+    """Map tag -> [ini paths] over jobs/ and xml/ (archives excluded)."""
+    index: dict[str, list[Path]] = {}
+    for top in ("jobs", "xml"):
+        for ini in sorted((repo / top).rglob("*.ini")):
+            if "archive" in ini.parts:
+                continue
+            for line in ini.read_text(errors="replace").splitlines():
+                if line.lstrip().startswith("["):
+                    break
+                match = re.match(r"\s*tag\s*=\s*(\S+)", line)
+                if match:
+                    index.setdefault(match.group(1), []).append(ini)
+    return index
+
+
+def _ini_key(text: str, key: str) -> str:
+    for line in text.splitlines():
+        if line.lstrip().startswith("["):
+            break
+        match = re.match(rf"\s*{key}\s*=\s*(\S+)", line)
+        if match:
+            return match.group(1)
+    return ""
+
+
+def _file_state(path: Path, repo: Path, embed_if_unversioned: bool) -> dict:
+    """A configuration file: hash, git commit, and the content itself when git cannot restore it."""
+    rel = _relative(path, repo)
+    info = describe_input(path, repo)
+    tracked = _git("ls-files", "--error-unmatch", rel, repo=repo) != ""
+    clean = tracked and _git("status", "--porcelain", "--", rel, repo=repo) == ""
+    info.update(git_commit=_git("log", "-1", "--format=%h", "--", rel, repo=repo) if tracked else "", git_clean=clean)
+    if embed_if_unversioned and not clean:
+        info["content_gz_b64"] = base64.b64encode(gzip.compress(path.read_bytes())).decode()
+    return info
+
+
+def profit_recipe(output_file: Path, repo: Path = REPO) -> list[dict]:
+    """
+    Describe how a PROfit output file was made, or ``[]`` if it does not look like one.
+
+    The tag comes from the file name (``<tag>_v1_PROplot.root``); every ini in ``jobs/`` and ``xml/`` with
+    that ``tag`` is returned (several can share one, e.g. a plot and a process ini).
+    """
+    repo, output_file = Path(repo), Path(output_file)
+    match = _OUTPUT.match(output_file.name)
+    if not match:
+        return []
+    tag = match.group("tag")
+    inis = _ini_index(repo).get(tag, [])
+    entries = []
+    for ini in inis:
+        text = ini.read_text(errors="replace")
+        xml = repo / _ini_key(text, "xml")
+        if not xml.is_file():
+            continue
+        keys = sorted(set(_WORK.findall(xml.read_text(errors="replace"))))
+        work = []
+        for key in keys:
+            link = repo / "work" / key
+            real = link.resolve() if link.exists() else link
+            item = describe_input(real, repo)
+            item["work_key"] = key
+            work.append(item)
+        caches = [describe_input(output_file.parent / f"{tag}_{kind}.bin", repo) for kind in ("data", "prop", "syst")]
+        logs = sorted(output_file.parent.glob(f"{tag}*.log"))
+        version = ""
+        for log in logs:
+            found = re.search(r"PROfit version (v[\d.]+)", log.read_text(errors="replace")[:20000])
+            version = found.group(1) if found else version
+        hints = [m.group(0) for m in re.finditer(r"(?m)^#\s+\S*(?:PROfit|profit_run)\S*.*$", text)]
+        entries.append({
+            "tag": tag,
+            "output": _relative(output_file, repo),
+            "ini": {**_file_state(ini, repo, embed_if_unversioned=False), "content": text},
+            "xml": _file_state(xml, repo, embed_if_unversioned=True),
+            "work_files": work,
+            "caches": caches,
+            "profit_version": version,
+            "run_hints": [h.lstrip("# ").strip() for h in hints],
+        })
+    return entries
+
+
+def restore(sidecar: Path, destination: Path, repo: Path = REPO) -> list[Path]:
+    """
+    Write the recorded ini and XML of a figure under ``destination`` (at their repository paths).
+
+    The ini comes from the sidecar; the XML from the embedded copy, or from git at the recorded commit.
+    """
+    rec = json.loads(Path(sidecar).read_text())
+    written = []
+    for entry in rec.get("profit", []):
+        for kind in ("ini", "xml"):
+            state = entry[kind]
+            target = Path(destination) / state["path"]
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if kind == "ini":
+                target.write_text(state["content"])
+            elif "content_gz_b64" in state:
+                target.write_bytes(gzip.decompress(base64.b64decode(state["content_gz_b64"])))
+            else:
+                blob = subprocess.run(["git", "-C", str(repo), "show", f"{state['git_commit']}:{state['path']}"],
+                                      capture_output=True, check=True).stdout
+                target.write_bytes(blob)
+            written.append(target)
+    return written
 
 
 def sidecar_path(figure: Path) -> Path:
@@ -75,7 +204,7 @@ def sidecar_path(figure: Path) -> Path:
     return figure.with_name(figure.name + SUFFIX)
 
 
-def record(figure, inputs, script, arguments=None, versions=None, note: str = "") -> Path:
+def record(figure, inputs, script, arguments=None, versions=None, note: str = "", repo: Path = REPO) -> Path:
     """
     Write the provenance sidecar of a figure that has just been saved.
 
@@ -100,20 +229,21 @@ def record(figure, inputs, script, arguments=None, versions=None, note: str = ""
         The sidecar file.
     """
     figure, script = Path(figure), Path(script).resolve()
-    rel_script = _relative(script)
+    rel_script = _relative(script, repo)
     record_ = {
         "schema": SCHEMA,
         "figure": {"name": figure.name, "sha256": sha256(figure), "size": figure.stat().st_size},
         "script": {
             "path": rel_script,
             "sha256": sha256(script),
-            "git_commit": _git("rev-parse", "--short", "HEAD"),
-            "git_clean": _git("status", "--porcelain", "--", rel_script) == "",
+            "git_commit": _git("rev-parse", "--short", "HEAD", repo=repo),
+            "git_clean": _git("status", "--porcelain", "--", rel_script, repo=repo) == "",
         },
         "command": " ".join([Path(sys.argv[0]).name, *sys.argv[1:]]),
         "arguments": arguments or {},
         "versions": versions or {},
-        "inputs": [describe_input(p) for p in inputs],
+        "inputs": [describe_input(p, repo) for p in inputs],
+        "profit": [entry for p in inputs for entry in profit_recipe(Path(p), repo)],
         "created": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
         "note": note,
     }
@@ -122,7 +252,7 @@ def record(figure, inputs, script, arguments=None, versions=None, note: str = ""
     return out
 
 
-def check(sidecar: Path) -> tuple[str, list[str]]:
+def check(sidecar: Path, repo: Path = REPO) -> tuple[str, list[str]]:
     """
     Compare a sidecar with the files it describes.
 
@@ -147,7 +277,7 @@ def check(sidecar: Path) -> tuple[str, list[str]]:
     if sha256(figure) != rec["figure"]["sha256"]:
         worse("MODIFIED")
         reasons.append("figure differs from the recorded one")
-    script = (REPO / rec["script"]["path"]) if not Path(rec["script"]["path"]).is_absolute() else Path(rec["script"]["path"])
+    script = (repo / rec["script"]["path"]) if not Path(rec["script"]["path"]).is_absolute() else Path(rec["script"]["path"])
     if not script.exists():
         worse("MISSING")
         reasons.append(f"script {rec['script']['path']} is gone")
@@ -155,7 +285,7 @@ def check(sidecar: Path) -> tuple[str, list[str]]:
         worse("STALE")
         reasons.append(f"script {rec['script']['path']} changed since the figure was made")
     for item in rec["inputs"]:
-        path = Path(item["path"]) if Path(item["path"]).is_absolute() else REPO / item["path"]
+        path = Path(item["path"]) if Path(item["path"]).is_absolute() else repo / item["path"]
         if item.get("missing") or not path.exists():
             worse("MISSING")
             reasons.append(f"input {item['path']} is missing")
@@ -168,4 +298,45 @@ def check(sidecar: Path) -> tuple[str, list[str]]:
         if changed:
             worse("STALE")
             reasons.append(f"input {item['path']} changed since the figure was made")
+    for entry in rec.get("profit", []):
+        for kind in ("ini", "xml"):
+            state = entry[kind]
+            path = repo / state["path"]
+            if not path.exists():
+                worse("MISSING")
+                reasons.append(f"{kind} {state['path']} is gone (restore it from the sidecar)")
+            elif sha256(path) != state["sha256"]:
+                worse("STALE")
+                reasons.append(f"{kind} {state['path']} changed since the figure was made")
+        for item in entry["work_files"]:
+            path = Path(item["path"]) if Path(item["path"]).is_absolute() else repo / item["path"]
+            if not path.exists():
+                worse("MISSING")
+                reasons.append(f"work/{item['work_key']} -> {item['path']} is missing")
+            elif "sha256" in item and sha256(path) != item["sha256"]:
+                worse("STALE")
+                reasons.append(f"work/{item['work_key']} ({item['path']}) changed")
+            elif "sha256" not in item and (path.stat().st_size, path.stat().st_mtime_ns) != (item["size"], item["mtime_ns"]):
+                worse("STALE")
+                reasons.append(f"work/{item['work_key']} ({item['path']}) changed")
+        config_mtime = max((repo / entry[k]["path"]).stat().st_mtime_ns for k in ("ini", "xml") if (repo / entry[k]["path"]).exists())
+        for cache in entry["caches"]:
+            path = Path(cache["path"]) if Path(cache["path"]).is_absolute() else repo / cache["path"]
+            if path.exists() and path.stat().st_mtime_ns < config_mtime:
+                worse("STALE")
+                reasons.append(f"cache {cache['path']} is older than the ini or XML (PROfit does not hash the ini)")
     return status, reasons
+
+
+def remake_steps(sidecar: Path) -> list[str]:
+    """The steps, in order, that remake a figure, as the sidecar knows them."""
+    rec = json.loads(Path(sidecar).read_text())
+    steps = [f"use the repository at commit {rec['script']['git_commit']}   # script and helpers as they were (script clean when run: {rec['script']['git_clean']})"]
+    for entry in rec.get("profit", []):
+        steps.append(f"scripts/figure_provenance.py restore {Path(sidecar).name} DIR   # writes {entry['ini']['path']} and {entry['xml']['path']}")
+        keys = ", ".join(w["work_key"] for w in entry["work_files"])
+        steps.append(f"scripts/deploy.sh   # work/ must map: {keys}")
+        for hint in entry["run_hints"] or [f"PROfit --config {entry['ini']['path']} process; PROfit --config {entry['ini']['path']} plot"]:
+            steps.append(f"{hint}   # tag {entry['tag']}, PROfit {entry['profit_version'] or '?'}")
+    steps.append(f"python {rec['script']['path']} {rec['command'].split(' ', 1)[1] if ' ' in rec['command'] else ''}".rstrip())
+    return steps

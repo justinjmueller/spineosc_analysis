@@ -3,6 +3,8 @@
 
     python scripts/figure_provenance.py list  figures/ docs/
     python scripts/figure_provenance.py check figures/ --technote ../spineosc_technote
+    python scripts/figure_provenance.py show  figures/x.pdf.prov.json       # the steps that remake it
+    python scripts/figure_provenance.py restore figures/x.pdf.prov.json DIR  # write the recorded ini and XML
 
 ``check`` exits non-zero if any figure is MODIFIED, STALE or MISSING (see plotting/studies/provenance.py).
 With ``--technote`` it also finds the figure of the same name in the technote tree and says whether that
@@ -34,10 +36,21 @@ def technote_status(technote: Path, rec: dict) -> str:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=("list", "check"))
-    parser.add_argument("paths", nargs="+", help="directories (searched recursively) or sidecar files")
+    parser.add_argument("command", choices=("list", "check", "show", "restore"))
+    parser.add_argument("paths", nargs="+", help="directories (searched recursively) or sidecar files; for restore: SIDECAR DIR")
     parser.add_argument("--technote", type=Path, help="technote repository, to compare its copies of the figures")
     args = parser.parse_args(argv)
+
+    if args.command == "restore":
+        for path in provenance.restore(Path(args.paths[0]), Path(args.paths[1])):
+            print(f"wrote {path}")
+        return 0
+    if args.command == "show":
+        for sidecar in args.paths:
+            print(f"{sidecar}:")
+            for i, step in enumerate(provenance.remake_steps(Path(sidecar)), 1):
+                print(f"  {i}. {step}")
+        return 0
 
     bad = 0
     for sidecar in find_sidecars(args.paths):
