@@ -112,10 +112,15 @@ Request Nupur to update the labels on the N-1 studies so that they match the lab
 watermark and version stamps). I did not find "N-1" in the technote's `.tex` files, so the figures may be absent from the current text or live elsewhere; confirm where they
 are and which labels differ before sending the request.
 
-### Remove leftover files (follow up)
+### Review the remaining root ROOT outputs
 Opened 2026-10-13. Updated 2026-10-17.
 
-Still to remove by hand (the permission classifier blocked deletion): the untracked, git-ignored root files `test_detsysonly.ini` and `test_detsysonly.xml`. Not yet decided: `runs/xml_backup_20261008.tgz` (delete once the XML consolidation is confirmed), the one-time migration scripts `build_cov_v2.py` / `build_da_v2.py` (archive), and the remaining root ROOT outputs listed in `docs/root_bin_candidates.md`. Archived 2026-10-17: `tmp_debug/` (`archive/tmp_debug_2026-10/`).
+Done 2026-10-17: removed `test_detsysonly.{ini,xml}` and `runs/xml_backup_20261008.tgz`; archived the one-time migration scripts `build_cov_v2.py` / `build_da_v2.py` (`archive/cleanup_2026-10/`); the tier 1 and 2 caches of `docs/root_bin_candidates.md` were already deleted. Kept: tier 3 (active XMLs, minutes to regenerate), tier 4 (read by the conditional-constraint notebook) and tier 5 (frozen SBND data-access caches, hours to regenerate); delete tier 3 or 5 only if the space is needed.
+
+### Detvar smoothing scripts depend on archived DENT-improvement XMLs
+Opened 2026-10-17.
+
+`scripts/detvar_smoothing/closure.py` and `make_energy_study.py` read `xml/dent_improvement/sbnd_run1`, and `closure.py` expects the inis from `scripts/dent_improvement/build_xmls.py`. Both the XMLs and the generator were archived (`archive/dent_improvement_2026-10/`, `archive/cleanup_2026-10/scripts_dent_improvement/`) because the DENT-improvement study is not used in the technote. Either restore them to rerun the smoothing study, or archive `scripts/detvar_smoothing/` as well.
 
 ### Verify the remaining plotting/studies scripts and retire their notebooks
 Opened 2026-10-13. Updated 2026-10-17.
