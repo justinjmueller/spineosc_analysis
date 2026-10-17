@@ -1,7 +1,7 @@
 """Analysis helpers for the DENT data/MC study (see docs/dent_study/PREREGISTRATION.md).
 
 Reads the per-study result JSON written by scripts/dent_study/run_study.py and the PROplot_histograms files, and renders
-PROfit-style panels with mutools exactly as plotting/data_access_results.ipynb does.
+PROfit-style panels with mutools exactly as plotting/studies/data_access.py does.
 """
 import glob, json, pathlib, shutil
 import numpy as np, pandas as pd

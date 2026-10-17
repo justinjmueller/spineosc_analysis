@@ -129,7 +129,7 @@ PROfit-style panels for the ten primary observables (production CV, and the CV s
 """)
 
 code('''
-# PROfit-style panels (mutools, same configuration as plotting/data_access_results.ipynb) for the primary observables
+# PROfit-style panels (mutools, same configuration as plotting/studies/data_access.py) for the primary observables
 import glob
 made = []
 for name in PRIM:

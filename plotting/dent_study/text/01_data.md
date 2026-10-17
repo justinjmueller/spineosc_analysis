@@ -11,7 +11,7 @@
   applies the flash-PE threshold, which is trigger emulation and is not applied to data.
 * **Rules.** No fitting; every PROfit job uses `--area-norm` and `--shapeonly`; shape chi-square and p-value
   (`ndf = nbins - 1`) are the metrics; systematics are assessed in the observable's own binning; plots follow
-  `plotting/data_access_results.ipynb`.
+  `plotting/studies/data_access.py`.
 * **Observables.** Twenty-one energy-free observables were registered, binned by equal-population quantiles of the detvar CV only.
   The **primary set** (ten observables) was chosen by an MC-only criterion: the CV-versus-DENT shape chi-square at data-sized
   statistics, per degree of freedom, is at least 1. The analyst had already seen exploratory data comparisons (section 9), so the choice
