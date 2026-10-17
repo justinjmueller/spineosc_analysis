@@ -112,11 +112,11 @@ def load_data(data_dir: Path = common.DATA_DIR) -> pd.DataFrame:
     return frame[selection(frame)].reset_index(drop=True)
 
 
-def load_mc(data_dir: Path = common.DATA_DIR) -> pd.DataFrame:
-    """Selected simulation events (neutrino categories, flash threshold) with weight ``w`` = cvwgt."""
+def load_mc(data_dir: Path = common.DATA_DIR, with_truth: bool = False) -> pd.DataFrame:
+    """Selected simulation events (neutrino categories, flash threshold) with weight ``w`` = cvwgt (and the true vertex z)."""
     import uproot
 
-    branches = [b for b in DATA_BRANCHES if b != "Run"] + MC_EXTRA
+    branches = [b for b in DATA_BRANCHES if b != "Run"] + MC_EXTRA + (["true_vertex_z"] if with_truth else [])
     with uproot.open(data_dir / MC_FILE) as handle:
         frame = handle[MC_TREE].arrays(branches, library="pd")
     keep = selection(frame) & (0.647 * frame.event_largest_flash_pe > 2000) & (frame.true_neutrino_id >= 0)

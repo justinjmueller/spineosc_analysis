@@ -56,6 +56,46 @@ mostly the +z edge, and the simulation under-represents that. The deficit in the
 loss is real inefficiency and part is migration. The PID dependence (clean, saturated proton scores disappearing) fits events that lose hits at the
 gap. None of this is an energy effect, and none of it is established as the cause: the data have no truth.
 
+## How long is the gap? (`plotting/studies/apagap_length.py`)
+
+Two probes, same data and rules (area-normalised, allowed variables, no counts; all lengths in cm of z).
+
+**1. Equivalent length (no model).** `integral (1 - data/MC) dz` over a window is the stretch of z the missing events would occupy if the
+detector were uniformly efficient: **0.79 +- 0.16 cm** for the deficit side (251.5-254.5 cm), **0.43 +- 0.17 cm** for the pile-up above it
+(254.5-256.5 cm), and **0.36 +- 0.23 cm** net. So most of the displaced stretch is compensated just above the gap and only a fraction is lost.
+
+**2. Box scan with the simulation's own reconstruction.** The simulation's true vertex is smooth across the gap and its reconstruction
+resolves it to a robust 0.33 cm, so a no-gap pseudo-reconstruction (true vertex plus the residuals measured away from the gap) is a clean reference.
+Events whose *true* vertex lies in a box `[a, b)` are lost, or displaced to the +z edge of the box, and the reconstructed vertex histogram is
+compared with the data in 0.5 cm bins (Poisson likelihood, prediction area-normalised, `length_scan`, `length_summary.json`).
+
+| Model | a [cm] | b [cm] | Length L [cm] | -2 ln L better than no gap | Fractions |
+|---|---|---|---|---|---|
+| displaced to the +z edge | 251.75 | 255.5 | **3.75** | 62 | 0.3 displaced |
+| lost | 252.5 | 254.0 | 1.5 | 27 | 0.5 lost |
+| lost and displaced | 251.75 | 255.5 | 3.75 | 62 | all displaced, none lost |
+
+* **Displacement beats loss by 35 units of -2 ln L**, and giving the model both leaves loss at zero: the gap mainly moves vertices (to the +z
+  edge) and does not just remove them. Equivalently, about 30% of the events with a true vertex in the 3.75 cm stretch are displaced.
+* **Uncertainty:** Poisson toys of the best-fit model refit the length with a spread of 0.54 cm (0.72 cm after inflating by the 1.78 per bin
+  deviance scatter that the rest of the range also shows, from template statistics and broad shape differences); the fitted length is 3.5 +- 0.5
+  on average for toys of a true 3.75 cm. **Length 3.75 cm, about 0.7 cm uncertain (statistics only).** The profile alone gives 3.5-4.0 cm; the toys
+  are the honest number. The result does not move with the fit range (240-268, 236-272 cm) or the residual pool (margin 5 or 12 cm), but the scan
+  grid is 0.25 cm and the edges are quantised to it.
+* **Goodness:** inside 248-259 cm the per-bin deviance drops from 4.4 (no gap) to 1.6 (best model), the same as the 1.8 per bin outside; the
+  model describes the gap region as well as the rest of the range is described.
+* **Closure on the simulation itself:** the same scan applied to the simulation's reconstructed vertices (it has its own built-in gap) gives
+  `a = 254.5, b = 255.25`, L = 0.75 cm with 0.9 displaced, but toys of that case spread widely (1.8 cm) because the effect is small. The data's gap is
+  about **3 cm longer than the simulation's**, spread over a region where only part of the events move.
+* **Independent check with end points:** the proton and muon end z (`length_edges`) pile up inside the gap (ratio about 1.3-1.8 at 253.5-254.5 cm) and
+  fall sharply from 255.5 cm (about 0.4-0.5 at 255.5-256.0 cm): tracks that would end beyond the +z edge are cut short, which puts the +z edge at
+  255.5 cm, the same place as the vertex fit.
+
+**Reading.** The affected stretch is about 3.75 cm long (251.75 to 255.5 cm, uncertainty about 0.7 cm), against about 0.75 cm in the simulation,
+and it acts by displacing vertices to the +z edge more than by removing them. The 3.75 cm is the extent of the region where the data reconstruction is
+affected; it is not by itself the physical size of a dead region. Caveats: statistics only; the model assumes the displacement goes to the +z edge
+and uses the simulation's resolution; edges are on a 0.25 cm grid.
+
 ## Suggested next steps
 
 1. **Use the simulation's truth** (not restricted for MC): how truth vertices in 250-256 cm are reconstructed, to separate loss from migration in the
