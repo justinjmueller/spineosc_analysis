@@ -79,7 +79,7 @@ def configure_style(fmt: str = "pdf", dpi: int = 300, style: str = "rootlike") -
 _PROVENANCE: dict = {}
 
 
-def set_provenance(script, inputs=(), arguments=None) -> None:
+def set_provenance(script, inputs=(), arguments=None, restricted=()) -> None:
     """
     Make every following :func:`save_figure` write a provenance sidecar.
 
@@ -91,9 +91,11 @@ def set_provenance(script, inputs=(), arguments=None) -> None:
         Files (or directories) the figures are made from; ``save_figure(..., inputs=...)`` overrides them.
     arguments : dict, optional
         Parameters common to all figures of this run.
+    restricted : iterable of path-like, optional
+        Inputs recorded by hash only, with no size or date (data files whose scale must not be recorded).
     """
     _PROVENANCE.clear()
-    _PROVENANCE.update(script=script, inputs=list(inputs), arguments=dict(arguments or {}))
+    _PROVENANCE.update(script=script, inputs=list(inputs), arguments=dict(arguments or {}), restricted=list(restricted))
 
 
 def save_figure(
@@ -145,6 +147,7 @@ def save_figure(
             arguments={**_PROVENANCE["arguments"], **(arguments or {})},
             versions={"selection": SELECTION_VERSION},
             recipe=recipe,
+            restricted=_PROVENANCE.get("restricted", ()),
         )
     return path
 

@@ -22,6 +22,7 @@ Run with the mutools environment from the repository root:
 | `sbnd_scan.py` | `sbnd_data_access.ipynb` | oscillation-scan spectra, deficit, bins outside the CV band |
 | `conditional_constraint.py` | `conditional_constraint.ipynb` | SBND -> ICARUS conditional constraint |
 | `dent_study.py` | `dent_study.ipynb` | DENT data/MC study tables and figures |
+| `apagap.py` | (new) | SBND APA-gap deficit in the detector data access: area-normalised data/MC, allowed variables only (`docs/apa_gap/`) |
 
 Figures default to `figures/` (or the
 study's own folder), never to the technote; copy reviewed ones across by hand.

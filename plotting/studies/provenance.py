@@ -50,6 +50,13 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def describe_restricted(path: Path, repo: Path = REPO) -> dict:
+    """Identify a data file by hash only: no size or modification time, which would hint at the dataset's scale."""
+    path = Path(path)
+    info = {"path": _relative(path, repo), "restricted": True}
+    return {**info, "missing": True} if not path.exists() else {**info, "sha256": sha256(path)}
+
+
 def describe_input(path: Path, repo: Path = REPO) -> dict:
     """Identify an input: a file (size, mtime and, when small, hash) or a directory (count, size, newest mtime)."""
     path = Path(path)
@@ -271,7 +278,8 @@ def sidecar_path(figure: Path) -> Path:
     return figure.with_name(figure.name + SUFFIX)
 
 
-def record(figure, inputs, script, arguments=None, versions=None, note: str = "", repo: Path = REPO, recipe: bool = True) -> Path:
+def record(figure, inputs, script, arguments=None, versions=None, note: str = "", repo: Path = REPO, recipe: bool = True,
+           restricted=()) -> Path:
     """
     Write the provenance sidecar of a figure that has just been saved.
 
@@ -291,6 +299,8 @@ def record(figure, inputs, script, arguments=None, versions=None, note: str = ""
         Free text, e.g. "external input, not versioned".
     repo : path-like, optional
         Repository root that relative paths refer to.
+    restricted : iterable of path-like, optional
+        Inputs identified by hash only (data files whose size or date must not be recorded).
     recipe : bool, optional
         Trace PROfit outputs among the inputs back to their ini and XML; turn off for figures that read
         many PROfit files, whose recipes are in the per-panel sidecars.
@@ -314,7 +324,8 @@ def record(figure, inputs, script, arguments=None, versions=None, note: str = ""
         "command": " ".join([Path(sys.argv[0]).name, *sys.argv[1:]]),
         "arguments": arguments or {},
         "versions": versions or {},
-        "inputs": [describe_input(p, repo) for p in inputs],
+        "inputs": [describe_restricted(p, repo) if Path(p) in {Path(r) for r in restricted} else describe_input(p, repo)
+                   for p in inputs],
         "profit": [entry for p in inputs for entry in profit_recipe(Path(p), repo)] if recipe else [],
         "created": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
         "note": note,
@@ -363,7 +374,9 @@ def check(sidecar: Path, repo: Path = REPO) -> tuple[str, list[str]]:
             reasons.append(f"input {item['path']} is missing")
             continue
         stat = path.stat()
-        if item.get("directory"):
+        if item.get("restricted"):
+            changed = sha256(path) != item["sha256"]
+        elif item.get("directory"):
             now = _directory_state(path)
             changed = (now["n_files"], now["size"], now["mtime_ns"]) != (item["n_files"], item["size"], item["mtime_ns"])
         elif "sha256" in item:

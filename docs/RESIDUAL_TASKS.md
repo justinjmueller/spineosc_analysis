@@ -65,6 +65,8 @@ detector pair (SBND with ICARUS Run 2 and Run 4), and new text.
 ### Cover the SBND APA gap in the detector data access section
 Opened 2026-10-07.
 
+**Update (2026-10-17).** A closer look (`docs/apa_gap/REPORT.md`, `plotting/studies/apagap.py`) finds a localized deficit at vertex z = 251.5-254.5 cm (data/MC 0.73, -4.2 sigma, area-normalised, statistics only) with an excess just above it; the 4 cm PROfit comparison and its 2% systematic band do not cover it.
+
 **Status (2026-10-07 overnight).** APA-gap figures (vertex z and muon end z, gap at z = 250 cm confirmed) and text were added to `detector_data_access.tex`. Still open: the angular dependence of the position comparisons.
 
 
