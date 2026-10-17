@@ -10,19 +10,17 @@ and ``pvalues_<arm>``.
 
 Phases (``--phase``)
 --------------------
-``1``  Area-normalised data/MC, by tier.
+``1``  Area-normalised, shape-only data/MC, by tier.
     The chi-square PROfit draws on its channel plots is also written to
     the ``chi2`` tree of each run's ``_PROplot_histograms.root``, so the
-    numbers are read back, not recomputed. Runs are **area-normalised
-    with the shape-only switch deliberately left off**, matching the
-    parallel analysis: area-norm rescales the prediction onto the data
-    integral and costs one degree of freedom (``ndf = nbins - 1``),
-    while ``shapeonly`` would also project each systematic covariance
-    onto per-channel shape. The ndf assertion therefore proves area
-    normalisation and nothing more (an earlier set of runs passed it
-    without being shape-only). The covariance keeps its normalisation
-    component, so these chi-squares sit below the shape-only ones; for
-    delta p that is 29.04 against 32.57, on opposite sides of 0.05.
+    numbers are read back, not recomputed. The runs use both ``area-norm``
+    and ``shapeonly`` (set in every ``xml/sbnd_data_access/phase1-tier*/
+    *_cvrw_plot.ini``): area-norm rescales the prediction onto the data
+    integral and costs one degree of freedom (``ndf = nbins - 1``), and
+    ``shapeonly`` also projects each systematic covariance onto
+    per-channel shape. The ndf assertion proves area normalisation only,
+    not that ``shapeonly`` was set (an earlier set of runs passed it
+    without being shape-only); that is read off the ini.
     Several studies have more than one run on disk; the table names the
     file each number came from so a stale or rebinned run is visible.
     Caveats: the numbers carry whatever detector-systematics set and
@@ -30,9 +28,7 @@ Phases (``--phase``)
     (``events/sbnd_dirt/selected`` has no entries); the chi-square is
     whichever ``--chi2`` the run used (PROfit default: Neyman); the
     prediction is rescaled to the data integral so the data POT
-    mismatch in the ``_data.xml`` files does not enter; and since the
-    systematics are not shape-projected an overall-scale systematic
-    still contributes to the covariance. chi-square carries about
+    mismatch in the ``_data.xml`` files does not enter; and chi-square carries about
     +-0.6 of run-to-run scatter from the unpinned seed in the
     spline-to-covariance throws, and with 16 comparisons a single
     p-value near 0.01 is unremarkable.
@@ -352,9 +348,10 @@ class Phase:
         return RUNS_DIR / f"t{VARIABLES[study][0]}_{study}_{self.arm}_PROplot_histograms.root"
 
 
-#: Phase 1 (area-normalised), 2 (absolute rates) and 3 (absolute rates with
-#: data overlaid). ``ENABLED_TIERS = (1,)`` was the original first stage;
-#: widen only once the corresponding stage has been cleared.
+#: Phase 1 (area-normalised, shape-only), 2 (absolute rates) and 3 (absolute
+#: rates with data overlaid). All three tiers are enabled in every phase (the
+#: notebook's ``ENABLED_TIERS = (1, 2, 3)``); which tiers may show data points
+#: is set separately by ``overlay_tiers``.
 PHASES: dict[str, Phase] = {
     "1": Phase(
         key="1",
