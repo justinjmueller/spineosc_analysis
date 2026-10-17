@@ -10,9 +10,6 @@ DISCRETE = {"reco_cathode_crosser", "reco_neutrino2026_veto", "reco_electron_mul
 def load(path=SCRATCH):
     d = {k: pd.read_csv(f"{path}/{k}.csv") for k in ("data", "cv", "dent")}
     for df in d.values():
-        df["muon_len3d"] = np.sqrt((df.reco_leading_muon_end_x - df.reco_leading_muon_start_x) ** 2 +
-                                   (df.reco_leading_muon_end_y - df.reco_leading_muon_start_y) ** 2 +
-                                   (df.reco_leading_muon_end_z - df.reco_leading_muon_start_z) ** 2)
         df["abs_end_x"] = df.reco_leading_muon_end_x.abs()
         df["muon_xing_geom"] = ((df.reco_vertex_x * df.reco_leading_muon_end_x) < 0).astype(float)
     return d

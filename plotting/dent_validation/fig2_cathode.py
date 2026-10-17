@@ -4,17 +4,7 @@ import dentval as dv, plotlib as pl
 d = dv.load()
 fig = plt.figure(figsize=(14, 8.6), constrained_layout=False)
 gs = fig.add_gridspec(2, 3, hspace=0.34, wspace=0.28, left=0.06, right=0.99, top=0.91, bottom=0.07)
-Lb = np.array([0, 40, 80, 120, 160, 200, 260, 340, 600.0])
-# (a) crosser fraction vs muon 3D length proxy
-a, r = pl.pair_axes(fig, gs[0, 0])
-F = pl.frac_vs(d, "muon_len3d", Lb, lambda x: x.reco_cathode_crosser.to_numpy() == 1)
-pl.draw_frac(a, r, Lb, F, "straight-line muon length, start to end [cm]", "crosser fraction [%]"); a.legend(loc="upper left")
-a.set_title("(a) fraction flagged as cathode crossers", loc="left", fontsize=10); r.set_ylim(0.8, 1.15)
-# (b) pile-up fraction vs length
-a, r = pl.pair_axes(fig, gs[0, 1])
-F2 = pl.frac_vs(d, "muon_len3d", Lb, lambda x: (x.reco_cathode_crosser.to_numpy() == 0) & (x.abs_end_x.to_numpy() < 5))
-pl.draw_frac(a, r, Lb, F2, "straight-line muon length, start to end [cm]", "non-crossers ending within 5 cm of cathode [%]")
-a.set_title("(b) near-cathode pile-up of the muon endpoint", loc="left", fontsize=10); r.set_ylim(0.5, 2.3)
+# NOTE: the length panels were removed (muon length is not an allowed data-access variable); panels (a) and (b) are intentionally empty.
 # (c) |end_x| zoom, non-crossers, fractions of all selected events per cm
 a, r = pl.pair_axes(fig, gs[0, 2])
 e = np.arange(0, 42, 2.0)

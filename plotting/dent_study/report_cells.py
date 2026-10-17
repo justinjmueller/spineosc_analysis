@@ -47,8 +47,7 @@ if "inj1p0" in w:
 
 mdfile("03_mechanism")
 code("""
-for f, cap in (("mechanism_cathode_features.png", "Cathode-region features: (a) crosser fraction against muon length, (b) near-cathode pile-up of non-crossers, (c) distance of the endpoint from the cathode, (d) and (e) endpoint x for crossing and non-crossing muons, (f) vertex x."),
-               ("mechanism_missing_length.png", "Track length missing from the flipped crossers: (a) distribution, (b) against the length beyond the cathode, (c) where the CV track ends, (d) probability of flipping."),
+for f, cap in (("mechanism_missing_length.png", "Track length missing from the flipped crossers: (a) distribution, (b) against the length beyond the cathode, (c) where the CV track ends, (d) probability of flipping."),
                ("mechanism_endpoint_cut.png", "(a) Distance of the muon endpoint from the cathode for the flipped events and for non-crossers. (b) DENT/CV ratio of selected events against reconstructed visible energy (MC only): without the crosser cut, with it, and with it plus |x_end| >= 5 cm. The extra cut leaves the ratio within 1.6 % of unity.")):
     ds.show_figure(FIG / f, cap)
 """)

@@ -11,7 +11,7 @@ NICE = {"reco_leading_muon_calo_csda_diff": "muon calo-vs-CSDA residual", "reco_
         "reco_leading_proton_hadron_softmax": "proton: hadron score", "abs_end_x": "|muon end x|", "muon_xing_geom": "muon vertex/end opposite sides",
         "reco_cathode_crosser": "cathode-crosser flag", "reco_neutrino2026_veto": "neutrino2026 veto (= not crosser)", "reco_leading_muon_end_x": "muon end x",
         "reco_vertex_x": "vertex x", "reco_leading_muon_start_x": "muon start x", "reco_leading_proton_start_x": "proton start x", "reco_leading_proton_end_x": "proton end x",
-        "reco_leading_muon_start_dir_z": "muon direction z", "reco_leading_muon_start_dir_x": "muon direction x", "reco_vertex_y": "vertex y", "muon_len3d": "muon straight-line length"}
+        "reco_leading_muon_start_dir_z": "muon direction z", "reco_leading_muon_start_dir_x": "muon direction x", "reco_vertex_y": "vertex y"}
 nice = lambda v: NICE.get(v, v.replace("reco_", "").replace("_", " "))
 
 # ---------- Fig 1: ranked scan ----------

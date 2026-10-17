@@ -80,27 +80,20 @@ def fig_after_cuts():
     save(fig, "cathode_after_cuts")
 
 # ------------------------------------------------------------------------------------------------ stage 1: DENT systematic
-def fig_dent_ratio():
+def fig_dent_ratio(as_ratio=False):
+    """as_ratio=False: DENT/CV - 1 in percent (technical-note Fig. 25 as published); True: DENT/CV centered on 1. Both show all three selections"""
     J = json.load(open(OUT / "scan.json")); e = {"1p": np.array([0.3, 0.4, 0.46, 0.52, 0.58, 0.64, 0.70, 0.76, 0.82, 0.88, 0.94, 1.0, 1.06, 1.13, 1.2, 1.3, 1.5]),
-         "Mp": np.array([0.4, 0.5, 0.59, 0.67, 0.75, 0.83, 0.91, 0.99, 1.07, 1.16, 1.26, 1.37, 1.5, 1.7, 2.0])}
+         "Mp": np.array([0.4, 0.5, 0.59, 0.67, 0.75, 0.83, 0.91, 0.99, 1.07, 1.16, 1.26, 1.37, 1.5, 2.0])}
     sel = ((-1, "No crosser cut", "#009E73"), (0, "Crosser cut", "#0072B2"), (4, r"Crosser cut + $|x_{end}| \geq 4$ cm", "#D55E00"))
+    sc, off = (1.0, 1.0) if as_ratio else (100.0, 0.0)
     fig, axs = plt.subplots(1, 2, figsize=(14, 5.4), sharey=True)
     for ax, ch, title in zip(axs, ("1p", "Mp"), ("Single-proton", "Multi-proton")):
         ctr = 0.5 * (e[ch][1:] + e[ch][:-1])
         for X, lab, c in sel:
-            o = next(o for o in J["channels"][ch] if o["X"] == X); y = 100 * np.array(o["fine"]); err = 100 * np.array(o["fine_err"])
-            ax.stairs(y, e[ch], color=c, lw=2, label=lab); ax.errorbar(ctr, y, yerr=err, fmt="none", ecolor=c, elinewidth=1, alpha=0.55)
-        ax.axhline(0, color="0.4", lw=1); ax.set_xlabel("Reconstructed Visible Energy [GeV]"); ax.set_ylim(-22, 16); stamp(ax, right=f"SBND Simulation, {title}")
-    axs[0].set_ylabel("DENT / CV $-$ 1 [%]"); axs[0].legend(loc="lower left", fontsize=12); save(fig, "dent_ratio_vs_energy")
-
-def fig_dent_uncertainty():
-    files = (("detsys-v1.1.0v0.root", "No crosser cut", "#009E73"), ("detsys-v1.1.0v1.root", "Crosser cut", "#0072B2"), ("detsys-v1.1.0v1_endx4.root", r"Crosser cut + $|x_{end}| \geq 4$ cm", "#D55E00"))
-    fig, ax = plt.subplots(figsize=(8.5, 6))
-    for fn, lab, c in files:
-        h = uproot.open(REPO / "detvar" / fn)["DENT_sbnd_Run1"]; ed = h.axis().edges(); v = np.abs(h.values() - 1)
-        ax.stairs(v, ed, color=c, lw=2, label=lab)
-    ax.set_xlabel("Reconstructed Visible Energy [GeV]"); ax.set_ylabel("DENT fractional uncertainty"); ax.set_xlim(0.3, 2.0); ax.set_ylim(0, None); ax.legend(loc="upper left", fontsize=12)
-    stamp(ax, right="SBND Simulation"); save(fig, "dent_fractional_uncertainty")
+            o = next(o for o in J["channels"][ch] if o["X"] == X); y = sc * np.array(o["fine"]) + off; err = sc * np.array(o["fine_err"])
+            ax.stairs(y, e[ch], color=c, lw=2, label=lab, baseline=None); ax.errorbar(ctr, y, yerr=err, fmt="none", ecolor=c, elinewidth=1, alpha=0.55)
+        ax.axhline(1 if as_ratio else 0, color="0.4", lw=1); ax.set_xlabel("Reconstructed Visible Energy [GeV]"); ax.set_ylim((0.78, 1.16) if as_ratio else (-22, 16)); stamp(ax); ax.legend(title=title, loc="lower left", fontsize=12, title_fontsize=12, alignment="left")
+    axs[0].set_ylabel("DENT / CV" if as_ratio else "DENT / CV $-$ 1 [%]"); save(fig, "dent_ratio_vs_energy_ratio" if as_ratio else "dent_ratio_vs_energy")
 
 def pid_impact():
     """matched detvar CV/DENT events (fiducial + veto), DENT/CV - 1 per PID-score bin for crossers and non-crossers, paired Poisson bootstrap"""
@@ -126,7 +119,8 @@ def pid_impact():
             out[var][nm] = (ratio[0], ratio[1:].std(axis=0), vals["cv"][0])
     return edges, out
 
-def fig_pid_impact():
+def fig_pid_impact(as_ratio=False):
+    """as_ratio=False: DENT/CV - 1 in percent (technical-note Fig. 24 as published); True: DENT/CV centered on 1"""
     edges, P = pid_impact(); ctr = 0.5 * (edges[1:] + edges[:-1])
     names = {"reco_leading_muon_muon_softmax": "Muon PID score", "reco_leading_muon_primary_softmax": "Muon primary score",
              "reco_leading_proton_proton_softmax": "Leading-proton PID score", "reco_leading_proton_primary_softmax": "Leading-proton primary score"}
@@ -135,10 +129,11 @@ def fig_pid_impact():
     for ax, (var, title) in zip(axs.ravel(), names.items()):
         for k, lab, c in sel:
             y, err, ncv = P[var][k]; ok = ncv > 30       # drop bins too empty to carry a ratio
-            ax.stairs(np.where(ok, 100 * y, np.nan), edges, color=c, lw=2, label=lab); ax.errorbar(ctr[ok], 100 * y[ok], yerr=100 * err[ok], fmt="none", ecolor=c, elinewidth=1, alpha=0.5)
-        ax.axhline(0, color="0.4", lw=1); ax.set_xlabel(title); ax.set_ylabel("DENT / CV $-$ 1 [%]"); pop = np.where(P[var]["nocut"][2] > 30)[0]; ax.set_xlim(edges[max(pop[0] - 1, 0)], 1)
+            sc, off = (1.0, 1.0) if as_ratio else (100.0, 0.0)
+            ax.stairs(np.where(ok, sc * y + off, np.nan), edges, color=c, lw=2, label=lab, baseline=None); ax.errorbar(ctr[ok], sc * y[ok] + off, yerr=sc * err[ok], fmt="none", ecolor=c, elinewidth=1, alpha=0.5)
+        ax.axhline(1 if as_ratio else 0, color="0.4", lw=1); ax.set_xlabel(title); ax.set_ylabel("DENT / CV" if as_ratio else "DENT / CV $-$ 1 [%]"); pop = np.where(P[var]["nocut"][2] > 30)[0]; ax.set_xlim(edges[max(pop[0] - 1, 0)], 1)
     h, l = axs[0, 0].get_legend_handles_labels(); fig.legend(h, l, loc="upper center", ncol=3, fontsize=13, frameon=False, bbox_to_anchor=(0.5, 1.0)); stamp(axs[0, 0], right=None); mark_axis(axs[0, 1], "SBND Simulation", alignment="right")
-    fig.tight_layout(rect=(0, 0, 1, 0.94)); save(fig, "dent_pid_impact")
+    fig.tight_layout(rect=(0, 0, 1, 0.94)); save(fig, "dent_pid_impact_ratio" if as_ratio else "dent_pid_impact")
 
 def fig_scan():
     J = json.load(open(OUT / "scan.json")); X = np.array([x for x in J["X"] if x >= 0])
@@ -158,6 +153,6 @@ def fig_scan():
     for ax in axs.ravel(): ax.axvline(CUT, color="0.45", ls="--", lw=1.2); ax.set_xlabel(r"End-point cut value $X$ [cm]")
     stamp(axs[0, 0], right=None); mark_axis(axs[0, 1], "SBND Simulation", alignment="right"); fig.tight_layout(); save(fig, "cathode_cut_scan")
 
-ALL = dict(endx_distance=fig_endx_distance, fractions=fig_fractions, after_cuts=fig_after_cuts, dent_ratio=fig_dent_ratio, dent_uncertainty=fig_dent_uncertainty, pid_impact=fig_pid_impact, scan=fig_scan)
+ALL = dict(endx_distance=fig_endx_distance, fractions=fig_fractions, after_cuts=fig_after_cuts, dent_ratio=fig_dent_ratio, dent_ratio_ratio=lambda: fig_dent_ratio(as_ratio=True), pid_impact=fig_pid_impact, pid_impact_ratio=lambda: fig_pid_impact(as_ratio=True), scan=fig_scan)
 if __name__ == "__main__":
     for k in (sys.argv[1:] or ALL): ALL[k]()

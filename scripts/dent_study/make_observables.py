@@ -14,7 +14,6 @@ L3D = "sqrt(pow(reco_leading_muon_end_x-reco_leading_muon_start_x,2)+pow(reco_le
 SPECS = [
     # --- cathode-region / DENT-mechanism observables (primary candidates, chosen from MC-only DENT sensitivity)
     ("muon_calo_csda",     "reco_leading_muon_calo_csda_diff",  r"Muon calo-vs-CSDA residual",              "cont", 20),
-    ("muon_len3d",         L3D,                                  r"Muon straight-line length [cm]",          "cont", 20),
     ("muon_abs_endx",      "abs(reco_leading_muon_end_x)",       r"Muon $|x_{end}|$ [cm]",                   "cont", 20),
     ("crosser_flag",       "reco_cathode_crosser",               r"Cathode-crosser flag",                    "disc", 2),
     ("muon_endx_full",     "reco_leading_muon_end_x",            r"Muon end $x$ [cm]",                       "cont", 24),
@@ -33,9 +32,6 @@ SPECS = [
     ("vertexy",            "reco_vertex_y",                      r"Vertex $y$ [cm]",                         "cont", 20),
     ("proton_endy",        "reco_leading_proton_end_y",          r"Leading-proton end $y$ [cm]",             "cont", 20),
     ("proton_endz",        "reco_leading_proton_end_z",          r"Leading-proton end $z$ [cm]",             "cont", 20),
-    ("muon_dir_x",         "reco_leading_muon_start_dir_x",      r"Muon direction $x$",                      "cont", 20),
-    ("muon_dir_y",         "reco_leading_muon_start_dir_y",      r"Muon direction $y$",                      "cont", 20),
-    ("muon_dir_z",         "reco_leading_muon_start_dir_z",      r"Muon direction $z$",                      "cont", 20),
 ]
 
 def cpp(expr):

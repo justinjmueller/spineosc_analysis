@@ -9,7 +9,7 @@ DET = D / "spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root"; NOS = D / "spineosc_nu
 K = ["Run", "Subrun", "Evt", "event_max_neutrino_energy"]
 XS = [0, 1, 2, 3, 4, 5, 6, 8, 10]
 FINE = {"1p": np.array([0.3, 0.4, 0.46, 0.52, 0.58, 0.64, 0.70, 0.76, 0.82, 0.88, 0.94, 1.0, 1.06, 1.13, 1.2, 1.3, 1.5]),
-        "Mp": np.array([0.4, 0.5, 0.59, 0.67, 0.75, 0.83, 0.91, 0.99, 1.07, 1.16, 1.26, 1.37, 1.5, 1.7, 2.0])}
+        "Mp": np.array([0.4, 0.5, 0.59, 0.67, 0.75, 0.83, 0.91, 0.99, 1.07, 1.16, 1.26, 1.37, 1.5, 2.0])}
 COARSE = {"1p": [0.3, 0.7, 1.0, 1.5], "Mp": [0.4, 0.8, 1.2, 2.0]}
 NBOOT = 500; RNG = np.random.default_rng(20261007)
 COLS = K + ["reco_visible_energy", "reco_fiducialize_cathode", "reco_veto_sbnd_highy_highz", "reco_cathode_crosser", "reco_leading_muon_end_x", "reco_proton_multiplicity"]
@@ -74,13 +74,17 @@ def main():
     sg = sg[(sg.true_fiducialize_cathode == 1) & (sg.true_veto_sbnd_highy_highz == 1) & (sg.true_cathode_crosser == 0)]
     at = np.abs(sg.true_leading_muon_end_x.to_numpy()); res["cost_true"] = {str(X): float((at < X).mean()) for X in XS}
     # data / CV / DENT fractions of selected events that are non-crossers with |x_end| < X (energy-free; MC with flash threshold)
-    sys.path.insert(0, str(REPO / "plotting" / "dent_validation")); import dentval as dv
-    d = dv.load(); fr = {}
-    for k, df in d.items():
-        nc = (df.reco_cathode_crosser == 0).to_numpy(); ae = df.abs_end_x.to_numpy(); N = len(df)
-        fr[k] = {str(X): [float((nc & (ae < X)).sum() / N), float(np.sqrt(max((nc & (ae < X)).sum(), 1)) / N)] for X in XS}
-        fr[k]["crosser_fraction"] = [float((~nc).sum() / N), float(np.sqrt((~nc).sum()) / N)]
-    res["fractions"] = fr
-    out = REPO / "docs" / "cathode_motivation" / "scan.json"; out.write_text(json.dumps(res, indent=1)); print("wrote", out)
+    out = REPO / "docs" / "cathode_motivation" / "scan.json"
+    try:
+        sys.path.insert(0, str(REPO / "plotting" / "dent_validation")); import dentval as dv
+        d = dv.load(); fr = {}
+        for k, df in d.items():
+            nc = (df.reco_cathode_crosser == 0).to_numpy(); ae = df.abs_end_x.to_numpy(); N = len(df)
+            fr[k] = {str(X): [float((nc & (ae < X)).sum() / N), float(np.sqrt(max((nc & (ae < X)).sum(), 1)) / N)] for X in XS}
+            fr[k]["crosser_fraction"] = [float((~nc).sum() / N), float(np.sqrt((~nc).sum()) / N)]
+        res["fractions"] = fr
+    except FileNotFoundError:      # the dump_samples.C CSVs are scratch products; the fractions do not depend on the energy binning
+        print("sample dumps missing: keeping the fractions already in", out); res["fractions"] = json.loads(out.read_text())["fractions"]
+    out.write_text(json.dumps(res, indent=1)); print("wrote", out)
 
 if __name__ == "__main__": main()

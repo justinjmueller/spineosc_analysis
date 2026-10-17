@@ -80,7 +80,6 @@ detsys_muon_azimuth=/path/to/detsys_muon_azimuth.root
 
 # --- DENT study: per-observable detector-variation ratios (scripts/dent_study/build_dd_detsys.py) ---
 detsys_dd_muon_calo_csda=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_calo_csda.root
-detsys_dd_muon_len3d=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_len3d.root
 detsys_dd_muon_abs_endx=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_abs_endx.root
 detsys_dd_crosser_flag=/Users/mueller/Projects/spineosc/detvar/detsys_dd_crosser_flag.root
 detsys_dd_muon_endx_full=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_endx_full.root
@@ -97,6 +96,3 @@ detsys_dd_muon_endy=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_endy.
 detsys_dd_vertexy=/Users/mueller/Projects/spineosc/detvar/detsys_dd_vertexy.root
 detsys_dd_proton_endy=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_endy.root
 detsys_dd_proton_endz=/Users/mueller/Projects/spineosc/detvar/detsys_dd_proton_endz.root
-detsys_dd_muon_dir_x=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_dir_x.root
-detsys_dd_muon_dir_y=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_dir_y.root
-detsys_dd_muon_dir_z=/Users/mueller/Projects/spineosc/detvar/detsys_dd_muon_dir_z.root
