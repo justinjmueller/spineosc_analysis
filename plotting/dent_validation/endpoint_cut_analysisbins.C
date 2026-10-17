@@ -12,8 +12,19 @@ std::set<K> evkeys(TFile*f,const char*k){std::set<K> s; ROOT::RDataFrame d(Form(
 std::multimap<K,R> load(TFile*f,const char*k){std::multimap<K,R> m; ROOT::RDataFrame d(Form("events/%s/selected",k),f->GetName());
   d.Foreach([&](int r,int sr,int e,double mm,double E,double ca,double hy,double cx,double ex,double pm){m.insert({K(r,sr,e,mm),{E,ca,hy,cx,ex,pm}});},
    {"Run","Subrun","Evt","event_max_neutrino_energy","reco_visible_energy","reco_fiducialize_cathode","reco_veto_sbnd_highy_highz","reco_cathode_crosser","reco_leading_muon_end_x","reco_proton_multiplicity"}); return m;}
+#include <TString.h>
+#include <TSystem.h>
+
+// Release ntuple directory: $SPINEOSC_DATA/v1.1.0 (default $HOME/data/spineosc/v1.1.0), with a trailing slash.
+static TString spineosc_dir()
+{
+  const char *root = gSystem->Getenv("SPINEOSC_DATA");
+  TString base = (root && *root) ? TString(root) : TString(gSystem->Getenv("HOME")) + "/data/spineosc";
+  return base + "/v1.1.0/";
+}
+
 void endpoint_cut_analysisbins(double XCUT=4.0){
-  TFile f("/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root");
+  TFile f(spineosc_dir() + "spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root");
   auto kc=evkeys(&f,"sbnd_detvar_newcv"), kd=evkeys(&f,"sbnd_detvar_newdent");
   auto cv=load(&f,"sbnd_detvar_newcv"), dt=load(&f,"sbnd_detvar_newdent");
   std::vector<double> e1={0.3,0.4,0.46,0.52,0.58,0.64,0.7,0.76,0.82,0.88,0.94,1.0,1.06,1.13,1.2,1.3,1.5};

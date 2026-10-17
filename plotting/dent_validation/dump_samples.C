@@ -12,12 +12,22 @@
 #include <string>
 #include <vector>
 
-static const char *kDir = "/Users/mueller/data/spineosc/v1.1.0/";
+
+#include <TString.h>
+#include <TSystem.h>
+
+// Release ntuple directory: $SPINEOSC_DATA/v1.1.0 (default $HOME/data/spineosc/v1.1.0), with a trailing slash.
+static TString spineosc_dir()
+{
+  const char *root = gSystem->Getenv("SPINEOSC_DATA");
+  TString base = (root && *root) ? TString(root) : TString(gSystem->Getenv("HOME")) + "/data/spineosc";
+  return base + "/v1.1.0/";
+}
 
 void dump_one(const char *file, const char *tree_path, const std::string &out,
               const std::vector<std::string> &cols, bool flash_cut = true)
 {
-    TFile f(Form("%s%s", kDir, file));
+    TFile f(Form("%s%s", spineosc_dir().Data(), file));
     TTree *t = static_cast<TTree *>(f.Get(tree_path));
     if (!t) { printf("missing %s\n", tree_path); return; }
     std::vector<TLeaf *> lv;

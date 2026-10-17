@@ -68,16 +68,23 @@ differs per machine.
    and off `$HOME`). The `pbs_*` settings only matter if you submit batch
    jobs.
 
-4. Tell the Python plotting and study scripts where the release ntuples are
-   (the C++ calculators and ROOT macros still have the path compiled in):
+4. Tell the Python scripts, the C++ detector-systematics calculators and the
+   ROOT macros where the release ntuples are (all read the variable at run
+   time; the calculators need no rebuild when it changes):
 
    ```
    export SPINEOSC_DATA=/path/to/data/spineosc    # holds v1.1.0/spineosc_numu_*.root
    ```
 
    The default is `~/data/spineosc`. The release folder (`v1.1.0`) and the
-   repository root are set in `plotting/spineosc_paths.py`; scripts import
-   `DATA_DIR`, `DATA_ROOT` and `REPO` from there rather than hard-coding them.
+   repository root are set in `plotting/spineosc_paths.py` (Python), in
+   `release_dir()` of each `detsys/calculator*/configuration.h` (C++) and in
+   `spineosc_dir()` of the `plotting/dent_validation/*.C` macros.
+
+   The calculators have no build file; one builds with
+   `c++ -O2 $(root-config --cflags) main.cc -o run_detsys $(root-config --libs) -lROOTDataFrame`
+   in its directory and runs as `./run_detsys <sbnd|icarus|generic|all> <output_dir>`. Binaries built
+   before this change still carry the old path and need rebuilding.
 
 `input/sources.list`, `input/site.conf` and `work/` are all gitignored -
 they're machine-specific and fully reproducible from the checked-in
