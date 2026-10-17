@@ -53,6 +53,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import provenance  # noqa: E402
+
 import common  # noqa: E402
 
 #: Selections: PROfit file stem and channel labels (``None`` for no channel split).
@@ -239,6 +241,7 @@ def make_overlays(
     detectors: list[int],
     variables: list[int] | None,
     stage: Path,
+    input_file: Path | None = None,
 ) -> list[Path]:
     """
     Overlay plots of several bias variables on one axis.
@@ -307,6 +310,11 @@ def make_overlays(
                 tag = DETECTOR_TAGS[detector]
                 new = stage / f"resolution_{group}_{chname}_{tag}.{mp.saver.fmt}"
                 auto.rename(new)
+                if input_file is not None:
+                    provenance.record(new, inputs=[input_file], script=__file__,
+                                      arguments={"kind": "overlay", "group": group, "channel": chname,
+                                                 "detector": tag, "variables": list(overlay_variables)},
+                                      versions={"selection": common.SELECTION_VERSION})
                 written.append(new)
                 print(f"wrote {new}")
     return written
@@ -352,7 +360,7 @@ def main(argv: list[str] | None = None) -> None:
                      args.variable, args.output / "resolution")
     if args.kind in ("overlay", "all"):
         args.stage.mkdir(parents=True, exist_ok=True)
-        make_overlays(contents, channel_labels, detectors, args.variable, args.stage)
+        make_overlays(contents, channel_labels, detectors, args.variable, args.stage, input_file)
 
 
 if __name__ == "__main__":

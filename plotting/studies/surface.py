@@ -40,6 +40,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+import provenance
 from matplotlib.lines import Line2D
 
 import common
@@ -198,6 +199,9 @@ def plot_sensitivity(
         savefig = Path(savefig)
         savefig.parent.mkdir(parents=True, exist_ok=True)
         figure.savefig(savefig)
+        provenance.record(savefig, inputs=paths, script=__file__,
+                          arguments={"labels": labels, "level": level},
+                          versions={"selection": common.SELECTION_VERSION})
     return figure
 
 

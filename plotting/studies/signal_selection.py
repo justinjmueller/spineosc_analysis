@@ -69,6 +69,8 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import provenance  # noqa: E402
+
 import common  # noqa: E402
 
 #: Default location of the v1.1.0 ntuples.
@@ -785,6 +787,10 @@ def make_efficiency_figures(
                     xlabel=var.xlabel, detector_label=det.title, mark_fs=sel.label, savefig=path,
                 )
                 plt.close(fig)
+                provenance.record(path, inputs=[data / "v1.1.0" / det.ntuple], script=__file__,
+                                  arguments={"detector": det.name, "variable": var.name,
+                                             "selection": sel.label, "kind": "efficiency"},
+                                  versions={"selection": common.SELECTION_VERSION})
                 written.append(path)
                 print(f"wrote {path}")
     return written

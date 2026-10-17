@@ -64,8 +64,13 @@ def configure_style(fmt: str = "pdf", dpi: int = 300, style: str = "rootlike") -
     style : str, optional
         Name of a bundled mutools matplotlib style sheet.
     """
+    import os
+
     import mutools.plotting as mp
 
+    # Fix the PDF creation date so that identical inputs give byte-identical figures
+    # (matplotlib reads SOURCE_DATE_EPOCH); the sidecar written by provenance.record() holds the real date.
+    os.environ.setdefault("SOURCE_DATE_EPOCH", "1760000000")
     mp.saver.configure(fmt=fmt, dpi=dpi, rasterized=True, ytick_precision=2)
     mp.use_style(style)
 
