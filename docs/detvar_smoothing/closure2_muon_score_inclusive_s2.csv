@@ -1,0 +1,25 @@
+study,syst,variant,perm,data,chi2_total,fitted,max_other_pull,max_other
+muon_score_inclusive_s2,DENT,unsmoothed,1,varied,8.36465,0.0807498,0.63434,WireMod xThetaXW SBND
+muon_score_inclusive_s2,DENT,unsmoothed,1,null,5.75665,0.0510077,0.626725,WireMod xThetaXW SBND
+muon_score_inclusive_s2,DENT,unsmoothed,2,varied,4.57611,0.0,0.525265,QEIntf_dial0
+muon_score_inclusive_s2,DENT,unsmoothed,2,null,9.50409,0.0,0.73636,QEIntf_dial0
+muon_score_inclusive_s2,DENT,unsmoothed,0,varied,7.66917,0.046286,0.784986,WireMod xThetaXW SBND
+muon_score_inclusive_s2,DENT,unsmoothed,0,null,6.37643,0.0,0.879595,WireMod xThetaXW SBND
+muon_score_inclusive_s2,ChargeScale15,unsmoothed,2,varied,9.97944,0.889557,0.663238,QEIntf_dial0
+muon_score_inclusive_s2,ChargeScale15,unsmoothed,2,null,7.68906,0.0,0.491862,QEIntf_dial0
+muon_score_inclusive_s2,ChargeScale15,unsmoothed,1,varied,6.59273,0.80367,0.55827,DENT SBND
+muon_score_inclusive_s2,ChargeScale15,unsmoothed,1,null,5.68804,0.055906,0.569562,Non-uniformity SBND
+muon_score_inclusive_s2,ChargeScale15,unsmoothed,0,varied,16.767,0.888449,0.570469,WireMod xThetaXW SBND
+muon_score_inclusive_s2,ChargeScale15,unsmoothed,0,null,2.77479,0.0,0.287684,WireMod xThetaXW SBND
+muon_score_inclusive_s2,WireModxThetaXW,unsmoothed,1,varied,5.7997,0.371281,0.484729,Non-uniformity SBND
+muon_score_inclusive_s2,WireModxThetaXW,unsmoothed,1,null,6.08975,0.255825,0.444523,Non-uniformity SBND
+muon_score_inclusive_s2,WireModxThetaXW,unsmoothed,0,varied,4.44832,0.0,0.355342,Non-uniformity SBND
+muon_score_inclusive_s2,WireModxThetaXW,unsmoothed,0,null,3.00155,0.00554544,0.220559,FrAbs_pi
+muon_score_inclusive_s2,WireModxThetaXW,unsmoothed,2,varied,6.72817,0.0,0.374173,Non-uniformity SBND
+muon_score_inclusive_s2,WireModxThetaXW,unsmoothed,2,null,7.6894,6.97033e-12,0.482674,QEIntf_dial0
+muon_score_inclusive_s2,MattModYZ,unsmoothed,2,varied,15.6322,0.999825,0.667595,FrAbs_pi
+muon_score_inclusive_s2,MattModYZ,unsmoothed,2,null,8.30645,0.166183,0.49285,FrAbs_pi
+muon_score_inclusive_s2,MattModYZ,unsmoothed,0,varied,13.1263,0.739993,0.911881,FrAbs_pi
+muon_score_inclusive_s2,MattModYZ,unsmoothed,0,null,2.92992,0.0647272,0.350964,WireMod xThetaXW SBND
+muon_score_inclusive_s2,MattModYZ,unsmoothed,1,varied,12.977,1.0,0.886131,FrAbs_pi
+muon_score_inclusive_s2,MattModYZ,unsmoothed,1,null,5.84895,0.400148,0.419718,DENT SBND

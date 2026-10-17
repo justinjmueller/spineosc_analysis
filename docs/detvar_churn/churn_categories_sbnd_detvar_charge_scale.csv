@@ -1,0 +1,10 @@
+true_category,meaning,selected_nominal,lost,gained,lost_fraction
+0.0,"contained, 1 muon, 1 proton (signal)",64,0,0,0.0
+2.0,"contained, 1 muon, N>1 protons (signal)",330,2,1,0.006
+3.0,"non-contained, 1 muon, N>1 protons",3,0,0,0.0
+4.0,"contained, 1 muon, any protons, >0 charged pions",186,50,17,0.269
+5.0,"non-contained, 1 muon, any protons, >0 charged pions",8,2,1,0.25
+6.0,"fiducial CC, non-signal",10,5,2,0.5
+7.0,non-fiducial CC,4,1,0,0.25
+8.0,NC,9,5,1,0.556
+9.0,cosmic,14,4,1,0.286
