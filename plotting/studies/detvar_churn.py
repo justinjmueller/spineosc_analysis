@@ -31,9 +31,9 @@ import pandas as pd
 import uproot
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import REPO, configure_style, save_figure  # noqa: E402
+from common import DATA_DIR, REPO, configure_style, save_figure  # noqa: E402
 
-DATA = Path("/Users/mueller/data/spineosc/v1.1.0")
+DATA = DATA_DIR
 NOMINAL_FILE = DATA / "spineosc_numu_sbnd_v1.1.0_nosyst.root"
 DETVAR_FILE = DATA / "spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root"
 KEY = ["Run", "Subrun", "Evt", "event_max_neutrino_energy"]

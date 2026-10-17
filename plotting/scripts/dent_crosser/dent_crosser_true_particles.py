@@ -5,6 +5,8 @@ particle-level file on disk). No displacement arrows: this tree has no
 per-particle index (only Run/Subrun/Evt, not unique per-particle), so
 particles can't be safely paired across samples -- density/ratio only.
 """
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+from spineosc_paths import DATA_ROOT, REPO  # noqa: E402
 import os
 import uproot
 import numpy as np
@@ -15,8 +17,8 @@ from mutools.plotting import use_style
 
 use_style('rootlike')
 
-PARTICLES = '/Users/mueller/data/spineosc/v1.0.10/spineosc_numu_sbnd_release-v1.0.10_particles_nosyst.root'
-OUTDIR = '/Users/mueller/Projects/spineosc/figures/dent_crosser_ternary'
+PARTICLES = str(DATA_ROOT / 'v1.0.10/spineosc_numu_sbnd_release-v1.0.10_particles_nosyst.root')
+OUTDIR = str(REPO / "figures/dent_crosser_ternary")
 os.makedirs(OUTDIR, exist_ok=True)
 
 BRANCHES = [

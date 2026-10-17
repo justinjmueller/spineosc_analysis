@@ -72,7 +72,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import common  # noqa: E402
 
 #: Default location of the v1.1.0 ntuples.
-DATA = Path.home() / "data" / "spineosc"
+DATA = common.DATA_ROOT
 
 #: Sub-directory (of the staging directory and of ``--output``) that holds the figures.
 SUBDIR = "signal_and_selection"

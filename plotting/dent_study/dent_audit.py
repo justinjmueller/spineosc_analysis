@@ -4,6 +4,8 @@
 (T2) the pile-up and crosser fractions by TPC side (sign of x_end) for data, production CV, detvar CV, DENT.
 (T3) detvar CV against production CV (cvwgt) for the same fractions: is the detvar CV a fair stand-in?
 Output: docs/dent_study/audit.json.  Run: python plotting/dent_study/dent_audit.py"""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import json, pathlib, sys
 import numpy as np, pandas as pd, uproot
 sys.path.insert(0, str(pathlib.Path(__file__).parent)); import cathode_scan as cs
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     res["T0_null_newcv_vs_cv"] = table(s["sbnd_detvar_newcv"], s["sbnd_detvar_cv"], common("sbnd_detvar_newcv", "sbnd_detvar_cv"))
     res["T0_null_newcv_vs_production_nosyst"] = table(s["sbnd_detvar_newcv"], s["sbnd_large_nosyst"], common("sbnd_detvar_newcv", "sbnd_large_nosyst"))
     print("T2/T3 fractions", flush=True)
-    data = uproot.open("/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_release-v1.1.0_detector_access_DONOTLOOK.root")["events/sbnd_bnblight_full/selected"].arrays(DCOLS, library="pd")
+    data = uproot.open(str(DATA_DIR / "spineosc_numu_sbnd_release-v1.1.0_detector_access_DONOTLOOK.root"))["events/sbnd_bnblight_full/selected"].arrays(DCOLS, library="pd")
     data = data[(data.reco_fiducialize_cathode == 1) & (data.reco_veto_sbnd_highy_highz == 1) & (data.reco_proton_multiplicity >= 1)]
     prod = uproot.open(cs.REPO / "work" / "sbnd_run1_cvrw.root")["events/sbnd_large/selected"].arrays(DCOLS + ["event_largest_flash_pe", "cvwgt"], library="pd")
     prod = prod[(prod.reco_fiducialize_cathode == 1) & (prod.reco_veto_sbnd_highy_highz == 1) & (prod.reco_proton_multiplicity >= 1) & (0.647 * prod.event_largest_flash_pe > 2000)]

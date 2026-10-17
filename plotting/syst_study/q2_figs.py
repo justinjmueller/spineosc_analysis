@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Q2 figures (docs/syst_study/q2/*.png)."""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import REPO  # noqa: E402
 from q2_lib import *
 from q2_fit import *
 from q2_smooth import *
@@ -90,7 +92,7 @@ fig, axs = plt.subplots(2, 2, figsize=(13, 10)); x = np.arange(len(NAMES))
 ax = axs[0, 0]; ax.bar(x, [pool[n]["n_pool"] / 1e6 for n in NAMES], color=[DC[det_of(n)] for n in NAMES]); ax.set_xticks(x); ax.set_xticklabels([short(n) for n in NAMES], rotation=90, fontsize=8); ax.set_ylabel("common-event pool [M events]"); mark_axis(ax, WM)
 ax = axs[0, 1]; nn = [n for n in NAMES if "common" in pool[n]]; ax.plot(range(len(nn)), [pool[n]["common"]["chi2"] / NB for n in nn], "o", color="#0072B2"); ax.axhline(1, color="k", lw=1); ax.set_xticks(range(len(nn))); ax.set_xticklabels([short(n) for n in nn], rotation=90, fontsize=8); ax.set_ylabel(r"$\chi^2$/ndf (full pool $-$ common pool), joint bootstrap")
 ax = axs[1, 0]; ax.bar(x, [pool[n]["dup"]["rms_dr_over_sigma"] for n in NAMES], color=[DC[det_of(n)] for n in NAMES]); ax.set_xticks(x); ax.set_xticklabels([short(n) for n in NAMES], rotation=90, fontsize=8); ax.set_ylabel(r"rms$_b$ [(all rows $-$ unique keys) ratio]/$\sigma_b$"); ax.set_yscale("log")
-ax = axs[1, 1]; cl = json.load(open(Q2 / "q2_run4_wiremodx_clean.json")); import uproot; prod = uproot.open("/Users/mueller/Projects/spineosc/detvar/detsys-v1.1.0v2.root")["WireModxThetaXW_icarus_Run4"].values()
+ax = axs[1, 1]; cl = json.load(open(Q2 / "q2_run4_wiremodx_clean.json")); import uproot; prod = uproot.open(str(REPO / "detvar/detsys-v1.1.0v2.root"))["WireModxThetaXW_icarus_Run4"].values()
 ax.plot(CTR, 100 * (prod - 1), "o-", color="#D55E00", label="production histogram (all rows, dup. events counted twice)"); ax.plot(CTR, 100 * DATA["icarus_run4__WireModxThetaXW"]["y"], "s-", color="#0072B2", label="pair table (duplicated keys dropped)"); ax.errorbar(CTR, 100 * DATA["icarus_run4__WireModxThetaXWclean"]["y"], yerr=100 * DATA["icarus_run4__WireModxThetaXWclean"]["s"], fmt="^-", color="#009E73", label="runs 12965-12970 removed")
 ax.axhline(0, color="0.5"); ax.set_xlabel("Reco visible energy [GeV]"); ax.set_ylabel("Ratio $-$ 1 [%]"); ax.set_title("ICARUS Run4 WireModxThetaXW", fontsize=10); ax.legend(fontsize=8)
 fig.tight_layout(); fig.savefig(Q2 / "q2_fig6_pool.png", dpi=110); plt.close(fig)

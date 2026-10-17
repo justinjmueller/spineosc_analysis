@@ -4,8 +4,10 @@
  * a 'streak' is a maximal run of consecutive repeated entries j, j+1, ... whose first occurrences i, i+1, ... are also consecutive (constant offset j - i): a contiguous block of the tree copied verbatim;
  * compare with the (Run, Subrun) segmentation of the tree (contiguous stretches of one (Run, Subrun) = presumed file/segment) and with event_is_first_in_subrun.
 Output: docs/syst_study/duplicates_streaks.json + figure."""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import json, numpy as np, pandas as pd, uproot, pathlib
-D = pathlib.Path("/Users/mueller/data/spineosc/v1.1.0"); OUT = pathlib.Path("/Users/mueller/Projects/spineosc/docs/syst_study")
+D = DATA_DIR; OUT = REPO / "docs/syst_study"
 CASES = [("ICARUS Run4 wiremod_xthetaxw (events)", "spineosc_numu_icarus_run4_v1.1.0_detvar_nosyst.root", "events/icarus_wiremod_xthetaxw_run4/events"),
          ("ICARUS Run4 dirt (events)", "spineosc_numu_icarus_run4_v1.1.0_dirt_nosyst.root", "events/icarus_dirt_run4/events"),
          ("ICARUS Run2 dirt (events)", "spineosc_numu_icarus_run2_v1.1.0_dirt_nosyst.root", "events/icarus_dirt_run2/events"),

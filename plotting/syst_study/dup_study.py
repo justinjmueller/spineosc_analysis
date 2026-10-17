@@ -5,8 +5,10 @@ Per tree (events / selected / signal):
   rows, unique K1, unique K2, 'excess' rows = rows - unique keys, rows sitting in duplicated groups,
   fraction of the K1 degeneracy broken by adding the energy, and for the groups that stay duplicated under K2: are they FULL-ROW duplicates (every branch identical) and which branches differ otherwise.
 Output: docs/syst_study/duplicates_all.json (+ per-sample detail for the anomalous trees).  Index-only for data files (no physics columns read)."""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import json, sys, time, pathlib, numpy as np, pandas as pd, uproot
-D = pathlib.Path("/Users/mueller/data/spineosc/v1.1.0"); OUT = pathlib.Path("/Users/mueller/Projects/spineosc/docs/syst_study")
+D = DATA_DIR; OUT = REPO / "docs/syst_study"
 K1 = ["Run", "Subrun", "Evt"]; EK = "event_max_neutrino_energy"
 MC = sorted([p for p in D.glob("*.root") if any(t in p.name for t in ("_nosyst.root", "_wsyst.root", "_wsyst_cvrw.root", "_detvar_nosyst.root", "_detvar_wsyst.root", "_dirt_nosyst.root", "_dirt_wsyst.root")) and "DONOTLOOK" not in p.name])
 DATA_IDX = [D / "spineosc_numu_sbnd_release-v1.1.0_detector_access_DONOTLOOK.root", D / "spineosc_numu_icarus_run2_v1.1.0_bnblight.root", D / "spineosc_numu_icarus_run4_v1.1.0_bnblight.root", D / "spineosc_numu_icarus_release-v1.1.0_detector_access_DONOTLOOK.root"]

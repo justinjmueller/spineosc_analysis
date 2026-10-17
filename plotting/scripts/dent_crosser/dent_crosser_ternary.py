@@ -1,3 +1,5 @@
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import uproot
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,8 +10,8 @@ from mutools.plotting.helpers import mark_axis
 
 use_style('rootlike')
 
-DETVAR = '/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root'
-OUTDIR = '/Users/mueller/Projects/spineosc/figures/dent_crosser_ternary'
+DETVAR = str(DATA_DIR / "spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root")
+OUTDIR = str(REPO / "figures/dent_crosser_ternary")
 
 import os
 os.makedirs(OUTDIR, exist_ok=True)

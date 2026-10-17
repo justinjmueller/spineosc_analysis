@@ -2,8 +2,10 @@
 Paired event tables: for every detector/variation, all events common to the nominal (CV) and varied samples, with a selected flag on each side and the
 reconstructed features of the candidate on the side(s) where it is selected. cvwgt is NOT used anywhere in this study."""
 import pathlib, numpy as np, pandas as pd, uproot
-REPO = pathlib.Path(__file__).resolve().parents[2]
-D = pathlib.Path("/Users/mueller/data/spineosc/v1.1.0")
+import sys
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
+D = DATA_DIR
 OUT = REPO / "runs" / "syst_study"; PAIRS = OUT / "pairs"; FIG = REPO / "docs" / "syst_study"
 KEYS = ["Run", "Subrun", "Evt"]; EKEY = "event_max_neutrino_energy"
 BINS = np.array([0.3, 0.4, 0.46, 0.52, 0.58, 0.64, 0.70, 0.76, 0.82, 0.88, 0.94, 1.0, 1.06, 1.13, 1.2, 1.3, 1.5, 2.0])   # production ratio binning (by_vis_energy)

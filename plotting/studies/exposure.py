@@ -8,7 +8,7 @@ POT and its ratio to the on-beam sample. Replaces
 the table (and optionally writes it as CSV).
 
 Inputs are the ``spineosc_numu_<detector>_<tag>_*.root`` selection files
-under ``--data-dir`` (default ``~/data/spineosc/<tag>``), read from the
+under ``--data-dir`` (default ``$SPINEOSC_DATA/<tag>``, ``~/data/spineosc/<tag>`` if unset), read from the
 ``events/<key>/events`` tree.
 
 Equivalent POT:
@@ -45,7 +45,7 @@ import common
 from common import SELECTION_VERSION
 
 #: Default data root; the selection files live in ``<root>/<tag>``.
-DATA_ROOT = Path.home() / "data" / "spineosc"
+DATA_ROOT = common.DATA_ROOT
 
 #: Sample name -> how it is normalized ('mc', 'onbeam' or 'offbeam').
 SAMPLE_TYPES = {
@@ -227,7 +227,7 @@ def main(argv: list[str] | None = None) -> None:
     parser = common.base_parser(__doc__)
     parser.add_argument("--tag", default=SELECTION_VERSION, help="selection version")
     parser.add_argument("--data-dir", type=Path, default=None,
-                        help="selection-file directory (default ~/data/spineosc/<tag>)")
+                        help="selection-file directory (default $SPINEOSC_DATA/<tag>, else ~/data/spineosc/<tag>)")
     parser.add_argument("--csv", type=Path, default=None, help="also write the table as CSV")
     args = parser.parse_args(argv)
 

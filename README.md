@@ -68,6 +68,17 @@ differs per machine.
    and off `$HOME`). The `pbs_*` settings only matter if you submit batch
    jobs.
 
+4. Tell the Python plotting and study scripts where the release ntuples are
+   (the C++ calculators and ROOT macros still have the path compiled in):
+
+   ```
+   export SPINEOSC_DATA=/path/to/data/spineosc    # holds v1.1.0/spineosc_numu_*.root
+   ```
+
+   The default is `~/data/spineosc`. The release folder (`v1.1.0`) and the
+   repository root are set in `plotting/spineosc_paths.py`; scripts import
+   `DATA_DIR`, `DATA_ROOT` and `REPO` from there rather than hard-coding them.
+
 `input/sources.list`, `input/site.conf` and `work/` are all gitignored -
 they're machine-specific and fully reproducible from the checked-in
 `.example` templates plus your local data, so there's nothing to commit.

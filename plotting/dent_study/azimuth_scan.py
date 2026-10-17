@@ -5,13 +5,15 @@ Per azimuthal slice and score, the mean score of data and MC (shape information,
 distribution against the MC shape after removing the global (azimuth-independent) data/MC ratio in each score bin. Statistical uncertainties only for the data/MC
 differences; the expected azimuth-dependent size of the detector systematic variations is taken from the detvar samples (SBND).
 Run:  python plotting/dent_study/azimuth_scan.py          Outputs: docs/azimuth_scan/*"""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import json, pathlib, sys
 import numpy as np, uproot
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from mutools.plotting import use_style; from mutools.plotting.helpers import mark_axis
 use_style("rootlike")
-REPO = pathlib.Path(__file__).resolve().parents[2]; OUT = REPO / "docs" / "azimuth_scan"; OUT.mkdir(parents=True, exist_ok=True)
-D = pathlib.Path("/Users/mueller/data/spineosc/v1.1.0")
+OUT = REPO / "docs" / "azimuth_scan"; OUT.mkdir(parents=True, exist_ok=True)
+D = DATA_DIR
 SCORES = {"muon_pid": "reco_leading_muon_muon_softmax", "muon_primary": "reco_leading_muon_primary_softmax",
           "proton_pid": "reco_leading_proton_proton_softmax", "proton_primary": "reco_leading_proton_primary_softmax"}
 LABEL = {"muon_pid": "Muon PID score", "muon_primary": "Muon primary score", "proton_pid": "Leading-proton PID score", "proton_primary": "Leading-proton primary score"}

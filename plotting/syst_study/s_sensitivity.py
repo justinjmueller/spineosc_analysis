@@ -2,8 +2,10 @@
 """How much does each detector systematic matter for the oscillation sensitivity? Uses the PROfit chi2 surfaces (runs/legacy_root/contours_*_surf.root, produced BEFORE the v1.1.0v2 detector
 ratios and cuts, so they describe the previous systematic configuration). 90% CL contour at delta chi2 = 1.6.  Metric: sin^2(2theta) at which chi2 crosses 1.6, per dm^2 row; and the excluded
 area in (log sin^2 2theta, log dm^2).  'no X' = systematic X removed; improvement = (limit_full - limit_noX) / limit_full."""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import REPO  # noqa: E402
 import json, numpy as np, uproot, pathlib
-P = pathlib.Path("/Users/mueller/Projects/spineosc/runs/legacy_root"); OUT = pathlib.Path("/Users/mueller/Projects/spineosc/docs/syst_study"); OUT.mkdir(exist_ok=True)
+P = REPO / "runs/legacy_root"; OUT = REPO / "docs/syst_study"; OUT.mkdir(exist_ok=True)
 NAMES = {"full": "contours_full_v1", "noSBNDChargeScale": "contours_full_nochargescale", "noICARUSChargeScale": "contours_full_noicchargescale", "noSBNDDENT": "contours_full_nodent",
          "noSBNDWireModYZ": "contours_full_nowmyz", "noSBNDWireModXTh": "contours_full_nowmxtxw", "noICARUSWireModYZ": "contours_full_noicwmyz", "noICARUSWireModXTh": "contours_full_noicwmxtxw",
          "noICARUSSCE": "contours_full_noicsce", "noSBNDTrigger": "contours_full_notrigemu", "noICARUSTrigger": "contours_full_noictrigemu", "blind": "contours_blind_v1", "sbndunblind": "contours_sbndunblind_v1"}

@@ -1,6 +1,8 @@
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+from spineosc_paths import DATA_DIR  # noqa: E402
 import uproot, numpy as np
 
-WSYST = '/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_wsyst.root'
+WSYST = str(DATA_DIR / "spineosc_numu_sbnd_v1.1.0_wsyst.root")
 
 f = uproot.open(WSYST)
 t = f['events/sbnd_large/selected']

@@ -16,6 +16,8 @@ them, so every ratio file gets its own tag. See docs/detvar_smoothing/PLAN.md.
 
     python scripts/detvar_smoothing/split_closure.py muon_score_inclusive_s2 DENT --perm 0
 """
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "plotting"))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import argparse
 import functools
 import re
@@ -27,12 +29,11 @@ import numpy as np
 import pandas as pd
 import uproot
 
-REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import closure  # noqa: E402
 
 RUN = closure.RUN
-DATA = Path("/Users/mueller/data/spineosc/v1.1.0")
+DATA = DATA_DIR
 NOMINAL_FILE = DATA / "spineosc_numu_sbnd_v1.1.0_nosyst.root"
 DETVAR_FILE = DATA / "spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root"
 KEY = ["Run", "Subrun", "Evt", "event_max_neutrino_energy"]

@@ -48,10 +48,10 @@ import numpy as np
 import pandas as pd
 import uproot
 
-from common import REPO, base_parser, save_figure
+from common import DATA_DIR, REPO, base_parser, save_figure
 
 #: Directory holding the v1.1.0 ntuples.
-DATA = Path.home() / "data" / "spineosc" / "v1.1.0"
+DATA = DATA_DIR
 
 #: Event key used to match the same generated event across samples.
 KEY = ["Run", "Subrun", "Evt", "event_max_neutrino_energy"]

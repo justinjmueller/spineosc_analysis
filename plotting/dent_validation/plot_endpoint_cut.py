@@ -1,3 +1,5 @@
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import REPO  # noqa: E402
 import numpy as np, pandas as pd, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -23,4 +25,4 @@ b.axhline(1,color=INK2,lw=0.8); b.set_ylim(0.955,1.045); b.set_xlabel("reconstru
 b.set_title("(b) the endpoint cut restores a flat DENT effect",loc="left",color=INK,fontsize=10.5)
 b.legend(loc="upper left",frameon=False,fontsize=8.8,labelcolor=INK)
 fig.text(0.005,-0.02,"SBND, events passing cathode + high-y/z cuts, matched between CV and DENT samples. (a) normalised to each population; 2 cm bins. (b) statistical scatter is about 1% per point.",color=INK2,fontsize=8.3,ha="left")
-fig.savefig("/Users/mueller/Projects/spineosc/dent_endpoint_cut.png",dpi=160,facecolor=SURF,bbox_inches="tight"); print("saved")
+fig.savefig(str(REPO / "dent_endpoint_cut.png"),dpi=160,facecolor=SURF,bbox_inches="tight"); print("saved")

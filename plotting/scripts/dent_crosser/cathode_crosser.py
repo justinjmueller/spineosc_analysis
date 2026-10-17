@@ -1,7 +1,9 @@
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+from spineosc_paths import DATA_DIR  # noqa: E402
 import uproot, numpy as np
 
-DETVAR = '/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root'
-WSYST = '/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_wsyst.root'
+DETVAR = str(DATA_DIR / "spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root")
+WSYST = str(DATA_DIR / "spineosc_numu_sbnd_v1.1.0_wsyst.root")
 
 id_branches = ['Run', 'Subrun', 'Evt', 'event_max_neutrino_energy']
 branches = id_branches + ['reco_vertex_x', 'reco_leading_muon_end_x',

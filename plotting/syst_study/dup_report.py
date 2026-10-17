@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Tables and figure for the duplicate study (reads docs/syst_study/duplicates_all.json, duplicates_subruns.json, duplicates_ratio_impact.json)."""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import REPO  # noqa: E402
 import json, pathlib, numpy as np
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from mutools.plotting import use_style; from mutools.plotting.helpers import mark_axis
-use_style("rootlike"); S = pathlib.Path("/Users/mueller/Projects/spineosc/docs/syst_study"); r = json.loads((S / "duplicates_all.json").read_text())
+use_style("rootlike"); S = REPO / "docs/syst_study"; r = json.loads((S / "duplicates_all.json").read_text())
 def short(k): f, t = k.split("::"); return f.replace("spineosc_numu_", "").replace("_v1.1.0", "").replace(".root", ""), t.replace("events/", "")
 rows = []
 for k, v in r.items():

@@ -1,7 +1,9 @@
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import numpy as np, pandas as pd, uproot, pathlib
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from mutools.plotting import use_style; from mutools.plotting.helpers import mark_axis
-use_style("rootlike"); D = pathlib.Path("/Users/mueller/data/spineosc/v1.1.0"); S = pathlib.Path("/Users/mueller/Projects/spineosc/docs/syst_study")
+use_style("rootlike"); D = DATA_DIR; S = REPO / "docs/syst_study"
 cases = [("ICARUS Run 4 dirt", "spineosc_numu_icarus_run4_v1.1.0_dirt_nosyst.root", "events/icarus_dirt_run4/events", "#0072B2"), ("ICARUS Run 4 WireModxThetaXW", "spineosc_numu_icarus_run4_v1.1.0_detvar_nosyst.root", "events/icarus_wiremod_xthetaxw_run4/events", "#D55E00")]
 fig, axs = plt.subplots(1, 3, figsize=(17, 5.2)); stats = {}
 for lab, fn, tree, c in cases:

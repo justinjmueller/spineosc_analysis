@@ -14,9 +14,13 @@ Run a script with the mutools environment, from anywhere::
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # plotting/, for spineosc_paths
+from spineosc_paths import DATA_DIR, DATA_ROOT  # noqa: E402,F401  (SPINEOSC_DATA overrides ~/data/spineosc)
 
 #: Repository root (this file lives in ``plotting/studies``).
 REPO = Path(__file__).resolve().parents[2]

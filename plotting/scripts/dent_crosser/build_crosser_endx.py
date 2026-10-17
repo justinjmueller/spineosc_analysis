@@ -1,6 +1,8 @@
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+from spineosc_paths import REPO  # noqa: E402
 import re
 
-ROOT = '/Users/mueller/Projects/spineosc'
+ROOT = str(REPO)
 SRC_MC = f'{ROOT}/xml/detector_data_access/sbnd_run1/muon_endx_zoom_inclusive.xml'
 SRC_DATA = f'{ROOT}/xml/detector_data_access/sbnd_run1/muon_endx_zoom_inclusive_data.xml'
 OUT_MC = f'{ROOT}/xml/detector_data_access/sbnd_run1/muon_endx_zoom_crosser.xml'

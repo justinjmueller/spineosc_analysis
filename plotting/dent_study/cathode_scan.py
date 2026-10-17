@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Cut-value scan for the SBND muon end-point cut (see docs/cathode_motivation/PLAN.md for the pre-registered criterion).
 Writes docs/cathode_motivation/scan.json. Run with the mutools environment:  python plotting/dent_study/cathode_scan.py"""
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import DATA_DIR, REPO  # noqa: E402
 import json, pathlib, sys
 import numpy as np, pandas as pd, uproot
-REPO = pathlib.Path(__file__).resolve().parents[2]
-D = pathlib.Path("/Users/mueller/data/spineosc/v1.1.0")
+D = DATA_DIR
 DET = D / "spineosc_numu_sbnd_v1.1.0_detvar_nosyst.root"; NOS = D / "spineosc_numu_sbnd_v1.1.0_nosyst.root"
 K = ["Run", "Subrun", "Evt", "event_max_neutrino_energy"]
 XS = [0, 1, 2, 3, 4, 5, 6, 8, 10]

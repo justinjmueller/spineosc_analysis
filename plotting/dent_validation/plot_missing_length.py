@@ -1,3 +1,5 @@
+import pathlib as _pl, sys as _sys; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[1]))
+from spineosc_paths import REPO  # noqa: E402
 import numpy as np, pandas as pd, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -55,7 +57,7 @@ e.set_xlabel("CV muon endpoint distance beyond the cathode  |x$_{end}$|  [cm]");
 e.set_title("(d) probability of flipping",loc="left",color=INK,fontsize=10.5); e.set_ylim(0,None)
 fig.suptitle("SBND DENT vs CV: cathode crossers that lose track length  (events passing cathode + high-y/z cuts, matched by event)",color=INK,fontsize=11.5,x=0.01,ha="left")
 fig.text(0.01,-0.012,f"Panel (b) correlation r = {r:.2f}; points beyond the 99th percentile not shown.",color=INK2,fontsize=8.5,ha="left")
-out="/Users/mueller/Projects/spineosc/dent_missing_length.png"; fig.savefig(out,dpi=160,facecolor=SURF,bbox_inches="tight")
+out=str(REPO / "dent_missing_length.png"); fig.savefig(out,dpi=160,facecolor=SURF,bbox_inches="tight")
 print("saved",out)
 # numbers for the write-up
 print("flipped: median dL %.1f cm, mean %.1f, 25/75%% %.1f/%.1f, frac with dL>20cm %.2f, >50cm %.2f"%(fl.dL.median(),fl.dL.mean(),fl.dL.quantile(.25),fl.dL.quantile(.75),(fl.dL>20).mean(),(fl.dL>50).mean()))
