@@ -7,7 +7,7 @@ import glob, json, pathlib, shutil
 import numpy as np, pandas as pd
 from scipy.stats import chi2 as chi2_dist
 
-REPO = pathlib.Path("/Users/mueller/Projects/spineosc")
+REPO = pathlib.Path(__file__).resolve().parents[2]
 RUN = REPO / "runs" / "dent_study"
 OBS = {o["name"]: o for o in json.loads((REPO / "scripts/dent_study/observables.json").read_text())}
 PRIMARY = json.loads((REPO / "scripts/dent_study/primary_selection.json").read_text())["primary"]
@@ -21,7 +21,7 @@ def load_results():
     """One row per (study, variant, detector, channel)."""
     rows = []
     for f in sorted(glob.glob(str(RUN / "results" / "*.json"))):
-        r = json.load(open(f))
+        r = json.loads(pathlib.Path(f).read_text())
         tag = r["tag"]
         if tag.startswith("dentA_"):
             tier, name, which = "A", tag.split("_dd_")[1].rsplit("_", 1)[0], tag.rsplit("_", 1)[1]
@@ -41,7 +41,7 @@ def load_tierC(key="tierC_pe"):
     Paired fake-data throws: one row per (study, seed, truth) with chi2 at test strength 0 and 1 (channel 0 summed over channels)."""
     out = []
     for f in sorted(glob.glob(str(RUN / "results" / "*.json"))):
-        r = json.load(open(f))
+        r = json.loads(pathlib.Path(f).read_text())
         if not r.get(key): continue
         df = pd.DataFrame(r[key]); df["chi2"] = df["chi2"].apply(sum)
         piv = df.pivot_table(index=["seed", "truth"], columns="test", values="chi2").reset_index()

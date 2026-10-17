@@ -12,7 +12,8 @@ mdfile("01_data")
 # ------------------------------------------------------------------------------------------------ setup
 code('''
 import sys, json, pathlib
-sys.path.insert(0, "/Users/mueller/Projects/spineosc/plotting/dent_study")
+HERE = next(p for p in (pathlib.Path.cwd() / d for d in ("dent_study", "plotting/dent_study", ".")) if (p / "dentstudy.py").exists())
+sys.path.insert(0, str(HERE))
 import numpy as np, pandas as pd
 import dentstudy as ds
 from mutools.plotting import use_style

@@ -5,7 +5,7 @@ Its use here: (1) hold the covariance fixed while the DENT strength changes (PRO
 prediction), and (2) run many pseudo-experiments (Poisson + Gaussian systematic throws through F) cheaply, so p-values are not limited
 to the 50 PROfit throws. Nothing is fitted: DENT strength is only ever 0, 0.5 or 1.0."""
 import pathlib, numpy as np
-RDIR = pathlib.Path("/Users/mueller/Projects/spineosc/runs/dent_study/replica")
+RDIR = pathlib.Path(__file__).resolve().parents[2] / "runs" / "dent_study" / "replica"
 THETAS = (0.0, 0.5, 1.0)
 
 def load(obs):
