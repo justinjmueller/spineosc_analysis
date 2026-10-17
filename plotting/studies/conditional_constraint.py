@@ -657,6 +657,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     common.configure_style(fmt=args.format)
+    common.set_provenance(__file__, [args.input])
     from mutools import profit
 
     proplot = profit.ProPlot(args.input)

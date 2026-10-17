@@ -472,6 +472,7 @@ def run_phase4(output: Path, fmt: str, flip: bool = False, alpha: float = 1.0) -
     alpha : float, optional
         Near-detector exposure scale; 1.0 is nominal.
     """
+    common.set_provenance(__file__, [], {"phase": 4, "flip": flip, "alpha": alpha})
     direction = "partner -> E_nu" if flip else "E_nu -> partner"
     print(f"phase 4: {len(PHASE4_PAIRS)} pairs, alpha = {alpha}, direction {direction}")
     made = []
@@ -489,7 +490,10 @@ def run_phase4(output: Path, fmt: str, flip: bool = False, alpha: float = 1.0) -
             offset += n
             token = CHANNEL_TOKENS.get(ch - drawn[0], f"ch{ch}")
             side = "enu" if flip else "partner"
-            common.save_figure(fig, output / f"constrained_{stem}_{side}_{token}.{fmt}")
+            common.save_figure(
+                fig, output / f"constrained_{stem}_{side}_{token}.{fmt}",
+                inputs=[RUNS_DIR / f"{stem}_PROplot_histograms.root", RUNS_DIR / f"{stem}_PROplot.root"],
+                arguments={"kind": "constrained", "stem": stem, "side": side, "channel": token})
             made.append(summary)
     print(f"\n{len(made)} panels")
     print(f"{'pair':14s}{'channel':>14}{'chi2/ndf':>12}{'p':>8}{'band pre':>10}{'band post':>11}")
@@ -534,6 +538,7 @@ def run_phase5(output: Path, fmt: str) -> None:
     fmt : str
         Figure format.
     """
+    common.set_provenance(__file__, [], {"phase": 5})
     import matplotlib.pyplot as plt
     from mutools.plotting.helpers import mark_axis
 
@@ -544,4 +549,5 @@ def run_phase5(output: Path, fmt: str) -> None:
     ax.set_xlabel("Pull Strength")
     ax.set_ylabel("Count")
     mark_axis(ax, r"$\bf{SBND}$ Analysis-in-Progress")
-    print(common.save_figure(fig, output / f"pulls_p5_vis_energy_null.{fmt}"))
+    print(common.save_figure(fig, output / f"pulls_p5_vis_energy_null.{fmt}", inputs=[GLOBAL_FIT_FILE],
+                             arguments={"kind": "pulls", "phase": 5}))

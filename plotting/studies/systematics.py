@@ -58,6 +58,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+import provenance
 
 import common
 from common import CODE_VERSION, DOCS, RUNS, SELECTION_VERSION
@@ -495,6 +496,9 @@ def make_breakdowns(run_dir: Path, tag: str, out_dir: Path) -> int:
                         stem = f"systematics_{det_token}_{name}_{var_token}_{ch_token}"
                         target = out_dir / f"{stem}.pdf"
                         shutil.move(tmp / f"uncertainty_{detector}_{CODE_VERSION}.pdf", target)
+                        provenance.record(target, [infile], __file__, versions={"selection": common.SELECTION_VERSION},
+                                          arguments={"kind": "breakdown", "detector": det_token, "category": name,
+                                                     "variable": var_token, "channel": ch_token})
                         count += 1
     return count
 
@@ -552,6 +556,9 @@ def make_ratio_breakdowns(run_dir: Path, tag: str, out_dir: Path) -> int:
                         stem = f"systematics_ratio_{token}_{name}_{var_token}_{ch_token}"
                         target = out_dir / f"{stem}.pdf"
                         shutil.move(produced[-1], target)
+                        provenance.record(target, [infile], __file__, versions={"selection": common.SELECTION_VERSION},
+                                          arguments={"kind": "ratio", "pair": token, "category": name,
+                                                     "variable": var_token, "channel": ch_token})
                         count += 1
     return count
 

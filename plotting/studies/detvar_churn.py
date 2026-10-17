@@ -31,7 +31,7 @@ import pandas as pd
 import uproot
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import DATA_DIR, REPO, configure_style, save_figure  # noqa: E402
+from common import DATA_DIR, REPO, configure_style, save_figure, set_provenance  # noqa: E402
 
 DATA = DATA_DIR
 NOMINAL_FILE = DATA / "spineosc_numu_sbnd_v1.1.0_nosyst.root"
@@ -214,6 +214,8 @@ def main() -> None:
     parser.add_argument("--min-energy", type=float, default=1.5)
     parser.add_argument("--output", type=Path, default=REPO / "docs" / "detvar_churn")
     args = parser.parse_args()
+    set_provenance(__file__, [NOMINAL_FILE, DETVAR_FILE],
+                   {"variation": args.variation, "min_energy": args.min_energy})
     run(args.variation, args.min_energy, args.output)
 
 

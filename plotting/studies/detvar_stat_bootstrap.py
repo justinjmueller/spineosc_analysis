@@ -38,7 +38,7 @@ import pandas as pd
 import uproot
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import DATA_DIR, REPO, configure_style, save_figure  # noqa: E402
+from common import DATA_DIR, REPO, configure_style, save_figure, set_provenance  # noqa: E402
 
 DATA = DATA_DIR
 NOMINAL_FILE = DATA / "spineosc_numu_sbnd_v1.1.0_nosyst.root"
@@ -217,6 +217,7 @@ def main() -> None:
     parser.add_argument("--null-test", action="store_true",
                         help="calibrate the bootstrap on random half-splits instead of running it")
     args = parser.parse_args()
+    set_provenance(__file__, [NOMINAL_FILE, DETVAR_FILE], {"n_boot": args.n_boot})
     if args.null_test:
         null_test()
     else:

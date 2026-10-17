@@ -48,7 +48,7 @@ import numpy as np
 import pandas as pd
 import uproot
 
-from common import DATA_DIR, REPO, base_parser, save_figure
+from common import DATA_DIR, REPO, base_parser, save_figure, set_provenance
 
 #: Directory holding the v1.1.0 ntuples.
 DATA = DATA_DIR
@@ -649,6 +649,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--tol-length", type=float, default=TOL_LENGTH,
                         help="path-length loss defining a gap [cm]")
     args: argparse.Namespace = parser.parse_args(argv)
+    set_provenance(__file__, [args.data / DETVAR_FILE], {"pairs": args.pair or list(PAIRS)})
     run(args.pair or list(PAIRS), args.data, args.output, args.format, args.tol_point,
         args.tol_length)
 

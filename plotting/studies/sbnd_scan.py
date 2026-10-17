@@ -543,6 +543,7 @@ def main(argv: Sequence[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     common.configure_style(args.format)
+    common.set_provenance(__file__, [args.input, args.envelope], {"scan_dir": str(args.input)})
     scan = find_scan(args.input)
     print(
         f"{len(scan)} grid points: {scan.dmsq.nunique()} dmsq x {scan.sinsq.nunique()} sinsq"

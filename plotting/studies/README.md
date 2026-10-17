@@ -47,12 +47,19 @@ because their PROfit inputs are missing.
   `work/<key>.root` files the XML reads resolved to real paths, the cache files, the PROfit version (from the logs) and the run
   commands noted in the ini header.
 
-Hooked so far: `surface.py`, the efficiency plots of `signal_selection.py` and the overlays of `resolution.py`; the PROfit
-recipe is picked up automatically from any hooked input.
+Hooked: every figure script in this directory (`exposure.py` makes no figures). Scripts either
+call `provenance.record()` where a figure is moved into place (`systematics`, the `data_access` panels, `surface`, the efficiency and
+resolution plots) or call `common.set_provenance(__file__, inputs)` once so that `common.save_figure` records every figure
+(`dent_study`, `sbnd_scan`, `conditional_constraint`, `detvar_*`, `dent_cathode_break`, `data_access_phases`). A directory among the
+inputs is tracked by file count, total size and newest mtime. The PROfit recipe is picked up automatically from any input whose file
+name starts with a known ini `tag` (`<tag>_<output tag>_PROplot*.root` or `_surf.root`); where several inis share a tag the output tag
+chooses (`..._cvrw_phase2_...` selects the `phase2` ini). Figures that read many PROfit files (the p-value summaries) pass
+`recipe=False` and refer to their per-panel sidecars.
 
 ```
 python scripts/figure_provenance.py list    figures/provenance_demo
 python scripts/figure_provenance.py check   figures/provenance_demo --technote ../spineosc_technote
+python scripts/figure_provenance.py coverage docs figures --technote ../spineosc_technote   # technote figures with and without provenance
 python scripts/figure_provenance.py show    figures/provenance_demo/sensitivity_baseline.pdf.prov.json   # the steps that remake it
 python scripts/figure_provenance.py restore figures/provenance_demo/sensitivity_baseline.pdf.prov.json DIR   # writes the recorded ini and XML
 ```

@@ -51,16 +51,26 @@ def sha256(path: Path) -> str:
 
 
 def describe_input(path: Path, repo: Path = REPO) -> dict:
-    """Identify an input file: path, size, mtime and, when small, the hash."""
+    """Identify an input: a file (size, mtime and, when small, hash) or a directory (count, size, newest mtime)."""
     path = Path(path)
     info = {"path": _relative(path, repo)}
     if not path.exists():
         return {**info, "missing": True}
+    if path.is_dir():
+        return {**info, **_directory_state(path)}
     stat = path.stat()
     info.update(size=stat.st_size, mtime_ns=stat.st_mtime_ns)
     if stat.st_size <= HASH_LIMIT:
         info["sha256"] = sha256(path)
     return info
+
+
+def _directory_state(path: Path) -> dict:
+    """A directory input (e.g. hundreds of scan files): file count, total size and newest mtime."""
+    files = [p for p in path.rglob("*") if p.is_file()]
+    stats = [p.stat() for p in files]
+    return {"directory": True, "n_files": len(files), "size": sum(s.st_size for s in stats),
+            "mtime_ns": max((s.st_mtime_ns for s in stats), default=0)}
 
 
 def _relative(path: Path, repo: Path = REPO) -> str:
@@ -83,7 +93,7 @@ def _git(*args: str, repo: Path = REPO) -> str:
 # ----------------------------------------------------------------------
 # PROfit recipe: ini, XML, work/ file map, caches
 # ----------------------------------------------------------------------
-_OUTPUT = re.compile(r"^(?P<tag>.+?)_v\d+[._]")
+_SUFFIX = re.compile(r"_(?:PROplot|surf|fractional|ratio)")
 _WORK = re.compile(r"work/([\w.+-]+\.root)")
 
 
@@ -126,19 +136,41 @@ def _file_state(path: Path, repo: Path, embed_if_unversioned: bool) -> dict:
     return info
 
 
+def _select_inis(inis: list[Path], remainder: str) -> list[Path]:
+    """
+    Pick the ini(s) of a tag that fit the rest of the output file name.
+
+    Several inis can share a tag (a plain and a ``phase2`` plot ini, for example). The file name then carries the
+    output tag (``..._cvrw_phase2_PROplot...``); keep the inis whose distinguishing name parts all occur in it, and of
+    those the most specific.
+    """
+    if len(inis) <= 1:
+        return list(inis)
+    parts = {ini: set(ini.stem.split("_")) for ini in inis}
+    common = set.intersection(*parts.values())
+    wanted = set(remainder.split("_"))
+    fits = {ini: parts[ini] - common for ini in inis if parts[ini] - common <= wanted}
+    if not fits:
+        return list(inis)
+    best = max(len(extra) for extra in fits.values())
+    return [ini for ini, extra in fits.items() if len(extra) == best]
+
+
 def profit_recipe(output_file: Path, repo: Path = REPO) -> list[dict]:
     """
     Describe how a PROfit output file was made, or ``[]`` if it does not look like one.
 
-    The tag comes from the file name (``<tag>_v1_PROplot.root``); every ini in ``jobs/`` and ``xml/`` with
-    that ``tag`` is returned (several can share one, e.g. a plot and a process ini).
+    PROfit names its outputs ``<tag>_<output tag>_PROplot*.root`` (or ``_surf``); the longest ini ``tag`` that
+    prefixes the file name is used, and the inis in ``jobs/`` and ``xml/`` with that tag are narrowed by the
+    output tag (a ``phase2`` ini is only used for a ``..._phase2_...`` file).
     """
     repo, output_file = Path(repo), Path(output_file)
-    match = _OUTPUT.match(output_file.name)
-    if not match:
+    name = output_file.name
+    tags = [t for t in _ini_index(repo) if name.startswith(t + "_")]
+    if not tags:
         return []
-    tag = match.group("tag")
-    inis = _ini_index(repo).get(tag, [])
+    tag = max(tags, key=len)
+    inis = _select_inis(_ini_index(repo)[tag], _SUFFIX.split(name[len(tag) + 1:])[0])
     entries = []
     for ini in inis:
         text = ini.read_text(errors="replace")
@@ -152,6 +184,9 @@ def profit_recipe(output_file: Path, repo: Path = REPO) -> list[dict]:
             real = link.resolve() if link.exists() else link
             item = describe_input(real, repo)
             item["work_key"] = key
+            upstream = real.with_name(real.name + SUFFIX)
+            if upstream.is_file():
+                item["upstream"] = json.loads(upstream.read_text())
             work.append(item)
         caches = [describe_input(output_file.parent / f"{tag}_{kind}.bin", repo) for kind in ("data", "prop", "syst")]
         logs = sorted(output_file.parent.glob(f"{tag}*.log"))
@@ -204,7 +239,7 @@ def sidecar_path(figure: Path) -> Path:
     return figure.with_name(figure.name + SUFFIX)
 
 
-def record(figure, inputs, script, arguments=None, versions=None, note: str = "", repo: Path = REPO) -> Path:
+def record(figure, inputs, script, arguments=None, versions=None, note: str = "", repo: Path = REPO, recipe: bool = True) -> Path:
     """
     Write the provenance sidecar of a figure that has just been saved.
 
@@ -222,6 +257,11 @@ def record(figure, inputs, script, arguments=None, versions=None, note: str = ""
         Selection and code versions stamped on the figure.
     note : str, optional
         Free text, e.g. "external input, not versioned".
+    repo : path-like, optional
+        Repository root that relative paths refer to.
+    recipe : bool, optional
+        Trace PROfit outputs among the inputs back to their ini and XML; turn off for figures that read
+        many PROfit files, whose recipes are in the per-panel sidecars.
 
     Returns
     -------
@@ -243,7 +283,7 @@ def record(figure, inputs, script, arguments=None, versions=None, note: str = ""
         "arguments": arguments or {},
         "versions": versions or {},
         "inputs": [describe_input(p, repo) for p in inputs],
-        "profit": [entry for p in inputs for entry in profit_recipe(Path(p), repo)],
+        "profit": [entry for p in inputs for entry in profit_recipe(Path(p), repo)] if recipe else [],
         "created": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
         "note": note,
     }
@@ -291,7 +331,10 @@ def check(sidecar: Path, repo: Path = REPO) -> tuple[str, list[str]]:
             reasons.append(f"input {item['path']} is missing")
             continue
         stat = path.stat()
-        if "sha256" in item:
+        if item.get("directory"):
+            now = _directory_state(path)
+            changed = (now["n_files"], now["size"], now["mtime_ns"]) != (item["n_files"], item["size"], item["mtime_ns"])
+        elif "sha256" in item:
             changed = sha256(path) != item["sha256"]
         else:
             changed = (stat.st_size, stat.st_mtime_ns) != (item["size"], item["mtime_ns"])

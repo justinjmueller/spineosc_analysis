@@ -28,7 +28,7 @@ import numpy as np
 import uproot
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import REPO, configure_style, save_figure  # noqa: E402
+from common import REPO, configure_style, save_figure, set_provenance  # noqa: E402
 
 RUN = REPO / "runs" / "smoothing"
 OUT = REPO / "docs" / "detvar_smoothing" / "figures"
@@ -110,6 +110,8 @@ def main() -> None:
     parser.add_argument("--variants", nargs="+", required=True)
     parser.add_argument("--perm", type=int, default=0)
     args = parser.parse_args()
+    set_provenance(__file__, [PRODUCTION, REPO / "docs" / "detvar_smoothing"],
+                   {"study": args.study, "variants": args.variants, "perm": args.perm})
     draw_ratios(args.study, args.variants, args.perm)
     draw_fractional(args.study, args.variants, args.perm)
 

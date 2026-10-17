@@ -3,6 +3,7 @@
 
     python scripts/figure_provenance.py list  figures/ docs/
     python scripts/figure_provenance.py check figures/ --technote ../spineosc_technote
+    python scripts/figure_provenance.py coverage docs/ figures/ --technote ../spineosc_technote
     python scripts/figure_provenance.py show  figures/x.pdf.prov.json       # the steps that remake it
     python scripts/figure_provenance.py restore figures/x.pdf.prov.json DIR  # write the recorded ini and XML
 
@@ -13,6 +14,7 @@ copy is the recorded one, an older or edited one, or absent.
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -34,9 +36,56 @@ def technote_status(technote: Path, rec: dict) -> str:
     return "technote: current" if same else "technote: DIFFERS"
 
 
+INCLUDE = re.compile(r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{([^}]+)\}")
+
+
+def technote_figures(technote: Path) -> dict:
+    """Figures the technote includes: LaTeX argument -> files that satisfy it (searched under figures/)."""
+    found = {}
+    for tex in sorted(technote.rglob("*.tex")):
+        for arg in INCLUDE.findall(tex.read_text(errors="replace")):
+            name = Path(arg).name
+            pattern = name if Path(name).suffix else name + ".*"
+            found[arg] = sorted((technote / "figures").rglob(pattern)) or sorted(technote.rglob(pattern))
+    return found
+
+
+def coverage(technote: Path, search: list[str]) -> int:
+    """Report which of the technote's figures have a provenance sidecar, and whether the copies match."""
+    by_name = {}
+    for sidecar in find_sidecars(search):
+        rec = json.loads(sidecar.read_text())
+        by_name.setdefault(rec["figure"]["name"], (sidecar, rec))
+    rows, used = [], set()
+    for arg, copies in technote_figures(technote).items():
+        name = Path(arg).name if Path(arg).suffix else (copies[0].name if copies else Path(arg).name)
+        if name not in by_name:
+            rows.append(("no provenance", arg))
+            continue
+        sidecar, rec = by_name[name]
+        used.add(name)
+        status, _ = provenance.check(sidecar)
+        current = any(provenance.sha256(c) == rec["figure"]["sha256"] for c in copies)
+        rows.append((f"{status}, " + ("technote copy is the recorded one" if current else "technote copy differs"), arg))
+    summary = {}
+    for state, _ in rows:
+        summary[state] = summary.get(state, 0) + 1
+    print(f"{len(rows)} technote figures; {len(used)} of the {len(by_name)} figures with provenance are used")
+    for state, n in sorted(summary.items(), key=lambda kv: -kv[1]):
+        print(f"  {n:4d}  {state}")
+    missing = [arg for state, arg in rows if state == "no provenance"]
+    print("\nwithout provenance, by folder:")
+    folders = {}
+    for arg in missing:
+        folders[str(Path(arg).parent)] = folders.get(str(Path(arg).parent), 0) + 1
+    for folder, n in sorted(folders.items(), key=lambda kv: -kv[1]):
+        print(f"  {n:4d}  {folder}")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=("list", "check", "show", "restore"))
+    parser.add_argument("command", choices=("list", "check", "coverage", "show", "restore"))
     parser.add_argument("paths", nargs="+", help="directories (searched recursively) or sidecar files; for restore: SIDECAR DIR")
     parser.add_argument("--technote", type=Path, help="technote repository, to compare its copies of the figures")
     args = parser.parse_args(argv)
@@ -45,6 +94,10 @@ def main(argv=None) -> int:
         for path in provenance.restore(Path(args.paths[0]), Path(args.paths[1])):
             print(f"wrote {path}")
         return 0
+    if args.command == "coverage":
+        if not args.technote:
+            parser.error("coverage needs --technote")
+        return coverage(args.technote, args.paths)
     if args.command == "show":
         for sidecar in args.paths:
             print(f"{sidecar}:")

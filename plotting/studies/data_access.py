@@ -77,6 +77,8 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import provenance  # noqa: E402
+
 import common  # noqa: E402
 
 #: Directory of PROfit plot outputs read by every phase.
@@ -877,6 +879,10 @@ def render_panels(
                     f"_{CHANNEL_TOKENS[ch]}_{phase.figure_arm}"
                 )
                 shutil.move(staged[-1], output / f"{name}.{fmt}")
+                provenance.record(output / f"{name}.{fmt}", [path], __file__,
+                                  arguments={"phase": phase.key, "study": study, "tier": tier, "detector": det_label,
+                                             "channel": CHANNEL_TOKENS[ch], "data_overlaid": overlay},
+                                  versions={"selection": common.SELECTION_VERSION})
                 made += 1
     print(f"{made} phase-{phase.key} panels rendered for tiers {phase.enabled_tiers}")
     if suppressed:
@@ -939,6 +945,7 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser.add_argument("--flip", action="store_true", help="phase 4: partner constrains E_nu")
     parser.add_argument("--alpha", type=float, default=1.0, help="phase 4: exposure scale")
     args = parser.parse_args(argv)
+    common.set_provenance(__file__, [], {"phase": args.phase})
 
     every = {"table", "pvalues", "peaks", "clipping", "panels"}
     what = every if "all" in args.what else set(args.what)
@@ -967,7 +974,9 @@ def main(argv: Sequence[str] | None = None) -> None:
             table = print_table(phase) if "table" in what else chi2_table(phase)[0]
             if "pvalues" in what and not table.empty:
                 fig = plot_pvalues(table, phase)
-                print(common.save_figure(fig, args.output / f"pvalues_{phase.arm}.{args.format}"))
+                files = [phase.file(s) for s, _, _ in phase.studies() if phase.file(s).exists()]
+                print(common.save_figure(fig, args.output / f"pvalues_{phase.arm}.{args.format}", inputs=files,
+                                         arguments={"phase": phase.key, "kind": "pvalues"}, recipe=False))
         if "peaks" in what:
             report_peaks(phase)
         if "clipping" in what and phase.key == "3":

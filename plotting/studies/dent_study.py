@@ -769,6 +769,8 @@ def main(argv: list[str] | None = None) -> None:
         help="stages to run (default: all)",
     )
     args = parser.parse_args(argv)
+    common.set_provenance(__file__, [common.RUNS / "dent_study" / "results", REPLICA_SUMMARY],
+                          {"stages": list(args.only or STAGES)})
     ext = args.format
     out = args.output
     run = set(args.only)

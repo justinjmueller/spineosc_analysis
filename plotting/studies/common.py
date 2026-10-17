@@ -75,7 +75,36 @@ def configure_style(fmt: str = "pdf", dpi: int = 300, style: str = "rootlike") -
     mp.use_style(style)
 
 
-def save_figure(fig: plt.Figure, path: Path, dpi: int = 200, close: bool = True) -> Path:
+#: Provenance context of the running script, set by :func:`set_provenance`.
+_PROVENANCE: dict = {}
+
+
+def set_provenance(script, inputs=(), arguments=None) -> None:
+    """
+    Make every following :func:`save_figure` write a provenance sidecar.
+
+    Parameters
+    ----------
+    script : path-like
+        The producing script (``__file__``).
+    inputs : iterable of path-like, optional
+        Files (or directories) the figures are made from; ``save_figure(..., inputs=...)`` overrides them.
+    arguments : dict, optional
+        Parameters common to all figures of this run.
+    """
+    _PROVENANCE.clear()
+    _PROVENANCE.update(script=script, inputs=list(inputs), arguments=dict(arguments or {}))
+
+
+def save_figure(
+    fig: plt.Figure,
+    path: Path,
+    dpi: int = 200,
+    close: bool = True,
+    inputs=None,
+    arguments: dict | None = None,
+    recipe: bool = True,
+) -> Path:
     """
     Write a figure, creating parent directories, and optionally close it.
 
@@ -89,6 +118,12 @@ def save_figure(fig: plt.Figure, path: Path, dpi: int = 200, close: bool = True)
         Resolution for raster formats.
     close : bool, optional
         Close the figure after saving to free memory in batch runs.
+    inputs : iterable of path-like, optional
+        Inputs of this figure, if different from those given to :func:`set_provenance`.
+    arguments : dict, optional
+        Parameters that select this figure; merged over those given to :func:`set_provenance`.
+    recipe : bool, optional
+        Trace PROfit inputs back to their ini and XML (turn off for figures that read many PROfit files).
 
     Returns
     -------
@@ -100,6 +135,17 @@ def save_figure(fig: plt.Figure, path: Path, dpi: int = 200, close: bool = True)
     fig.savefig(path, dpi=dpi, bbox_inches="tight")
     if close:
         plt.close(fig)
+    if _PROVENANCE:
+        import provenance
+
+        provenance.record(
+            path,
+            _PROVENANCE["inputs"] if inputs is None else inputs,
+            _PROVENANCE["script"],
+            arguments={**_PROVENANCE["arguments"], **(arguments or {})},
+            versions={"selection": SELECTION_VERSION},
+            recipe=recipe,
+        )
     return path
 
 

@@ -105,3 +105,32 @@ def test_restore_rewrites_the_recorded_configuration(tmp_path):
     assert (tmp_path / "again" / "xml" / "study.xml").read_text() == original
     steps = provenance.remake_steps(sidecar)
     assert any("PROfit --config jobs/study.ini plot" in s for s in steps) and steps[-1].startswith("python make.py")
+
+
+def test_directory_inputs_are_tracked_by_count_size_and_mtime(tmp_path):
+    scan = tmp_path / "scan"
+    scan.mkdir()
+    (scan / "a.root").write_bytes(b"a")
+    figure, script = tmp_path / "fig.pdf", tmp_path / "make.py"
+    figure.write_bytes(b"figure")
+    script.write_text("# producer\n")
+    sidecar = provenance.record(figure, [scan], script, repo=tmp_path)
+    assert provenance.check(sidecar, tmp_path)[0] == "OK"
+    (scan / "b.root").write_bytes(b"b")
+    status, reasons = provenance.check(sidecar, tmp_path)
+    assert status == "STALE" and "scan" in reasons[0]
+
+
+def test_plain_and_phase2_inis_are_told_apart(tmp_path):
+    inis = [tmp_path / "dp_cvrw_plot.ini", tmp_path / "dp_cvrw_phase2_plot.ini"]
+    assert provenance._select_inis(inis, "cvrw") == [inis[0]]
+    assert provenance._select_inis(inis, "cvrw_phase2") == [inis[1]]
+    assert provenance._select_inis(inis[:1], "anything") == [inis[0]]
+
+
+def test_prefix_matching_finds_the_tag_of_an_output_with_an_output_tag(tmp_path):
+    repo, _, _ = make_profit_repo(tmp_path)
+    provenance._ini_index.cache_clear()
+    out = repo / "out" / "mystudy_cvrw_phase2_PROplot.root"
+    assert [e["tag"] for e in provenance.profit_recipe(out, repo)] == ["mystudy"]
+    assert provenance.profit_recipe(repo / "out" / "other_v1_PROplot.root", repo) == []
