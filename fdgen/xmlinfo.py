@@ -49,3 +49,26 @@ def pot_scale(info, f):
     if len(dets) != 1:
         raise ValueError(f"{f['treename']}: branches belong to several detectors {dets}")
     return info["det_pot"][dets.pop()] / f["mc_pot"]
+
+
+def load_detvars(xml_path):
+    """The hist1d systematics of the XML (commented-out entries ignored): name -> dict(pattern, xvar, hist=(filename, histname) or
+    sections=[(knobval, filename, histname), ...]). A name matching a <HistVarSection> carries that section's variations; otherwise the
+    allowlist's own `filename` and `name` are the single (knob +1) ratio histogram."""
+    s = re.sub(r"<!--.*?-->", "", open(xml_path).read(), flags=re.S)
+    sections = {}
+    for m in re.finditer(r'<HistVarSection\s+name="([^"]+)"\s*>(.*?)</HistVarSection>', s, re.S):
+        sections[m.group(1)] = [(float(a["knobval"]), a["filename"], a["histname"])
+                                for a in (attrs(v) for v in re.findall(r"<variation\s[^>]*/>", m.group(2)))]
+    out = {}
+    for m in re.finditer(r"<allowlist\s[^>]*>", s):
+        a = attrs(m.group(0))
+        if a.get("type") != "hist1d":
+            continue
+        entry = dict(pattern=a.get("apply_to_subchannel", ""), xvar=int(a["xvar"].replace("var", "")), plotname=a.get("plotname", ""))
+        if a["name"] in sections:
+            entry["sections"] = sections[a["name"]]
+        else:
+            entry["hist"] = (a["filename"], a["name"])
+        out[a["name"]] = entry
+    return out

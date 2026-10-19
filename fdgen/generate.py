@@ -152,7 +152,38 @@ def project_true_e(w, ev, te_edges):
     return out
 
 
-def scenario_ratio(sc, ev, edges, f, entry_stop, rebruce_files, te_edges=None):
+def detvar_ratio(e, ev, f, detvars, base):
+    """Per-event ratio of a detector (hist1d) systematic at knob `sigma`, the way PROfit's per-event lookup does it: the ratio histogram's
+    bin content at the event's `xvar` value (1 when the value is NaN or outside the axis range), for events whose subchannel matches the
+    allowlist's `apply_to_subchannel` regex. The knob must be one of the section's declared knob values (a single, unsectioned histogram is
+    the knob +1 universe): the ratio at a knot is exact, between knots PROfit interpolates per-bin sums, which this does not reproduce."""
+    import re
+    d = (detvars or {}).get(e["name"])
+    if d is None:
+        sys.exit(f"detvar {e['name']}: no hist1d systematic of that name in the MC XML (names: {sorted(detvars or {})[:6]} ...)")
+    if "sections" in d:
+        hit = [(fn, hn) for k, fn, hn in d["sections"] if abs(k - e["sigma"]) < 1e-9]
+        if not hit:
+            sys.exit(f"detvar {e['name']}: sigma {e['sigma']} is not a declared knob {[k for k, _, _ in d['sections']]}")
+        filename, histname = hit[0]
+    else:
+        if abs(e["sigma"] - 1.0) > 1e-9:
+            sys.exit(f"detvar {e['name']}: a single ratio histogram is the knob +1 universe; sigma {e['sigma']} is not supported")
+        filename, histname = d["hist"]
+    h = uproot.open(os.path.join(base, filename))[histname]
+    edges, content = h.axis().edges(), h.values(flow=True)         # content[0] underflow, content[1:-1] bins, content[-1] overflow
+    x = ev["x"].astype(np.float64)
+    r = np.ones(len(x))
+    use = np.zeros(len(x), dtype=bool)
+    for i, b in enumerate(f["branches"]):
+        if re.search(d["pattern"], b["subchannel"]):
+            use |= ev["branch"] == i
+    ok = use & np.isfinite(x) & (x >= edges[0]) & (x <= edges[-1])
+    r[ok] = content[np.searchsorted(edges, x[ok], side="right")]
+    return r
+
+
+def scenario_ratio(sc, ev, edges, f, entry_stop, rebruce_files, te_edges=None, detvars=None, base=None):
     """Per-event ratio to the PROfit prediction for one scenario and one MC file."""
     n = len(ev["aw"])
     r = np.ones(n)
@@ -167,6 +198,9 @@ def scenario_ratio(sc, ev, edges, f, entry_stop, rebruce_files, te_edges=None):
         use &= ~np.isnan(p)
         r[use] *= p[use]
     for e in sc.get("effects", []):
+        if e["source"] == "detvar":
+            r *= detvar_ratio(e, ev, f, detvars, base)
+            continue
         treedir, tree = f["treename"].rsplit("/", 1)
         if tree != "selected":
             continue                  # only the matched beam-neutrino tree has GENIE weights
@@ -196,6 +230,7 @@ def main(argv=None):
     xml = os.path.join(REPO, ds["mc_xml"])
     info = xmlinfo.load(xml)
     edges = osc.le_bin_edges(*info["le_bins"])
+    detvars = xmlinfo.load_detvars(xml)
     te_edges = osc.le_bin_edges(*info["te_bins"])      # truth-energy bins of the dial splines (binning=var2)
     outdir = os.path.join(REPO, ds["outdir"])
     keydir = os.path.join(REPO, ds.get("keydir", ds["outdir"]))        # KEY.yaml and manifest.yaml (private) can live elsewhere
@@ -252,7 +287,7 @@ def main(argv=None):
         out = {}
         for sc in scs:
             k = index[sc["id"]]
-            r, notes = scenario_ratio(sc, ev, edges, f, args.entry_stop, rebruce, te_edges)
+            r, notes = scenario_ratio(sc, ev, edges, f, args.entry_stop, rebruce, te_edges, detvars, base)
             out[f"mysterywgt{k:02d}"] = r
             lam = ev["aw"] * scale * r
             key["expected"].setdefault(sc["id"], {})[f["treename"]] = float(lam.sum())

@@ -125,3 +125,20 @@ Closure (`configs/batch1_asimov.yaml`, the 13 batch-1 scenarios, 2D analysis, fr
 oscillation scenarios (O1-O8) return chi^2 of 6-7e-4 and the injected (dmsq, sin^2 2theta) to 4 digits (e.g. O8: 2.000 / 0.2000; null: sin^2 2theta 1e-4).
 The dial scenarios do not close to zero, as expected from PROfit's true-E-only dial model: C4 chi^2 1.9, C5 5.8, C2 16.3, C2osc 17.9, with a spurious
 signal fitted (C2: 2.3 eV^2, 0.047; C5: 2.12 / 0.148 against the injected 2.07 / 0.116).
+
+## Detector systematics (`source: detvar`)
+`effects: [{source: detvar, name: <hist1d allowlist name>, sigma: <knob>}]` applies a detector (hist1d) systematic the way PROfit does it: the
+ratio histogram's bin content at the event's `xvar` value (the event's `var3` = reco energy; 1 when NaN or outside the axis), only for events whose
+subchannel matches the allowlist's `apply_to_subchannel` regex (this includes dirt, off-beam and non-matched trees). `name` is the allowlist `name`
+of `xml/contours/contours_base.xml` (e.g. `SCE_icarus_Run2`, `ChargeScale15_sbnd_Run1`, `BindingEnergy_SBN`, `ProtonMiss_sbnd_Run1`); a name that is a
+`HistVarSection` takes `sigma` from its declared knobs (the ratio at a knot is exact), an unsectioned histogram is the knob +1 universe (sigma 1 only).
+Commented-out allowlist entries are ignored, so only systematics that are active in the fit can be used.
+
+Closure against PROfit's own `--use-fake-data --inject-systs "<plotname>" 1` (`configs/detvar_test.yaml`, Asimov, free global fit, 2D analysis):
+| knob | chi^2 PROfit / fdgen | fitted pull PROfit / fdgen | max pull difference (all nuisances) |
+|---|---|---|---|
+| SCE ICARUS Run2 | 0.455 / 0.469 | 0.315 / 0.325 | 0.010 |
+| ChargeScale SBND | 0.724 / 0.732 | 0.721 / 0.727 | 0.005 |
+| Binding Energy | 0.991 / 0.992 | 0.991 / 0.991 | 0.004 |
+The injected +1 sigma is only partly pulled for the first two (the prior penalty), in both. `configs/batch2.yaml` (14 scenarios) is the first batch that
+mixes flux, interaction and detector knobs.
