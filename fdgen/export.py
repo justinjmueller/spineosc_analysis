@@ -12,6 +12,8 @@ import numpy as np
 TRUTH = re.compile(r"\btrue_[A-Za-z0-9_]*|\bcvwgt\b")
 # identifiers that look like truth but are file-level constants of the sample (detector id); allowed in a cut
 ALLOWED = {"true_detector"}
+#: branch carrying the per-event expectation in an Asimov export (`asimov: true`)
+ASIMOV_WEIGHT = "asimov_weight"
 
 
 def top_level_split(expr, sep="&&"):
@@ -133,12 +135,14 @@ def build_xml(xml_text, info, export, detector_pots, outdir):
     """The blind data XML for one export: same <mode>, <detector>, <model> and channels as the MC XML (every channel gets the single subchannel
     "data"), and one MCFile per detector reading the exported events. Weights are the channel's proton-multiplicity term alone (the cuts were
     already applied when the events were written); truth-based variables are the constant 0, as in the repo's real-data XMLs; the MCFile POT
-    is the detector's target POT, so PROfit's POT factor is 1 and every event counts once."""
+    is the detector's target POT, so PROfit's POT factor is 1 and every event counts once. With `asimov: true` the events are the
+    expectation itself (each once, weight = its expected count) and the weight is the multiplicity term times the `asimov_weight` branch."""
     import os
     s = xml_text
     out = ['<?xml version="1.0" ?>\n',
            f"<!--\nPseudo-data events, reco variables only (fdgen truth-free export '{export['name']}').\n"
-           "The selection is already applied; no systematics, no real beam data.\n-->\n",
+           "The selection is already applied; no systematics, no real beam data.\n"
+           + ("Weighted Asimov expectation (no Poisson fluctuation).\n" if export.get("asimov") else "") + "-->\n",
            re.search(r'<mode name="[^"]*"\s*/>', s).group(0) + "\n"]
     out += [m.group(0) + "\n" for m in re.finditer(r'<detector name="[^"]*"\s+pot="[^"]*"\s*/>', s)]
     out.append(re.search(r'<model tag=.*?</model>', s, re.S).group(0) + "\n")
@@ -155,7 +159,7 @@ def build_xml(xml_text, info, export, detector_pots, outdir):
             for v in b["variables"]:
                 tags.append(f"        <variable{'2D' if ';' in v else ''}>{blind_variable(v)}</variable{'2D' if ';' in v else ''}>")
             new.append(f'    <branch\n        associated_subchannel = "nu_{det}_{channel}_data"\n        model_rule            = "0"\n'
-                       f'        additional_weight     = "{channel_cut(info, ref, channel)}"\n    >\n' + "\n".join(tags) + "\n    </branch>")
+                       f'        additional_weight     = "{channel_cut(info, ref, channel)}{" * " + ASIMOV_WEIGHT if export.get("asimov") else ""}"\n    >\n' + "\n".join(tags) + "\n    </branch>")
         new.append("</MCFile>\n")
         out.append("\n".join(new))
     return "\n".join(out)

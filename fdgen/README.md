@@ -112,3 +112,16 @@ rms 4e-4 (max 3e-3), total yield 1e-5 to 2e-5.
   edit it directly. `dataset.keydir` keeps `KEY.yaml` and `manifest.yaml` (private) away from `dataset.outdir` (the shareable files).
 * `fdgen/configs/closure_2d.yaml`, `export_test.yaml`: the 2D closure and export validation configs.
 * `fdgen/configs/legacy_1d/`: configs on the 1D XML (`systematics_suite.xml`), kept because `crosscheck.py` and `validate_poisson.py` read two of them.
+
+## Asimov export (`asimov: true`)
+An export with `asimov: true` writes the expectation instead of a Poisson throw: every event with a non-zero expectation is written once, with the
+branch `asimov_weight` = `aw x pot_scale x ratio` (the full expected count; the data XML has `scale = 1.0` and the detector's target POT, so PROfit
+adds no factor). The XML branch weight is `(multiplicity term) * asimov_weight`. Components are merged and shuffled as for the thrown exports; no
+jitter is needed. The weights reveal the per-event ratio, which is acceptable for an end-user who is not trying to infer the scenario.
+PROfit's `--poisson-throw` acts on the MC-built fake data, not on a `-d` data file, so an end-user who wants fluctuations has to throw the weighted
+histogram bins themselves (a Poisson throw of a bin holding its expected count is the same law as the event-level throw).
+
+Closure (`configs/batch1_asimov.yaml`, the 13 batch-1 scenarios, 2D analysis, free global fit, `runs/fdgen_2d/fdgenjob.sh`): the null and all eight
+oscillation scenarios (O1-O8) return chi^2 of 6-7e-4 and the injected (dmsq, sin^2 2theta) to 4 digits (e.g. O8: 2.000 / 0.2000; null: sin^2 2theta 1e-4).
+The dial scenarios do not close to zero, as expected from PROfit's true-E-only dial model: C4 chi^2 1.9, C5 5.8, C2 16.3, C2osc 17.9, with a spurious
+signal fitted (C2: 2.3 eV^2, 0.047; C5: 2.12 / 0.148 against the injected 2.07 / 0.116).

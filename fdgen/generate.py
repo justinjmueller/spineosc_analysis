@@ -279,18 +279,25 @@ def main(argv=None):
             if ck not in cut_cache:
                 cut_cache[ck] = events.evaluate_formula(*ck)
             passed = cut_cache[ck][:n]
-            rng_x = np.random.default_rng(np.random.SeedSequence([ex["seed"], kx, fi, 4242]))
-            cnt = rng_x.poisson(np.clip(lam_x, 0, None))
+            asimov = bool(ex.get("asimov", False))      # Asimov export: every event once, carrying its expectation as a weight, no throw
+            if asimov:
+                cnt = (lam_x != 0).astype(int)
+            else:
+                rng_x = np.random.default_rng(np.random.SeedSequence([ex["seed"], kx, fi, 4242]))
+                cnt = rng_x.poisson(np.clip(lam_x, 0, None))
             bad = int(((cnt > 0) & ~passed).sum())
             if bad:
-                sys.exit(f"export {ex['name']} [{f['treename']}]: {bad} thrown events fail the configured cuts (the cuts are stricter than the XML selection)")
+                sys.exit(f"export {ex['name']} [{f['treename']}]: {bad} {'events with weight' if asimov else 'thrown events'} fail the configured cuts (the cuts are stricter than the XML selection)")
             idx = np.repeat(np.nonzero(cnt > 0)[0], cnt[cnt > 0])
             keep = ex.get("keep", ["reco_visible_energy", "reco_pn", "reco_proton_multiplicity"])
             kk = (f["_path"], f["treename"], tuple(keep))
             if kk not in col_cache:
                 col_cache[kk] = uproot.open(f["_path"])[f["treename"]].arrays(keep, library="np")
             arr = col_cache[kk]
-            export_rows.setdefault((ex["name"], det), []).append({k: np.asarray(arr[k])[idx] for k in keep})
+            rows_x = {k: np.asarray(arr[k])[idx] for k in keep}
+            if asimov:
+                rows_x[export.ASIMOV_WEIGHT] = lam_x[idx].astype(np.float64)
+            export_rows.setdefault((ex["name"], det), []).append(rows_x)
             o = export_obs.setdefault((ex["name"], det), dict(expected=0.0, events=0))
             o["expected"] += float(lam_x.sum())
             o["events"] += int(len(idx))
@@ -312,7 +319,7 @@ def main(argv=None):
             perm = rng_p.permutation(len(next(iter(cols.values()))))     # merge the MC components and shuffle: no component order is visible
             cols = {k: v[perm] for k, v in cols.items()}
             jit = float(ex.get("jitter_duplicates", 1e-6))
-            if jit > 0:        # an MC event thrown k > 1 times would otherwise appear as k identical rows, which real data never has
+            if jit > 0 and not ex.get("asimov", False):        # an MC event thrown k > 1 times would otherwise appear as k identical rows, which real data never has
                 cols = export.jitter_duplicates(cols, jit, rng_p)
             export.write_tree(os.path.join(outdir, spec["file"]), spec["tree"], cols)
             o = export_obs[(ex["name"], det)]
