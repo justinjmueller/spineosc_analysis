@@ -58,23 +58,25 @@
 #
 # label                 sections
 # --- single-knob injections, +-1 sigma ---
-inj_qeint_p1_null       inject-systs QEIntf_dial0 1 syst-only
-inj_qeint_p1            inject-systs QEIntf_dial0 1
-inj_qeint_m1_null       inject-systs QEIntf_dial0 -1 syst-only
-inj_qeint_m1            inject-systs QEIntf_dial0 -1
+inj_qeint_p1_null        inject-systs QEIntf_dial0 1 syst-only
+inj_qeint_p1             inject-systs QEIntf_dial0 1
 
-inj_specf_p1_null       inject-systs SF_q0bin0 1 syst-only
-inj_specf_p1            inject-systs SF_q0bin0 1
-inj_specf_m1_null       inject-systs SF_q0bin0 -1 syst-only
-inj_specf_m1            inject-systs SF_q0bin0 -1
+#inj_qeint_p1_null_notfit inject-systs QEIntf_dial0 1 syst-only exclude QEIntf_dial0
+#inj_qeint_p1_notfit      inject-systs QEIntf_dial0 1 exclude QEIntf_dial0
 
-inj_poisson_null        poisson-throw seed 104 syst-only
-inj_poisson             poisson-throw seed 104
+inj_qeint_m1_null        inject-systs QEIntf_dial0 -1 syst-only
+inj_qeint_m1             inject-systs QEIntf_dial0 -1
 
-# --- injected oscillation signal at a few points ---
-osc_dm2p07_s0p116_null  inject-osc dmsq 2.07 sinsq2thmm 0.116 syst-only
-osc_dm2p07_s0p116       inject-osc dmsq 2.07 sinsq2thmm 0.116
-osc_dm3p5_s0p16_null    inject-osc dmsq 3.5 sinsq2thmm 0.16 syst-only
-osc_dm3p5_s0p16         inject-osc dmsq 3.5 sinsq2thmm 0.16
-osc_dm12p1_s0p187_null  inject-osc dmsq 12.1 sinsq2thmm 0.187 syst-only
-osc_dm12p1_s0p187       inject-osc dmsq 12.1 sinsq2thmm 0.187
+#inj_qeint_m1_null_notfit inject-systs QEIntf_dial0 -1 syst-only exclude QEIntf_dial0
+#inj_qeint_m1_notfit      inject-systs QEIntf_dial0 -1 exclude QEIntf_dial0
+
+inj_specf_p1_null        inject-systs SF_q0bin3 1 syst-only
+inj_specf_p1             inject-systs SF_q0bin3 1
+inj_specf_m1_null        inject-systs SF_q0bin3 -1 syst-only
+inj_specf_m1             inject-systs SF_q0bin3 -1
+
+#inj_bind_p1_null         inject-systs BindingEnergy_SBN 1 syst-only
+#inj_bind_p1              inject-systs BindingEnergy_SBN 1
+
+#inj_poisson_null         poisson-throw seed 104 syst-only
+#inj_poisson              poisson-throw seed 104

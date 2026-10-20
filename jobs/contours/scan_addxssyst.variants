@@ -1,0 +1,58 @@
+# Systematic-GROUP importance scan against a single cache.
+#
+#   scripts/submit_fanout.sh --queue capacity --walltime 03:00:00 \
+#       --variants jobs/contours/scan_systgroup.variants \
+#       jobs/contours/contours_full.ini -- surface -g 30 --xlo 1e-2 --ylo 1e-1
+#
+# Companion to scan_detsyst.variants, which scans individual detector
+# systematics. This one removes whole groups: flux, the interaction model (as a
+# block and broken down), POT normalization, and G4 reinteractions.
+#
+# 16 variants = 16 nodes, exactly capacity's ceiling. Comment lines out
+# to shrink the batch.
+#
+# EXCLUDING BY TAG. --include-systs resolves a tag before a name, so naming a
+# tag drops every systematic carrying it - which is exactly what is wanted here.
+# The counts below are the entries each tag covers in contours_base.xml.
+#
+# TAGS WITH SPACES CANNOT BE USED. The include field is whitespace-separated, so
+# `POT Normalization` would arrive as two arguments, each matching nothing, each
+# silently excluding nothing. The POT and detector lines therefore enumerate
+# their member names instead. The same applies to `Cosmic Background
+# Normalization` (its plotname `CORSIKA` is space-free and works if you want it)
+# and `stat,MC Stats`.
+#
+# VERIFYING THESE IS NOT THE SAME AS FOR scan_detsyst.variants. Only spline,
+# norm and hist1d systematics become fitted parameters; covariance systematics
+# are marginalised analytically and never appear in global_fit.txt. So:
+#
+#   fitted   Cross-Section-QE/MEC/RES/DIS/COH/NCEL/FSI (spline), POT and
+#            detector systematics (hist1d)
+#            -> parameter count in global_fit.txt drops, as with the detsyst scan
+#   NOT      Flux, G4, Cross-Section-NonRES-nu/nubar, mcstat (covariance)
+#   fitted   -> parameter count is UNCHANGED even when the exclusion worked.
+#               Confirm those from the fractional systematics breakdown or the
+#               contour instead, not the parameter list.
+#
+# label            arguments
+# --- the three coarse groups ---
+# --- interaction model, broken down (subsets of nointeraction above) ---
+
+onlyqe               include mcstat Cross-Section-QE
+onlymec              include mcstat Cross-Section-MEC
+onlyres              include mcstat Cross-Section-RES
+onlynonnres          include mcstat Cross-Section-NonRES-nu Cross-Section-NonRES-nubar
+onlydis              include mcstat Cross-Section-DIS
+onlycoh              include mcstat Cross-Section-COH
+onlyncel             include mcstat Cross-Section-NCEL
+onlyfsi              include mcstat Cross-Section-FSI
+
+
+onlyxsqe               exclude Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
+onlyxsmec              exclude Cross-Section-QE Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
+onlyxsres              exclude Cross-Section-QE Cross-Section-MEC Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
+onlyxsnonres           exclude Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
+onlyxsdis              exclude Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-COH Cross-Section-NCEL Cross-Section-FSI
+onlyxscoh              exclude Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-NCEL Cross-Section-FSI
+onlyxsncel             exclude Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-FSI
+onlyxsfsi              exclude Cross-Section-QE Cross-Section-MEC Cross-Section-RES Cross-Section-NonRES-nu Cross-Section-NonRES-nubar Cross-Section-DIS Cross-Section-COH Cross-Section-NCEL

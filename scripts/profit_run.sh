@@ -102,6 +102,11 @@ fi
 # data/MC config reuse the same expensive processing run.
 TAG="$(grep -oP '^\s*tag\s*=\s*\K\S+' "$INI" | tail -1)"
 RUN_DIR="$OUTPUT_ROOT/${TAG:-$(basename "$INI" .ini)}"
+# submit_fanout.sh overrides this for variants that pass a `data` XML: PROfit
+# names the data cache <tag>_data.bin with no reference to WHICH data XML, so
+# each data XML gets its own subdirectory of the tag's run dir, with the tag's
+# MC caches symlinked in. Not meant to be set by hand.
+RUN_DIR="${PROFIT_RUN_DIR:-$RUN_DIR}"
 mkdir -p "$RUN_DIR"
 ln -sfn "$REPO_ROOT/work" "$RUN_DIR/work"
 ln -sfn "$REPO_ROOT/xml" "$RUN_DIR/xml"

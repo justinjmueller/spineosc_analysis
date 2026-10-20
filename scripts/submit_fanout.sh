@@ -12,9 +12,9 @@
 #   --queue NAME          default from input/site.conf
 #   --shared-cache        permit configs that share a tag (see below)
 #   --variants FILE       expand ONE base config into many runs (implies --shared-cache).
-#                         Each line is `label` plus exclude / inject-systs /
-#                         inject-osc / syst-only / poisson-throw / seed /
-#                         run sections - see
+#                         Each line is `label` plus exclude / include / inject-systs /
+#                         inject-osc / data / syst-only / poisson-throw /
+#                         seed / run sections - see
 #                         "variant expansion" below. With --variants the
 #                         `-- <subcommand>` is the default for lines without
 #                         `run`, and may be omitted if every line has one.
@@ -112,8 +112,10 @@ BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND:-mixed}_$(date +%Y%m%d_%H%M%S)"
 # order. Every section is explicit - there is no default action:
 #
 #   exclude       <name> [<name>...]        -> exclude-systs = ...
+#   include       <name> [<name>...]        -> syst-list     = ...  (fit ONLY these)
 #   inject-systs  <name> <sigma> [...]      -> inject-systs  = ...
 #   inject-osc    <param> <value> [...]     -> inject        = ...
+#   data          <data.xml>                -> data          = <data.xml>
 #   syst-only                               -> syst-only = true
 #   poisson-throw                           -> poisson-throw = true
 #   seed          <integer>                 -> seed = <integer>
@@ -144,6 +146,38 @@ BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND:-mixed}_$(date +%Y%m%d_%H%M%S)"
 # The throw only applies to fake data - with a <data> section or --data it does
 # nothing, like the injections.
 #
+# INCLUDE vs EXCLUDE. include maps to PROfit's --syst-list, which fits ONLY the
+# named systematics (tags, names or plotnames, as for exclude) - everything else
+# is dropped, INCLUDING the MC-stat covariance (`mcstat`) unless you list it.
+# The two are mutually exclusive in PROfit, so one line takes one or the other,
+# and a variant that sets either also drops the other from the base config.
+#
+#   onlyflux      include Flux mcstat
+#   onlyqe        include Cross-Section-QE mcstat
+#
+# DATA XMLS. `data` fits a data XML (real data, or a fake-data XML you built)
+# instead of the Asimov/injected prediction. The path is relative to the repo
+# (e.g. xml/fakedata/pt1.xml) or absolute, and must exist at submit time. The
+# data XML must use the same channels as the MC XML, with exactly one
+# subchannel per channel, named "data" - PROfit refuses it otherwise.
+#
+# inject-osc, inject-systs and poisson-throw only act on fake data, so they do
+# nothing alongside `data`; combining them is an error rather than a silent
+# no-op. syst-only, exclude and seed combine with `data` normally.
+#
+# PROfit caches the processed data spectrum as <tag>_data.bin, keyed on the tag
+# ONLY - not on which data XML it came from. So each distinct data XML runs in
+# its own subdirectory, $output_root/<tag>/data__<xml path>/, with the tag's MC
+# caches symlinked in (no reprocessing) and its own <tag>_data.bin. Outputs for
+# those variants land there, not in the tag directory. The first rank to use an
+# uncached data XML builds its data.bin, so only ONE rank per batch may use a
+# data XML that has no cache yet: submit one variant with it first, then the
+# rest. An edited data XML fails the hash check cleanly; delete its
+# data__*/<tag>_data.bin to rebuild.
+#
+#   fd_pt1        data xml/fakedata/pt1.xml                   run global
+#   fd_pt1_null   data xml/fakedata/pt1.xml   syst-only       run global
+#
 # `process` is refused: every rank shares one cache, and N ranks rebuilding it
 # into the same directory would corrupt it. All ranks share ONE walltime, so
 # size --walltime for the slowest subcommand in the file (fc, typically).
@@ -171,7 +205,7 @@ BATCH="$OUTPUT_ROOT/_batches/${SUBCOMMAND:-mixed}_$(date +%Y%m%d_%H%M%S)"
 # follow it; the dropped sections are listed in a comment. This also keeps the
 # generated keys out of any section, where PROfit would silently ignore them.
 # Pass subcommand options on the command line instead.
-declare -a LABELS=() SUBS=() ARGS=()
+declare -a LABELS=() SUBS=() ARGS=() RUNDIRS=()
 if [ -n "$VARIANTS" ]; then
     [ "${#INIS[@]}" -eq 1 ] || { echo "error: --variants takes exactly one base config, got ${#INIS[@]}" >&2; exit 1; }
     VFILE="$(resolve "$VARIANTS")"
@@ -179,7 +213,9 @@ if [ -n "$VARIANTS" ]; then
     BASE_NAME="$(basename "${INIS[0]}" .ini)"
     mkdir -p "$BATCH"
     INIS=()
-    is_kw()  { case "$1" in exclude|inject-systs|inject-osc|syst-only|poisson-throw|seed|run) return 0 ;; *) return 1 ;; esac; }
+    is_kw()  { case "$1" in exclude|include|inject-systs|inject-osc|data|syst-only|poisson-throw|seed|run) return 0 ;; *) return 1 ;; esac; }
+    BASE_TAG="$(tag_of "$BASE")"
+    [ -n "$BASE_TAG" ] || { echo "error: ${INIS[0]} declares no tag" >&2; exit 1; }
     VALID_SUBS="surface profile global plot fc fc-adaptive mcmc"
     check_sub() {
         [ "$1" != process ] || vfail "run process is not allowed - every rank shares one cache and would rebuild it concurrently"
@@ -188,6 +224,7 @@ if [ -n "$VARIANTS" ]; then
     is_num() { [[ "$1" =~ ^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?$ ]]; }
     vfail()  { echo "error: $VARIANTS: variant '$label': $*" >&2; exit 1; }
     [ -z "$SUBCOMMAND" ] || { label="(-- default)"; check_sub "$SUBCOMMAND"; }
+    set -f   # a variants line is split unquoted; never glob it against the filesystem
     while IFS= read -r line || [ -n "$line" ]; do
         line="${line%%#*}"
         # shellcheck disable=SC2086
@@ -210,7 +247,7 @@ if [ -n "$VARIANTS" ]; then
         set -- ${pre[@]+"${pre[@]}"}
         # A line with only `run` is allowed: the unmodified base under its own
         # label and subcommand, e.g. `baseline run global` as a reference fit.
-        [ "$#" -ge 1 ] || [ -n "$run_sub" ] || vfail "no sections (expected exclude / inject-systs / inject-osc / syst-only / poisson-throw / seed / run)"
+        [ "$#" -ge 1 ] || [ -n "$run_sub" ] || vfail "no sections (expected exclude / include / inject-systs / inject-osc / data / syst-only / poisson-throw / seed / run)"
         for t in "$@"; do
             [ "$t" = inject ] && vfail "bare 'inject' is ambiguous - use inject-systs (systematic pulls) or inject-osc (physics parameters)"
         done
@@ -220,7 +257,7 @@ if [ -n "$VARIANTS" ]; then
         for t in "$@"; do
             case "$t" in *\"*|*\'*) vfail "'$t' contains a quote - names with spaces are not supported; list the member XML names instead" ;; esac
         done
-        [ "$#" -eq 0 ] || is_kw "$1" || vfail "'$1' is not a section keyword - start with exclude, inject-systs, inject-osc, syst-only, poisson-throw, seed or run (e.g. '$label exclude $*')"
+        [ "$#" -eq 0 ] || is_kw "$1" || vfail "'$1' is not a section keyword - start with exclude, include, inject-systs, inject-osc, data, syst-only, poisson-throw, seed or run (e.g. '$label exclude $*')"
         for l in ${LABELS[@]+"${LABELS[@]}"}; do
             [ "$l" = "$label" ] && { echo "error: duplicate variant label '$label' - outputs would clobber" >&2; exit 1; }
         done
@@ -228,15 +265,25 @@ if [ -n "$VARIANTS" ]; then
         # Several exclude names are needed whenever one physical effect is
         # split across configs - the ICARUS detector systematics each exist as
         # a _Run2 and a _Run4 entry, and dropping only one answers nothing.
-        excl=(); inj=(); osc=(); systonly=0; set_excl=0; set_inj=0; set_osc=0; sect=""
-        pthrow=0; seed=""
+        excl=(); incl=(); inj=(); osc=(); systonly=0; set_excl=0; set_incl=0; set_inj=0; set_osc=0; sect=""
+        pthrow=0; seed=""; dxml=""; set_data=0
         while [ "$#" -gt 0 ]; do
             tok="$1"; shift
             case "$tok" in
                 exclude)   [ "$set_excl" -eq 0 ] || vfail "'exclude' given twice"; sect=exclude; set_excl=1; continue ;;
+                include)   [ "$set_incl" -eq 0 ] || vfail "'include' given twice"; sect=include; set_incl=1; continue ;;
                 inject-systs) [ "$set_inj" -eq 0 ] || vfail "'inject-systs' given twice"; sect=inject-systs; set_inj=1; continue ;;
                 inject-osc)   [ "$set_osc" -eq 0 ] || vfail "'inject-osc' given twice";   sect=inject-osc;   set_osc=1; continue ;;
                 syst-only) sect=""; systonly=1; continue ;;
+                data)
+                    [ "$set_data" -eq 0 ] || vfail "'data' given twice"
+                    { [ "$#" -ge 1 ] && ! is_kw "$1"; } || vfail "'data' needs a data XML path"
+                    dxml="$1"; shift; set_data=1; sect=""
+                    if [ -f "$REPO_ROOT/$dxml" ]; then :          # repo-relative: resolves via the run dir's xml/ symlink
+                    elif [[ "$dxml" = /* ]] && [ -f "$dxml" ]; then :
+                    else vfail "data XML '$dxml' not found (give a path relative to the repo, e.g. xml/..., or an absolute path)"
+                    fi
+                    continue ;;
                 poisson-throw) [ "$pthrow" -eq 0 ] || vfail "'poisson-throw' given twice"; sect=""; pthrow=1; continue ;;
                 seed)
                     [ -z "$seed" ] || vfail "'seed' given twice"
@@ -245,6 +292,7 @@ if [ -n "$VARIANTS" ]; then
             esac
             case "$sect" in
                 exclude) excl+=("$tok") ;;
+                include) incl+=("$tok") ;;
                 inject-systs|inject-osc)
                     # name/value pairs, checked here because PROfit's map parser
                     # would otherwise pair the wrong tokens without complaint.
@@ -256,8 +304,15 @@ if [ -n "$VARIANTS" ]; then
             esac
         done
         [ "$set_excl" -eq 0 ] || [ "${#excl[@]}" -gt 0 ] || vfail "'exclude' with no names"
+        [ "$set_incl" -eq 0 ] || [ "${#incl[@]}" -gt 0 ] || vfail "'include' with no names"
+        [ "$set_excl" -eq 0 ] || [ "$set_incl" -eq 0 ] || vfail "'exclude' and 'include' cannot be combined (PROfit's --exclude-systs and --syst-list are mutually exclusive)"
         [ "$set_inj"  -eq 0 ] || [ "${#inj[@]}"  -gt 0 ] || vfail "'inject-systs' with no name/sigma pairs"
         [ "$set_osc"  -eq 0 ] || [ "${#osc[@]}"  -gt 0 ] || vfail "'inject-osc' with no param/value pairs"
+        if [ "$set_data" -eq 1 ]; then
+            for k in inject-osc:$set_osc inject-systs:$set_inj poisson-throw:$pthrow; do
+                [ "${k#*:}" -eq 0 ] || vfail "'${k%%:*}' does nothing with 'data' - it only modifies fake data. Drop one of them."
+            done
+        fi
         if [ -n "$run_sub" ]; then eff_sub="$run_sub"; eff_args="$run_args"
         else
             [ -n "$SUBCOMMAND" ] || vfail "no 'run' on this line and no default '-- <subcommand>' given"
@@ -277,12 +332,14 @@ if [ -n "$VARIANTS" ]; then
 
         # Strip from the base only the keys this variant overrides.
         strip="output|log"
-        [ "$set_excl" -eq 1 ] && strip+="|exclude-systs"
+        [ "$set_excl" -eq 1 ] && strip+="|exclude-systs|syst-list"
+        [ "$set_incl" -eq 1 ] && strip+="|syst-list|exclude-systs"
         [ "$set_inj"  -eq 1 ] && strip+="|inject-systs"
         [ "$set_osc"  -eq 1 ] && strip+="|inject|i"
         [ "$systonly" -eq 1 ] && strip+="|syst-only"
         [ "$pthrow"   -eq 1 ] && strip+="|poisson-throw"
         [ -n "$seed" ]        && strip+="|seed|s"
+        [ "$set_data" -eq 1 ] && strip+="|data|d"
 
         LABELS+=("$label")
         gen="$BATCH/${BASE_NAME}__${label}.ini"
@@ -291,11 +348,13 @@ if [ -n "$VARIANTS" ]; then
             echo "# --- generated by submit_fanout.sh --variants $(basename "$VFILE") ---"
             echo "output = $label"
             [ "$set_excl" -eq 1 ] && echo "exclude-systs = ${excl[*]}"
+            [ "$set_incl" -eq 1 ] && echo "syst-list = ${incl[*]}"
             [ "$set_inj"  -eq 1 ] && echo "inject-systs = ${inj[*]}"
             [ "$set_osc"  -eq 1 ] && echo "inject = ${osc[*]}"
             [ "$systonly" -eq 1 ] && echo "syst-only = true"
             [ "$pthrow"   -eq 1 ] && echo "poisson-throw = true"
             [ -n "$seed" ]        && echo "seed = $seed"
+            [ "$set_data" -eq 1 ] && echo "data = $dxml"
             echo "log = ${label}.log"
         } > "$globals"
         # Keep the base's global block only; record which sections were dropped.
@@ -307,19 +366,26 @@ if [ -n "$VARIANTS" ]; then
             cat "$globals"
         } > "$gen"
         rm -f "$globals"
+        if [ "$set_data" -eq 1 ]; then
+            dkey="${dxml#/}"; dkey="${dkey%.xml}"; dkey="${dkey//[^A-Za-z0-9._-]/_}"
+            RUNDIRS+=("$OUTPUT_ROOT/$BASE_TAG/data__$dkey")
+        else
+            RUNDIRS+=("")
+        fi
         INIS+=("$gen"); SUBS+=("$eff_sub"); ARGS+=("$eff_args")
     done < "$VFILE"
+    set +f
     [ "${#INIS[@]}" -gt 0 ] || { echo "error: $VARIANTS contains no variants" >&2; exit 1; }
 else
-    for ini in "${INIS[@]}"; do SUBS+=("$SUBCOMMAND"); ARGS+=("${EXTRA[*]:-}"); done
+    for ini in "${INIS[@]}"; do SUBS+=("$SUBCOMMAND"); ARGS+=("${EXTRA[*]:-}"); RUNDIRS+=(""); done
 fi
 
 N="${#INIS[@]}"
 
 # capacity tops out at 16 nodes; debug-scaling allows more but caps walltime at
 # one hour, which a process run does not fit inside.
-if [ "$N" -gt 16 ]; then
-    echo "error: $N configs exceeds the 16-node ceiling on capacity. Split the batch." >&2
+if [ "$N" -gt 16 ] && [ "$QUEUE" != "debug-scaling" ]; then
+    echo "error: $N configs exceeds the 16-node ceiling on $QUEUE. Split the batch, or use --queue debug-scaling (1 h max)." >&2
     exit 1
 fi
 
@@ -374,11 +440,35 @@ if [ "$SHARED_CACHE" -eq 1 ]; then
     done
 fi
 
+# ---- per-data-XML run directories ------------------------------------------
+# One per distinct data XML, holding symlinks to the tag's MC caches and its own
+# <tag>_data.bin. Built here, once, for the same no-race reason as above.
+for rd in $(printf '%s\n' ${RUNDIRS[@]+"${RUNDIRS[@]}"} | grep . | sort -u); do
+    tagdir="$(dirname "$rd")"; tag="$(basename "$tagdir")"
+    users=0
+    for r in "${RUNDIRS[@]}"; do [ "$r" = "$rd" ] && users=$((users+1)); done
+    if [ ! -s "$rd/${tag}_data.bin" ] && [ "$users" -gt 1 ]; then
+        echo "error: $users ranks use the data XML behind $(basename "$rd"), which has no data cache yet." >&2
+        echo "       They would all build $rd/${tag}_data.bin at once." >&2
+        echo "       Submit ONE variant with that data XML first, then the rest." >&2
+        exit 1
+    fi
+    mkdir -p "$rd"
+    ln -sfn "$REPO_ROOT/work" "$rd/work"
+    ln -sfn "$REPO_ROOT/xml"  "$rd/xml"
+    for bin in "$tagdir/${tag}"_*.bin; do
+        [ -e "$bin" ] || continue
+        case "$bin" in *_data.bin) continue ;; esac
+        ln -sfn "../$(basename "$bin")" "$rd/$(basename "$bin")"
+    done
+done
+
 mkdir -p "$BATCH"
 TASKS="$BATCH/tasks.txt"
 : > "$TASKS"
 for i in "${!INIS[@]}"; do
-    printf '%s %s %s %s\n' "$REPO_ROOT/scripts/profit_run.sh" "$(resolve "${INIS[$i]}")" "${SUBS[$i]}" "${ARGS[$i]}" >> "$TASKS"
+    prefix=""; [ -z "${RUNDIRS[$i]}" ] || prefix="PROFIT_RUN_DIR=${RUNDIRS[$i]} "
+    printf '%s%s %s %s %s\n' "$prefix" "$REPO_ROOT/scripts/profit_run.sh" "$(resolve "${INIS[$i]}")" "${SUBS[$i]}" "${ARGS[$i]}" >> "$TASKS"
 done
 
 JOB_SCRIPT="$BATCH/fanout.pbs"
@@ -425,7 +515,8 @@ EOF
 echo "batch dir:  $BATCH"
 echo "tasks:      $N run(s), default subcommand '${SUBCOMMAND:-none}' ${EXTRA[*]:-}"
 for i in "${!INIS[@]}"; do
-    printf '  rank %-2s %-48s %-12s tag=%s\n' "$i" "$(basename "${INIS[$i]}")" "${SUBS[$i]}" "${TAGS[$i]}"
+    printf '  rank %-2s %-48s %-12s tag=%s%s\n' "$i" "$(basename "${INIS[$i]}")" "${SUBS[$i]}" "${TAGS[$i]}" \
+        "${RUNDIRS[$i]:+  dir=.../$(basename "${RUNDIRS[$i]}")}"
 done
 [ "$SHARED_CACHE" -eq 1 ] && echo "cache:      shared, verified present for $(printf '%s\n' "${TAGS[@]}" | sort -u | tr '\n' ' ')"
 echo "submitting: $N node(s), walltime $WALLTIME, queue $QUEUE"

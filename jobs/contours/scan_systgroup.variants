@@ -61,8 +61,7 @@ nomcstat           exclude mcstat
 noqe               exclude Cross-Section-QE
 nomec              exclude Cross-Section-MEC
 nores              exclude Cross-Section-RES
-nononresnu         exclude Cross-Section-NonRES-nu
-nononresnubar      exclude Cross-Section-NonRES-nubar
+nononres           exclude Cross-Section-NonRES-nu Cross-Section-NonRES-nubar
 nodis              exclude Cross-Section-DIS
 nocoh              exclude Cross-Section-COH
 noncel             exclude Cross-Section-NCEL

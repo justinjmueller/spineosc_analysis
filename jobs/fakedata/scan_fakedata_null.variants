@@ -1,0 +1,21 @@
+# Fake-data NULL fits (syst-only) - one rank per data XML. Submit FIRST: each
+# rank builds its data XML's cache, which scan_fakedata_free then reuses.
+#
+#   scripts/submit_fanout.sh --queue capacity --walltime 01:00:00 \
+#       --variants jobs/contours/scan_fakedata_null.variants jobs/contours/contours_full.ini -- global
+#
+# label                                   sections
+ctrl_null                                 data xml/fakedata/fakedata_data_ctrl.xml  syst-only
+mec_bdt_null                              data xml/fakedata/fakedata_data_mec_bdt.xml  syst-only
+cpi_subthreshold_minus100_null            data xml/fakedata/fakedata_data_cpi_subthreshold_minus100.xml  syst-only
+cpi_subthreshold_plus100_null             data xml/fakedata/fakedata_data_cpi_subthreshold_plus100.xml  syst-only
+jaesung_lowq2_pi_enhancement_prefsi_null  data xml/fakedata/fakedata_data_jaesung_lowq2_pi_enhancement_prefsi.xml  syst-only
+jaesung_lowq2_pi_enhancement_postfsi_null data xml/fakedata/fakedata_data_jaesung_lowq2_pi_enhancement_postfsi.xml  syst-only
+pi_fsi_ha2025_null                        data xml/fakedata/fakedata_data_pi_fsi_ha2025.xml  syst-only
+ub_cc1p0pi_dpt_dat_null                   data xml/fakedata/fakedata_data_ub_cc1p0pi_dpt_dat.xml  syst-only
+ub_cc1p0pi_dpt_dat_midW_null              data xml/fakedata/fakedata_data_ub_cc1p0pi_dpt_dat_midW.xml  syst-only
+ub_cc2p0pi_delta_pt_null                  data xml/fakedata/fakedata_data_ub_cc2p0pi_delta_pt.xml  syst-only
+t2k_nc1pi_p_costh_null                    data xml/fakedata/fakedata_data_t2k_nc1pi_p_costh.xml  syst-only
+minerva_3dqelike_bnb_null                 data xml/fakedata/fakedata_data_minerva_3dqelike_bnb.xml  syst-only
+qe_zexp_mva_to_lqcd_null                  data xml/fakedata/fakedata_data_qe_zexp_mva_to_lqcd.xml  syst-only
+osc_ic2024_pebl_bestfit_null              data xml/fakedata/fakedata_data_osc_ic2024_pebl_bestfit.xml  syst-only
