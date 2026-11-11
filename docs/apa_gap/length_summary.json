@@ -1,0 +1,160 @@
+{
+ "resolution_robust_sigma_cm": 0.3293409851074219,
+ "equivalent_length": {
+  "deficit": {
+   "window": [
+    251.5,
+    254.5
+   ],
+   "length_cm": 0.7872206972817619,
+   "error_cm": 0.15815518878654242
+  },
+  "pile_up": {
+   "window": [
+    254.5,
+    256.5
+   ],
+   "length_cm": 0.4273270968037969,
+   "error_cm": 0.16727460907777994
+  },
+  "net_loss_cm": {
+   "length_cm": 0.35989360047796504,
+   "error_cm": 0.23020394997095722
+  }
+ },
+ "variants": {
+  "loss": {
+   "a": 252.5,
+   "b": 254.0,
+   "length": 1.5,
+   "length_best_profile": 1.5,
+   "length_1sigma": [
+    1.25,
+    2.5
+   ],
+   "loss": 0.5,
+   "snap": 0.0,
+   "delta_minus2lnL_vs_no_gap": 27.0590998208138,
+   "delta_vs_best_variant": 35.28797675531763
+  },
+  "snap": {
+   "a": 251.75,
+   "b": 255.5,
+   "length": 3.75,
+   "length_best_profile": 3.75,
+   "length_1sigma": [
+    3.5,
+    4.0
+   ],
+   "loss": 0.0,
+   "snap": 0.3,
+   "delta_minus2lnL_vs_no_gap": 62.34707657613143,
+   "delta_vs_best_variant": 0.0
+  },
+  "loss+snap": {
+   "a": 251.75,
+   "b": 255.5,
+   "length": 3.75,
+   "length_best_profile": 3.75,
+   "length_1sigma": [
+    3.5,
+    4.0
+   ],
+   "loss": 0.0,
+   "snap": 0.3,
+   "delta_minus2lnL_vs_no_gap": 62.34707657613143,
+   "delta_vs_best_variant": 0.0
+  }
+ },
+ "best_variant": "snap",
+ "goodness_of_fit": {
+  "minus2lnL": 109.7747782368815,
+  "ndf": 60
+ },
+ "toys_from_best_fit": {
+  "length_mean": 3.475,
+  "length_std": 0.5414101956926929,
+  "lower_edge_mean": 252.0125,
+  "lower_edge_std": 0.5301827515112124,
+  "n_toys": 40
+ },
+ "deviance_per_bin": {
+  "no_gap": {
+   "inside_248_259_per_bin": 4.43096922922442,
+   "outside_per_bin": 1.7771555183351342
+  },
+  "best_model": {
+   "inside_248_259_per_bin": 1.5971563767246602,
+   "outside_per_bin": 1.7770794749747372
+  }
+ },
+ "length_uncertainty_cm": {
+  "toys": 0.5414101956926929,
+  "scatter_factor": 1.7770794749747372,
+  "inflated": 0.7217384714021899
+ },
+ "simulation_reconstruction_as_data": {
+  "asimov": {
+   "a": 254.5,
+   "b": 255.25,
+   "length": 0.75,
+   "length_best_profile": 0.75,
+   "length_1sigma": [
+    0.75,
+    1.0
+   ],
+   "loss": 0.0,
+   "snap": 0.9,
+   "minus2lnL": 46.31245859739617
+  },
+  "toys": {
+   "length_mean": 1.85,
+   "length_std": 1.8,
+   "lower_edge_mean": 253.28125,
+   "lower_edge_std": 1.8012040243959038,
+   "n_toys": 40
+  }
+ },
+ "robustness": {
+  "fit_range_240_268": {
+   "a": 251.75,
+   "b": 255.5,
+   "length": 3.75,
+   "length_1sigma": [
+    3.5,
+    4.0
+   ],
+   "snap": 0.3
+  },
+  "fit_range_236_272": {
+   "a": 251.75,
+   "b": 255.5,
+   "length": 3.75,
+   "length_1sigma": [
+    3.5,
+    4.0
+   ],
+   "snap": 0.3
+  },
+  "resolution_margin_5": {
+   "a": 251.75,
+   "b": 255.5,
+   "length": 3.75,
+   "length_1sigma": [
+    3.5,
+    4.0
+   ],
+   "snap": 0.3
+  },
+  "resolution_margin_12": {
+   "a": 251.75,
+   "b": 255.5,
+   "length": 3.75,
+   "length_1sigma": [
+    3.5,
+    4.0
+   ],
+   "snap": 0.3
+  }
+ }
+}

@@ -1,0 +1,83 @@
+# Truth-free export test (2D analysis selection = xml/contours/contours_base.xml). Each export writes one data-like ROOT file per detector (reco variables only,
+# Poisson-thrown events, selection already applied, MC components merged and shuffled) plus a data XML <name>.xml. `cuts` are the reco-only cuts per MC tree
+# (python -m fdgen.export --suggest-cuts xml/contours/contours_base.xml); a thrown event that fails them is an error. write_slim: false skips the weight files.
+dataset:
+  name: export_test
+  mc_xml: xml/contours/contours_base.xml
+  base_dir: runs/fakedata_data
+  outdir: output/fdgen/export_test
+  seed: 21
+  poisson: false
+  shuffle: false
+  write_slim: false
+scenarios:
+- id: 'null'
+- id: O3
+  oscillation:
+    dmsq: 2.07
+    sinsq2thmm: 0.116
+exports:
+- name: pseudo_A
+  scenario: O3
+  seed: 101
+  keep:
+  - reco_visible_energy
+  - reco_pn
+  - reco_proton_multiplicity
+  detectors:
+    SBND:
+      file: pseudo_A_sbnd.root
+      tree: events/sbnd_bnblight/selected
+      cuts:
+        events/sbnd_large/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/sbnd_dirt/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/sbnd_offbeam/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)
+        events/sbnd_large/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+    ICARUSRun2:
+      file: pseudo_A_icarus_run2.root
+      tree: events/icarus_bnblight_run2/selected
+      cuts:
+        events/icarus_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+        events/icarus_dirt_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+        events/icarus_offbeam_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1)
+        events/icarus_run2/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+    ICARUSRun4:
+      file: pseudo_A_icarus_run4.root
+      tree: events/icarus_bnblight_run4/selected
+      cuts:
+        events/icarus_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/icarus_dirt_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/icarus_offbeam_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)
+        events/icarus_run4/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+- name: pseudo_B
+  scenario: 'null'
+  seed: 102
+  keep:
+  - reco_visible_energy
+  - reco_pn
+  - reco_proton_multiplicity
+  detectors:
+    SBND:
+      file: pseudo_B_sbnd.root
+      tree: events/sbnd_bnblight/selected
+      cuts:
+        events/sbnd_large/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/sbnd_dirt/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/sbnd_offbeam/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)
+        events/sbnd_large/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+    ICARUSRun2:
+      file: pseudo_B_icarus_run2.root
+      tree: events/icarus_bnblight_run2/selected
+      cuts:
+        events/icarus_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+        events/icarus_dirt_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+        events/icarus_offbeam_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1)
+        events/icarus_run2/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+    ICARUSRun4:
+      file: pseudo_B_icarus_run4.root
+      tree: events/icarus_bnblight_run4/selected
+      cuts:
+        events/icarus_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/icarus_dirt_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/icarus_offbeam_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)
+        events/icarus_run4/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))

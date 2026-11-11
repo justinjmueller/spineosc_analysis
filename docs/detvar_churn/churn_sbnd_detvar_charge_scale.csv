@@ -1,0 +1,157 @@
+direction,bin,criterion,fails,only_this,n_events
+lost,0.3-0.7,fiducial volume,109,45,14153
+lost,0.3-0.7,cathode fiducial,55,38,14153
+lost,0.3-0.7,high-y/z veto,233,176,14153
+lost,0.3-0.7,containment,227,110,14153
+lost,0.3-0.7,single muon,1560,212,14153
+lost,0.3-0.7,at least one proton,4642,3055,14153
+lost,0.3-0.7,no charged pions,2899,804,14153
+lost,0.3-0.7,no electrons,119,73,14153
+lost,0.3-0.7,no photons,166,119,14153
+lost,0.3-0.7,not a crosser,51,7,14153
+lost,0.3-0.7,end point >= 4 cm,1046,12,14153
+lost,0.3-0.7,not signal (unattributed),6507,6507,14153
+lost,0.3-0.7,"signal, no failing criterion",51,51,14153
+gained,0.3-0.7,fiducial volume,288,233,13628
+gained,0.3-0.7,cathode fiducial,43,33,13628
+gained,0.3-0.7,high-y/z veto,161,114,13628
+gained,0.3-0.7,containment,164,52,13628
+gained,0.3-0.7,single muon,3992,1296,13628
+gained,0.3-0.7,at least one proton,2351,1992,13628
+gained,0.3-0.7,no charged pions,1447,410,13628
+gained,0.3-0.7,no electrons,131,81,13628
+gained,0.3-0.7,no photons,162,121,13628
+gained,0.3-0.7,not a crosser,66,14,13628
+gained,0.3-0.7,end point >= 4 cm,2284,0,13628
+gained,0.3-0.7,not signal (unattributed),6188,6188,13628
+gained,0.3-0.7,"signal, no failing criterion",43,43,13628
+lost,0.7-1.0,fiducial volume,83,61,6673
+lost,0.7-1.0,cathode fiducial,31,24,6673
+lost,0.7-1.0,high-y/z veto,190,138,6673
+lost,0.7-1.0,containment,163,74,6673
+lost,0.7-1.0,single muon,532,43,6673
+lost,0.7-1.0,at least one proton,1073,637,6673
+lost,0.7-1.0,no charged pions,1600,937,6673
+lost,0.7-1.0,no electrons,81,48,6673
+lost,0.7-1.0,no photons,89,61,6673
+lost,0.7-1.0,not a crosser,52,19,6673
+lost,0.7-1.0,end point >= 4 cm,356,3,6673
+lost,0.7-1.0,not signal (unattributed),3640,3640,6673
+lost,0.7-1.0,"signal, no failing criterion",23,23,6673
+gained,0.7-1.0,fiducial volume,112,102,4691
+gained,0.7-1.0,cathode fiducial,30,22,4691
+gained,0.7-1.0,high-y/z veto,113,79,4691
+gained,0.7-1.0,containment,119,41,4691
+gained,0.7-1.0,single muon,1067,210,4691
+gained,0.7-1.0,at least one proton,684,599,4691
+gained,0.7-1.0,no charged pions,596,241,4691
+gained,0.7-1.0,no electrons,87,54,4691
+gained,0.7-1.0,no photons,86,61,4691
+gained,0.7-1.0,not a crosser,36,8,4691
+gained,0.7-1.0,end point >= 4 cm,680,1,4691
+gained,0.7-1.0,not signal (unattributed),2265,2265,4691
+gained,0.7-1.0,"signal, no failing criterion",36,36,4691
+lost,1.0-1.3,fiducial volume,10,5,1762
+lost,1.0-1.3,cathode fiducial,4,1,1762
+lost,1.0-1.3,high-y/z veto,48,39,1762
+lost,1.0-1.3,containment,42,17,1762
+lost,1.0-1.3,single muon,76,6,1762
+lost,1.0-1.3,at least one proton,191,102,1762
+lost,1.0-1.3,no charged pions,361,230,1762
+lost,1.0-1.3,no electrons,22,15,1762
+lost,1.0-1.3,no photons,23,15,1762
+lost,1.0-1.3,not a crosser,13,4,1762
+lost,1.0-1.3,end point >= 4 cm,35,2,1762
+lost,1.0-1.3,not signal (unattributed),1150,1150,1762
+lost,1.0-1.3,"signal, no failing criterion",6,6,1762
+gained,1.0-1.3,fiducial volume,27,22,894
+gained,1.0-1.3,cathode fiducial,3,3,894
+gained,1.0-1.3,high-y/z veto,26,21,894
+gained,1.0-1.3,containment,36,13,894
+gained,1.0-1.3,single muon,124,22,894
+gained,1.0-1.3,at least one proton,135,115,894
+gained,1.0-1.3,no charged pions,102,50,894
+gained,1.0-1.3,no electrons,21,16,894
+gained,1.0-1.3,no photons,20,13,894
+gained,1.0-1.3,not a crosser,12,1,894
+gained,1.0-1.3,end point >= 4 cm,69,0,894
+gained,1.0-1.3,not signal (unattributed),491,491,894
+gained,1.0-1.3,"signal, no failing criterion",2,2,894
+lost,1.3-1.5,fiducial volume,1,0,237
+lost,1.3-1.5,cathode fiducial,0,0,237
+lost,1.3-1.5,high-y/z veto,7,6,237
+lost,1.3-1.5,containment,5,3,237
+lost,1.3-1.5,single muon,4,0,237
+lost,1.3-1.5,at least one proton,8,2,237
+lost,1.3-1.5,no charged pions,45,37,237
+lost,1.3-1.5,no electrons,3,2,237
+lost,1.3-1.5,no photons,2,2,237
+lost,1.3-1.5,not a crosser,1,1,237
+lost,1.3-1.5,end point >= 4 cm,1,0,237
+lost,1.3-1.5,not signal (unattributed),173,173,237
+lost,1.3-1.5,"signal, no failing criterion",0,0,237
+gained,1.3-1.5,fiducial volume,4,4,90
+gained,1.3-1.5,cathode fiducial,1,1,90
+gained,1.3-1.5,high-y/z veto,4,3,90
+gained,1.3-1.5,containment,1,1,90
+gained,1.3-1.5,single muon,11,2,90
+gained,1.3-1.5,at least one proton,7,5,90
+gained,1.3-1.5,no charged pions,9,2,90
+gained,1.3-1.5,no electrons,4,3,90
+gained,1.3-1.5,no photons,2,2,90
+gained,1.3-1.5,not a crosser,0,0,90
+gained,1.3-1.5,end point >= 4 cm,5,0,90
+gained,1.3-1.5,not signal (unattributed),55,55,90
+gained,1.3-1.5,"signal, no failing criterion",0,0,90
+lost,1.5-2.0,fiducial volume,0,0,88
+lost,1.5-2.0,cathode fiducial,0,0,88
+lost,1.5-2.0,high-y/z veto,0,0,88
+lost,1.5-2.0,containment,0,0,88
+lost,1.5-2.0,single muon,2,2,88
+lost,1.5-2.0,at least one proton,2,1,88
+lost,1.5-2.0,no charged pions,13,13,88
+lost,1.5-2.0,no electrons,1,1,88
+lost,1.5-2.0,no photons,4,4,88
+lost,1.5-2.0,not a crosser,1,0,88
+lost,1.5-2.0,end point >= 4 cm,0,0,88
+lost,1.5-2.0,not signal (unattributed),65,65,88
+lost,1.5-2.0,"signal, no failing criterion",1,1,88
+gained,1.5-2.0,fiducial volume,0,0,27
+gained,1.5-2.0,cathode fiducial,0,0,27
+gained,1.5-2.0,high-y/z veto,0,0,27
+gained,1.5-2.0,containment,0,0,27
+gained,1.5-2.0,single muon,3,0,27
+gained,1.5-2.0,at least one proton,0,0,27
+gained,1.5-2.0,no charged pions,2,1,27
+gained,1.5-2.0,no electrons,0,0,27
+gained,1.5-2.0,no photons,1,1,27
+gained,1.5-2.0,not a crosser,0,0,27
+gained,1.5-2.0,end point >= 4 cm,2,0,27
+gained,1.5-2.0,not signal (unattributed),22,22,27
+gained,1.5-2.0,"signal, no failing criterion",0,0,27
+lost,2.0-3.0,fiducial volume,0,0,3
+lost,2.0-3.0,cathode fiducial,0,0,3
+lost,2.0-3.0,high-y/z veto,0,0,3
+lost,2.0-3.0,containment,0,0,3
+lost,2.0-3.0,single muon,0,0,3
+lost,2.0-3.0,at least one proton,0,0,3
+lost,2.0-3.0,no charged pions,0,0,3
+lost,2.0-3.0,no electrons,0,0,3
+lost,2.0-3.0,no photons,0,0,3
+lost,2.0-3.0,not a crosser,0,0,3
+lost,2.0-3.0,end point >= 4 cm,0,0,3
+lost,2.0-3.0,not signal (unattributed),3,3,3
+lost,2.0-3.0,"signal, no failing criterion",0,0,3
+gained,2.0-3.0,fiducial volume,0,0,1
+gained,2.0-3.0,cathode fiducial,0,0,1
+gained,2.0-3.0,high-y/z veto,0,0,1
+gained,2.0-3.0,containment,0,0,1
+gained,2.0-3.0,single muon,0,0,1
+gained,2.0-3.0,at least one proton,0,0,1
+gained,2.0-3.0,no charged pions,0,0,1
+gained,2.0-3.0,no electrons,0,0,1
+gained,2.0-3.0,no photons,0,0,1
+gained,2.0-3.0,not a crosser,0,0,1
+gained,2.0-3.0,end point >= 4 cm,0,0,1
+gained,2.0-3.0,not signal (unattributed),1,1,1
+gained,2.0-3.0,"signal, no failing criterion",0,0,1

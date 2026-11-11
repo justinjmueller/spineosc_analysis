@@ -1,3 +1,6 @@
+# File map for the ALCF (Aurora) workflows: the v1.1.0 files under /flare/neutrinoGPU/jmueller/data. Use it as input/sources.list there
+# (cp input/sources.list.alcf input/sources.list). input/sources.list in this checkout is the maintainer's local-machine map.
+
 # --- SBND Run 1 ---
 sbnd_run1_cvmc=/flare/neutrinoGPU/jmueller/data/v1.1.0/spineosc_numu_sbnd_run1_v1.1.0_wsyst.root
 sbnd_run1_cvrw=/flare/neutrinoGPU/jmueller/data/v1.1.0/spineosc_numu_sbnd_run1_v1.1.0_wsyst_cvrw.root

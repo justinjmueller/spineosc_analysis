@@ -4,21 +4,26 @@ PROfit XML configs for the SBND + ICARUS oscillation analysis.
 
 ## Repo layout
 
-```
-xml/                   PROfit XML configs (contours_base.xml, exclusive_selected_1d.xml, varset*_mc.xml, varset*_devsample*.xml)
-jobs/                  per-study job configs (*.ini), read directly by PROfit --config
-input/
-  sources.list.example  checked-in template listing every file key the XML configs expect
-  sources.list           your machine's actual file paths (gitignored - you create this)
-  site.conf.example      checked-in template for this machine's paths and batch settings
-  site.conf              your PROfit build, output area and PBS settings (gitignored - you create this)
-scripts/
-  deploy.sh              populates work/ from input/sources.list
-  profit_run.sh          runs one PROfit subcommand for one job config
-  submit_pbs.sh          submits the same thing as a single-node PBS job
-work/                   symlinks the XML configs read from (generated, gitignored)
-detvar/detsys.root     detector systematics histograms (tracked in git)
-```
+| Path | Purpose | Entry point / docs |
+|---|---|---|
+| `xml/` | PROfit XML and `.ini` configs, grouped by study (`contours`, `coverage`, `detector_data_access`, `dent_study`, `resolution`, ...) | `xml/MANIFEST.toml`, `python scripts/xml_manifest.py --check` |
+| `jobs/` | per-study job configs read by PROfit `--config` | see "Job configs" |
+| `input/` | `sources.list.example` / `site.conf.example` templates and the machine file maps | see "First-time setup" |
+| `scripts/` | deploy, XML generators and linter, notebook runner, study drivers (`scripts/dent_study/`) | `scripts/deploy.sh` |
+| `plotting/studies/` | documented plotting scripts that replace the analysis notebooks | `plotting/studies/README.md` |
+| `plotting/`, `detsys/plotting/` | legacy analysis notebooks, kept until the scripts are verified | `docs/RESIDUAL_TASKS.md` |
+| `detsys/`, `detvar/` | detector-systematics calculator and the ratio-histogram ROOT files | `detsys/calculator*/` |
+| `reweight/`, `reBruce/` | event reweighting (`reweight/Makefile`) and the `reBruce` submodule | submodule README |
+| `fdgen/` | YAML-driven fake-data weight generator following PROfit's osc/Poisson recipe | `fdgen/README.md` |
+| `docs/` | study reports, audits and `RESIDUAL_TASKS.md` (open work) | `docs/RESIDUAL_TASKS.md` |
+| `runs/`, `figures/`, `work/`, `archive/` | generated run products, figures, symlinks and set-aside work such as the Oct 2026 `spinefd` fake-data study (git-ignored) | |
+
+Python environment: see `pyproject.toml` (Python >= 3.11; the study scripts also need the `mutools`
+package, installed from `/Users/mueller/Projects/mutools` with `uv sync`).
+
+Note: the PROfit wrappers `scripts/profit_run.sh` and `scripts/submit_pbs.sh` described below
+are not present on this branch (they live in the commit history of another branch); the PROfit
+build and `input/site.conf` settings are described in "Running PROfit".
 
 The XML configs never hardcode an absolute, machine-specific path. Every
 `filename="..."` attribute in `xml/*.xml` points at a relative
@@ -63,9 +68,29 @@ differs per machine.
    and off `$HOME`). The `pbs_*` settings only matter if you submit batch
    jobs.
 
-`input/sources.list`, `input/site.conf` and `work/` are all gitignored -
-they're machine-specific and fully reproducible from the checked-in
-`.example` templates plus your local data, so there's nothing to commit.
+4. Tell the Python scripts, the C++ detector-systematics calculators and the
+   ROOT macros where the release ntuples are (all read the variable at run
+   time; the calculators need no rebuild when it changes):
+
+   ```
+   export SPINEOSC_DATA=/path/to/data/spineosc    # holds v1.1.0/spineosc_numu_*.root
+   ```
+
+   The default is `~/data/spineosc`. The release folder (`v1.1.0`) and the
+   repository root are set in `plotting/spineosc_paths.py` (Python), in
+   `release_dir()` of each `detsys/calculator*/configuration.h` (C++) and in
+   `spineosc_dir()` of the `plotting/dent_validation/*.C` macros.
+
+   The calculators have no build file; one builds with
+   `c++ -O2 $(root-config --cflags) main.cc -o run_detsys $(root-config --libs) -lROOTDataFrame`
+   in its directory and runs as `./run_detsys <sbnd|icarus|generic|all> <output_dir>`. Binaries built
+   before this change still carry the old path and need rebuilding.
+
+`input/sources.list` and `input/site.conf` are tracked as the maintainer's own
+environments (a local checkout and ALCF Aurora); `input/sources.list.alcf` is the file
+map for the ALCF workflows, and `input/sources.list.example` / `input/site.conf.example`
+are the templates to copy on any other machine. `work/` is gitignored: it is rebuilt
+from `input/sources.list` by `scripts/deploy.sh`.
 
 ## Running PROfit
 
@@ -172,11 +197,36 @@ re-`process`; forcing past it yields silently wrong normalization.
 - Type: `cvmc` (central-value signal MC, "wsyst"), `dirt` (dirt MC),
   or `data` (beam-on data, "bnblight")
 
-Plus one detector-independent key, `detsys_main`, for the ROOT file
-holding the detector-systematics histograms referenced by
-`<HistVarFiles>` and the `hist1d` allowlist entries in the XML configs.
+Plus a set of detector-independent `detsys_*` keys, one per ROOT file of
+detector-systematics histograms referenced by `<HistVarFiles>` and the
+`hist1d` allowlist entries in the XML configs:
 
-That's 9 detector/run/type keys + `detsys_main` = 10 lines in
+- `detsys_main` - the histograms binned in reconstructed visible energy,
+  used by the main analysis XMLs.
+- One `detsys_<variable>` per coverage study under `xml/coverage/` -
+  the same 27 systematics re-binned in that study's fit variable.
+  Currently the PID scores (`muon_score`, `proton_score`,
+  `muon_primary_score`, `proton_primary_score`), the range/momentum
+  agreement variables (`muon_calo_csda`, `proton_calo_csda`,
+  `muon_mcs_csda`), and the kinematic/TKI variables (`proton_ke`, `dp`,
+  `dpt`, `dalphat`, `dphit`, `muon_azimuth`).
+
+  The kinematic set is binned in the ntuples' native units - MeV, MeV/c
+  and radians - rather than the GeV convention used by
+  `xml/varset1_devsample.xml`. The detvar calculator hands the subchannel
+  branch straight to RDataFrame as a column name, so a scaling expression
+  like `reco_pn/1000` cannot be used there; keeping the XML channel
+  binning in those same native units is what guarantees the fit variable
+  and the systematic ratio axis agree.
+
+Each is produced by `detsys/calculator` and then combined with e.g.
+
+```
+hadd detvar/detsys_v1.0.10_muon_score.root \
+     detsys/profit_systematics/*_by_muon_score.root
+```
+
+That's 9 detector/run/type keys + 14 `detsys_*` keys = 23 lines in
 `input/sources.list`.
 
 **ICARUS Run 2 and Run 4 read out of the same underlying production

@@ -10,6 +10,7 @@
 #ifndef DETSYS_CONFIGURATION_H
 #define DETSYS_CONFIGURATION_H
 
+#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -17,8 +18,26 @@
 
 namespace detsys
 {
-    constexpr const char *k_sbnd_path = "/Users/mueller/data/spineosc/v1.1.0";
-    constexpr const char *k_icarus_path = "/Users/mueller/data/spineosc/v1.1.0";
+    /**
+     * @brief Directory holding the v1.1.0 release ntuples.
+     * @details Read at run time from the SPINEOSC_DATA environment variable
+     * (the directory that contains the v1.1.0 folder); defaults to
+     * $HOME/data/spineosc. No rebuild is needed to point at another machine's data.
+     * @return "<SPINEOSC_DATA>/v1.1.0".
+     */
+    inline std::string release_dir()
+    {
+        const char *root = std::getenv("SPINEOSC_DATA");
+        if (root != nullptr && *root != '\0')
+        {
+            return std::string(root) + "/v1.1.0";
+        }
+        const char *home = std::getenv("HOME");
+        return std::string(home != nullptr ? home : ".") + "/data/spineosc/v1.1.0";
+    }
+
+    inline const std::string k_sbnd_path = release_dir();
+    inline const std::string k_icarus_path = release_dir();
 
     // v1.1.0 regained the SBND WireMod samples, so the v1.0.10 fallback that
     // stood in for them is retired.

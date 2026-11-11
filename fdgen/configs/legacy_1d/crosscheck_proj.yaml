@@ -1,0 +1,109 @@
+# Diagnostic: the cross-check dial scenarios with every dial projected onto true energy the way PROfit's splines are (project_true_e).
+# If PROfit's true-E-only dial model explains the reco-bin differences of crosscheck_dials.yaml, these agree with PROfit's injection to ~1%.
+dataset:
+  name: crosscheck_proj
+  mc_xml: xml/systematics/systematics_suite.xml
+  base_dir: runs/fakedata_data
+  outdir: output/fdgen/crosscheck_proj
+  seed: 5
+  poisson: false
+  shuffle: false
+scenarios:
+- id: xp_A
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  profit_inject:
+  - --inject-systs
+  - MaCCRES
+  - '1'
+  project_true_e: true
+- id: xp_B
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_NormCCMEC
+    sigma: -1.0
+  profit_inject:
+  - --inject-systs
+  - NormCCMEC
+  - '-1'
+  project_true_e: true
+- id: xp_C
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MvCCRES
+    sigma: -1.0
+  profit_inject:
+  - --inject-systs
+  - MaCCRES
+  - '1'
+  - MvCCRES
+  - '-1'
+  project_true_e: true
+- id: xp_D
+  effects:
+  - source: standard
+    dial: QEInterference_SBN_v3_QEIntf_dial_0
+    sigma: 2.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_FrAbs_pi
+    sigma: -1.0
+  profit_inject:
+  - --inject-systs
+  - QEIntf_dial0
+  - '2'
+  - FrAbs_pi
+  - '-1'
+  project_true_e: true
+- id: xp_E
+  oscillation:
+    dmsq: 2.0
+    sinsq2thmm: 0.2
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_NormCCMEC
+    sigma: -1.0
+  profit_inject:
+  - -i
+  - dmsq
+  - '2'
+  - sinsq2thmm
+  - '0.2'
+  - --inject-systs
+  - MaCCRES
+  - '1'
+  - NormCCMEC
+  - '-1'
+  project_true_e: true
+- id: xp_F
+  effects:
+  - source: standard
+    dial: ZExpPCAWeighter_SBN_v3_MvA_b1
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_CV1uBY
+    sigma: -2.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_DecayAngMEC
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_FrAbs_pi
+    sigma: 1.0
+  profit_inject:
+  - --inject-systs
+  - MvAZExp_b1
+  - '1'
+  - CV1uBY
+  - '-2'
+  - DecayAngMEC
+  - '1'
+  - FrAbs_pi
+  - '1'
+  project_true_e: true

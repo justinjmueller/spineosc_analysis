@@ -1,0 +1,50 @@
+{
+ "tol_point": 5.0,
+ "tol_length": 3.0,
+ "pairs": {
+  "DENT": {
+   "role": "primary",
+   "n_matched": 232511,
+   "class_counts": {
+    "non-crosser": 169293,
+    "intact": 59518,
+    "break": 3005,
+    "gap": 626,
+    "gain": 69
+   }
+  },
+  "DENT (replication)": {
+   "role": "replication",
+   "n_matched": 110780,
+   "class_counts": {
+    "non-crosser": 80683,
+    "intact": 28330,
+    "break": 1422,
+    "gap": 316,
+    "gain": 29
+   }
+  },
+  "ChargeScale": {
+   "role": "control",
+   "n_matched": 494798,
+   "class_counts": {
+    "non-crosser": 357544,
+    "intact": 137064,
+    "gap": 82,
+    "gain": 61,
+    "break": 47
+   }
+  },
+  "ChargeScale15": {
+   "role": "control",
+   "n_matched": 494874,
+   "class_counts": {
+    "non-crosser": 357724,
+    "intact": 136919,
+    "gap": 109,
+    "gain": 66,
+    "break": 56
+   }
+  }
+ }
+}

@@ -29,7 +29,7 @@ different POT than the target POT.
 
 Here, the POT matches the development sample POT in data for SBND and ICARUS Run 2 and Run 4:
 -->
-<detector name="SBND" pot="4.196270e+18" />
+<detector name="SBND" pot="4.514958e+18" />
 
 <!--
 Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
@@ -78,12 +78,12 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
 
 </channel>
 
-<MCFile treename="events/sbnd_bnblight/selected" filename="work/sbnd_run1_data.root" scale = "1.0" pot="3.619273e+18">
+<MCFile treename="events/sbnd_bnblight/selected" filename="work/sbnd_run1_data.root" scale = "1.0" pot="4.514958e+18">
 
     <branch
         associated_subchannel = "nu_SBND_ccqelike_data"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)"
     >
         <variable>reco_vertex_y</variable>
         <variable>0</variable>
@@ -95,7 +95,7 @@ blocks (detector="ICARUSRun2"/"ICARUSRun4").
     <branch
         associated_subchannel = "nu_SBND_nproton_data"
         model_rule            = "0"
-        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1)"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)"
     >
         <variable>reco_vertex_y</variable>
         <variable>0</variable>

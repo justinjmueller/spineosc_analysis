@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "muon_azimuth"
+channel_label = "Reconstructed Muon Azimuthal Angle [rad]"
+fit_variable  = "reco_leading_muon_azimuthal_angle"
+fit_bins      = "<bins unit=\"Muon Azimuth [rad]\" min=\"-3.14\" max=\"3.14\" nbins=\"20\"/>"

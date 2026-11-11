@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "dalphat"
+channel_label = "Reconstructed $\\delta \\alpha_{T}$ [rad]"
+fit_variable  = "reco_dalphaT"
+fit_bins      = "<bins unit=\"dalphaT [rad]\" min=\"0.0\" max=\"3.14\" nbins=\"20\"/>"

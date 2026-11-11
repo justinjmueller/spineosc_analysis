@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "dphit"
+channel_label = "Reconstructed $\\delta \\phi_{T}$ [rad]"
+fit_variable  = "reco_dphiT"
+fit_bins      = "<bins unit=\"dphiT [rad]\" min=\"0.0\" max=\"3.14\" nbins=\"20\"/>"

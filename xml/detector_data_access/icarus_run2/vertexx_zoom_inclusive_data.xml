@@ -1,0 +1,94 @@
+<?xml version="1.0" ?>
+
+<!--
+DETECTOR-ACCESS comparison: ICARUS Run 2, vertexx, inclusive, area normalized.
+Generated from xml/coverage/vertexx_icarus{,_data}.xml, which supplies var0 and the
+full systematics suite; everything belonging to the other detectors is
+removed. Variable indices follow the coverage convention (var0 observable,
+var1 L/E, var2 True E, var3 RecoE shadow, var4 Count), so plots want
+counter_index = 4.
+
+POT is BOGUS (1.0e+19) on both sides: the comparison is area normalized.
+MC is the v1.0.10 production, data the v1.1.0 detector-access sample.
+-->
+
+<!--
+SINGLE-DETECTOR (ICARUS Run 2 and Run 4) coverage config for |Vertex X| [cm], generated from
+muon_score_data.xml. A position coordinate only means something in its own
+geometry, so the other detector's samples, systematics and correlations are
+removed and the channel binning matches the detvar calculator's
+by_vertexx_icarus subchannel exactly. Prose below inherited from the
+three-detector template may still mention both detectors.
+-->
+
+<!--
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!--
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Here, the POT matches the development sample POT in data for SBND and ICARUS Run 2 and Run 4:
+-->
+<detector name="ICARUSRun2" pot="1.0e+19" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+Data overlay companion for coverage/vertexx_icarus.xml
+- data carries no interaction-model systematics
+Two channels split by reconstructed proton multiplicity (ccqelike = 1p,
+nproton = Np), each with a single flat "data" subchannel. Reco-level
+selection only - no truth-level cuts - and no systematics.
+
+ICARUS data (events/icarus_bnblight_run2, events/icarus_bnblight_run4) is
+already split into separate per-run trees upstream, so it gets two MCFile
+blocks (detector="ICARUSRun2"/"ICARUSRun4").
+-->
+
+<channel name="numu" unit="Reconstructed |Vertex X| [cm]">
+
+    <bins unit="|Vertex X| [cm]" edges="160.12 165.12 170.12 175.12 180.12 185.12 190.12 195.12 200.12 205.12 215.12 220.12 225.12 230.12 235.12 240.12 245.12 250.12 255.12 260.12"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<MCFile treename="events/icarus_run2_bnblight_full/selected" filename="work/icarus_run2_dataaccess.root" scale = "1.0" pot="1.0e+19">
+    <branch
+        associated_subchannel = "nu_ICARUSRun2_numu_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity >= 1) && (reco_fiducialize_cathode == 1) && (reco_user_containment_cut_filterEE == 1)"
+    >
+        <variable>abs(reco_vertex_x)</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+</MCFile>
+

@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+
+<!--
+BINNING STUDY (extended): dphiT, equal-population, 40 bins per channel.
+
+Built from the CURRENT dphit.xml, so it carries mirror="false" and the
+indirect binding energy; the comparison baseline is chi2 = 35.37, not the
+earlier 35.87.
+
+Verified on the nominal sample: no empty CV bins at this granularity.
+-->
+
+<!--
+SBND data-access study: dphit, single observable, modelled on the delta-p
+vanilla/shifted coverage pair (xml/coverage/dp.xml). Three detectors
+(SBND, ICARUS Run 2, ICARUS Run 4) x two channels (ccqelike = exactly one
+reconstructed proton, nproton = more than one), area normalized, full
+systematics suite including detector variations.
+
+Pairs with dphit_vanilla_plot.ini and dphit_shifted_plot.ini; the latter injects
++1 sigma on four ZExpPCA MvA components and FrPiProd_pi via inject-systs-cv
+only (no additional_weight, to avoid double counting).
+-->
+
+<!--
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!--
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Here, the POT matches the development sample POT in data for SBND and ICARUS Run 2 and Run 4:
+-->
+<detector name="SBND" pot="4.514958e+18" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+Data overlay companion for coverage/dphit.xml
+- data carries no interaction-model systematics
+Two channels split by reconstructed proton multiplicity (ccqelike = 1p,
+nproton = Np), each with a single flat "data" subchannel. Reco-level
+selection only - no truth-level cuts - and no systematics.
+
+ICARUS data (events/icarus_bnblight_run2, events/icarus_bnblight_run4) is
+already split into separate per-run trees upstream, so it gets two MCFile
+blocks (detector="ICARUSRun2"/"ICARUSRun4").
+-->
+
+<channel name="ccqelike" unit="Reconstructed $\delta \phi_{T}$ [rad]">
+
+    <bins unit="dphiT [rad]" edges="0 0.0155 0.0308 0.0462 0.0619 0.0775 0.0938 0.1104 0.1275 0.1451 0.1631 0.1816 0.2007 0.2204 0.2408 0.2622 0.2843 0.3082 0.3338 0.3605 0.3892 0.4199 0.4536 0.4904 0.5327 0.5801 0.6345 0.696 0.7671 0.8497 0.9446 1.053 1.1803 1.3312 1.51 1.7133 1.9545 2.2259 2.5248 2.8345 3.14"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<channel name="nproton" unit="Reconstructed $\delta \phi_{T}$ [rad]">
+
+    <bins unit="dphiT [rad]" edges="0 0.032 0.0638 0.0962 0.128 0.1599 0.1921 0.2257 0.2597 0.2944 0.331 0.3675 0.4046 0.4448 0.4853 0.5271 0.5722 0.6184 0.6678 0.7191 0.7744 0.8339 0.8949 0.9627 1.0362 1.1169 1.2045 1.2985 1.4003 1.5111 1.6377 1.7716 1.9133 2.0568 2.215 2.372 2.5333 2.6876 2.8393 2.9907 3.14"/>
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="data" plotname="Data" color="#FBBC04"/>
+
+</channel>
+
+<MCFile treename="events/sbnd_bnblight/selected" filename="work/sbnd_run1_data.root" scale = "1.0" pot="4.514958e+18">
+
+    <branch
+        associated_subchannel = "nu_SBND_ccqelike_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity == 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)"
+    >
+        <variable>reco_dphiT</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+
+    <branch
+        associated_subchannel = "nu_SBND_nproton_data"
+        model_rule            = "0"
+        additional_weight     = "(reco_proton_multiplicity > 1) && (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)"
+    >
+        <variable>reco_dphiT</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0</variable>
+        <variable>0.5</variable>
+    </branch>
+</MCFile>
+
+

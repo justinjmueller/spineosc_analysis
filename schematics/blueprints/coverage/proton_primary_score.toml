@@ -1,0 +1,12 @@
+template = "coverage"
+
+[values]
+study         = "proton_primary_score"
+channel_label = "Reconstructed Proton Primary Score"
+fit_variable  = "reco_leading_proton_primary_softmax"
+fit_bins      = "<bins unit=\"Reco Proton Primary Score\" min=\"0.1\" max=\"1.0\" nbins=\"20\"/>"
+
+# NOTE: the committed XML references another study here, left over from
+# the copy it was made from. Reproduced exactly so the check stays a
+# byte-for-byte comparison; delete this line once the XML is corrected.
+detector_block_reference = "muon_score_data.xml"

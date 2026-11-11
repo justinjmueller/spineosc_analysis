@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "muon_score"
+channel_label = "Reconstructed Muon Score"
+fit_variable  = "reco_leading_muon_muon_softmax"
+fit_bins      = "<bins unit=\"Reco Muon Score\" min=\"0.3\" max=\"1.0\" nbins=\"14\"/>"

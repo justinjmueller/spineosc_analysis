@@ -1,0 +1,288 @@
+# Batch 2: blind Asimov datasets (2D analysis). Every scenario has at least two knobs (flux / interaction / detector), except S4-S6, which pair one knob with oscillation.
+# Knobs are limited to systematics active in xml/contours/contours_base.xml. Detector knobs use source: detvar (name = the XML's hist1d allowlist name; sigma = a declared knob value).
+# PRIVATE: the dataset -> scenario assignment is in here. Run: PYTHONPATH=$(root-config --libdir) .venv/bin/python -m fdgen.generate fdgen/configs/batch2.yaml
+dataset:
+  name: batch2
+  mc_xml: xml/contours/contours_base.xml
+  base_dir: runs/fakedata_data
+  outdir: output/fdgen/batch2
+  keydir: output/fdgen/batch2_private
+  seed: 32
+  write_slim: false
+  shuffle: false
+  rebruce_files:
+    events/sbnd_large: output/sbnd_run1_fakedata_slim.root
+    events/icarus_run2: output/icarus_run2_fakedata_slim.root
+    events/icarus_run4: output/icarus_run4_fakedata_slim.root
+scenarios:
+- id: M1
+  note: flux horn nightmare + MaCCRES + ChargeScale SBND
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_horn_nightmare
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  - source: detvar
+    name: ChargeScale15_sbnd_Run1
+    sigma: 1.0
+- id: M2
+  note: hadprod + MvA b1 + Coulomb CCQE + SCE ICARUS
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_hadprod_sw_piplus_u387
+    sigma: 1.0
+  - source: standard
+    dial: ZExpPCAWeighter_SBN_v3_MvA_b1
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_CoulombCCQE
+    sigma: 1.0
+  - source: detvar
+    name: SCE_icarus_Run2
+    sigma: 1.0
+  - source: detvar
+    name: SCE_icarus_Run4
+    sigma: 1.0
+- id: M3
+  note: horn 171.5kA + pion FSI (abs, inel) + trigger emulation SBND
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_horn_171p5kA
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_FrAbs_pi
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_FrInel_pi
+    sigma: 1.0
+  - source: detvar
+    name: TriggerEmulation_sbnd_Run1
+    sigma: 1.0
+- id: M4
+  note: two flux dials + binding energy
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_horn_nightmare
+    sigma: 1.0
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_hadprod_sw_piplus_u387
+    sigma: 1.0
+  - source: detvar
+    name: BindingEnergy_SBN
+    sigma: 1.0
+- id: M5
+  note: CCMEC norm +2 + SF template q0 bins + ChargeScale SBND
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_NormCCMEC
+    sigma: 2.0
+  - source: standard
+    dial: CCQETemplateReweight_SBN_v3_LFGToSF_q0bin1
+    sigma: 1.0
+  - source: standard
+    dial: CCQETemplateReweight_SBN_v3_LFGToSF_q0bin2
+    sigma: 1.0
+  - source: standard
+    dial: CCQETemplateReweight_SBN_v3_LFGToSF_q0bin3
+    sigma: 1.0
+  - source: detvar
+    name: ChargeScale15_sbnd_Run1
+    sigma: 1.0
+- id: M6
+  note: reBruce QE z-exp to LQCD + pi FSI HA2025 + SCE ICARUS Run4
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_qe_zexp_mva_to_lqcd
+    sigma: 1.0
+  - source: rebruce
+    dial: multisigma_fdwgt_pi_fsi_ha2025
+    sigma: 1.0
+  - source: detvar
+    name: SCE_icarus_Run4
+    sigma: 1.0
+- id: M7
+  note: horn 171.5kA + MaCCRES + MvCCRES + proton missing SBND
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_horn_171p5kA
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MvCCRES
+    sigma: 1.0
+  - source: detvar
+    name: ProtonMiss_sbnd_Run1
+    sigma: 1.0
+- id: M8
+  note: binding energy + ChargeScale SBND + MFP low-E nucleon
+  effects:
+  - source: detvar
+    name: BindingEnergy_SBN
+    sigma: 1.0
+  - source: detvar
+    name: ChargeScale15_sbnd_Run1
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v3_MFPLoE_N
+    sigma: 1.0
+- id: S1
+  note: horn 171.5kA + ChargeScale SBND at (12.1, 0.187)
+  oscillation:
+    dmsq: 12.1
+    sinsq2thmm: 0.187
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_horn_171p5kA
+    sigma: 1.0
+  - source: detvar
+    name: ChargeScale15_sbnd_Run1
+    sigma: 1.0
+- id: S2
+  note: MaCCRES + SCE ICARUS at (3.5, 0.16)
+  oscillation:
+    dmsq: 3.5
+    sinsq2thmm: 0.16
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_MaCCRES
+    sigma: 1.0
+  - source: detvar
+    name: SCE_icarus_Run2
+    sigma: 1.0
+  - source: detvar
+    name: SCE_icarus_Run4
+    sigma: 1.0
+- id: S3
+  note: hadprod + FrAbs_pi + trigger emulation ICARUS Run2 at (2.07, 0.116)
+  oscillation:
+    dmsq: 2.07
+    sinsq2thmm: 0.116
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_hadprod_sw_piplus_u387
+    sigma: 1.0
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_FrAbs_pi
+    sigma: 1.0
+  - source: detvar
+    name: TriggerEmulation_icarus_Run2
+    sigma: 1.0
+- id: S4
+  note: CCMEC norm +2 at (1.5, 0.05)
+  oscillation:
+    dmsq: 1.5
+    sinsq2thmm: 0.05
+  effects:
+  - source: standard
+    dial: GENIEReWeight_SBN_v1_multisigma_NormCCMEC
+    sigma: 2.0
+- id: S5
+  note: horn nightmare at (25, 0.1)
+  oscillation:
+    dmsq: 25.0
+    sinsq2thmm: 0.1
+  effects:
+  - source: rebruce
+    dial: multisigma_fdwgt_flux_horn_nightmare
+    sigma: 1.0
+- id: S6
+  note: ChargeScale SBND at (0.5, 0.3)
+  oscillation:
+    dmsq: 0.5
+    sinsq2thmm: 0.3
+  effects:
+  - source: detvar
+    name: ChargeScale15_sbnd_Run1
+    sigma: 1.0
+export_defaults:
+  keep:
+  - reco_visible_energy
+  - reco_pn
+  - reco_proton_multiplicity
+  jitter_duplicates: 1.0e-06
+  detectors:
+    SBND:
+      file: '{name}_sbnd.root'
+      tree: events/sbnd_bnblight/selected
+      cuts:
+        events/sbnd_large/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/sbnd_dirt/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/sbnd_offbeam/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4)
+        events/sbnd_large/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_cathode_crosser == 0) && (abs(reco_leading_muon_end_x) >= 4) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+    ICARUSRun2:
+      file: '{name}_icarus_run2.root'
+      tree: events/icarus_bnblight_run2/selected
+      cuts:
+        events/icarus_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+        events/icarus_dirt_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+        events/icarus_offbeam_run2/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1)
+        events/icarus_run2/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && (reco_user_containment_cut_filterEE == 1) && (0.615 * event_largest_flash_pe > 6000)
+    ICARUSRun4:
+      file: '{name}_icarus_run4.root'
+      tree: events/icarus_bnblight_run4/selected
+      cuts:
+        events/icarus_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/icarus_dirt_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+        events/icarus_offbeam_run4/selected: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1)
+        events/icarus_run4/selected_nonmatched: (reco_fiducialize_cathode == 1) && (reco_veto_sbnd_highy_highz == 1) && ((true_detector == 1 && (0.647 * event_largest_flash_pe > 2000)) || (true_detector == 2 && Run <= 10097 && (0.615 * event_largest_flash_pe > 6000)) || (true_detector == 2 && Run >= 12965 && (0.361 * event_largest_flash_pe > 3000)))
+exports:
+- name: dataset_01
+  scenario: M4
+  seed: 2001
+  asimov: true
+- name: dataset_02
+  scenario: M7
+  seed: 2002
+  asimov: true
+- name: dataset_03
+  scenario: S6
+  seed: 2003
+  asimov: true
+- name: dataset_04
+  scenario: S3
+  seed: 2004
+  asimov: true
+- name: dataset_05
+  scenario: S5
+  seed: 2005
+  asimov: true
+- name: dataset_06
+  scenario: M8
+  seed: 2006
+  asimov: true
+- name: dataset_07
+  scenario: M3
+  seed: 2007
+  asimov: true
+- name: dataset_08
+  scenario: M5
+  seed: 2008
+  asimov: true
+- name: dataset_09
+  scenario: M2
+  seed: 2009
+  asimov: true
+- name: dataset_10
+  scenario: S2
+  seed: 2010
+  asimov: true
+- name: dataset_11
+  scenario: M6
+  seed: 2011
+  asimov: true
+- name: dataset_12
+  scenario: S1
+  seed: 2012
+  asimov: true
+- name: dataset_13
+  scenario: M1
+  seed: 2013
+  asimov: true
+- name: dataset_14
+  scenario: S4
+  seed: 2014
+  asimov: true

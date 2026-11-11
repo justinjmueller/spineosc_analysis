@@ -1,0 +1,41 @@
+{
+ "schema": 1,
+ "figure": {
+  "name": "length_edges.pdf",
+  "sha256": "02fee86ef7919c199bc32fe59b69e3c9a4fe37733bea101f50bbafa661a94ab7",
+  "size": 22184
+ },
+ "script": {
+  "path": "plotting/studies/apagap_length.py",
+  "sha256": "028ea5b3e148d32762aa246d19fbd4ae2efc4e2f84a00d2351c6cde17c358f41",
+  "git_commit": "652d23c",
+  "git_clean": false
+ },
+ "command": "apagap_length.py",
+ "arguments": {
+  "fit_range": [
+   238.0,
+   270.0
+  ],
+  "bin": 0.5,
+  "kind": "length_edges"
+ },
+ "versions": {
+  "selection": "v1.1.0"
+ },
+ "inputs": [
+  {
+   "path": "/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_release-v1.1.0_detector_access_DONOTLOOK.root",
+   "restricted": true,
+   "sha256": "583a202702b8b0760b8a3db681273cc380d34dbc637b5ef9500848a194fa9277"
+  },
+  {
+   "path": "/Users/mueller/data/spineosc/v1.1.0/spineosc_numu_sbnd_v1.1.0_wsyst_cvrw.root",
+   "size": 25778975899,
+   "mtime_ns": 1791250290120259213
+  }
+ ],
+ "profit": [],
+ "created": "2026-10-17T23:16:24+00:00",
+ "note": ""
+}

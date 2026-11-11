@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "muon_calo_csda"
+channel_label = "Muon Calo-CSDA Bias"
+fit_variable  = "reco_leading_muon_calo_csda_diff"
+fit_bins      = "<bins unit=\"Muon Calo-CSDA Bias\" min=\"-0.8\" max=\"0.2\" nbins=\"20\"/>"

@@ -1,0 +1,36 @@
+| file | tree | rows | K1 excess | K2 excess | K1 degeneracy broken by energy | full-row identical excess | K2-duplicate rows identical |
+|---|---|---|---|---|---|---|---|
+| icarus_run2_detvar_nosyst | icarus_detvar_charge_scale_run2 | 1,295,142 | 300 (0.023%) | 0 | 100.0% | 0 | 0 of 0 |
+| icarus_run2_detvar_nosyst | icarus_detvar_sce0x_run2 | 1,453,190 | 300 (0.021%) | 0 | 100.0% | 0 | 0 of 0 |
+| icarus_run2_detvar_nosyst | icarus_detvar_sce2x_run2 | 1,264,736 | 250 (0.020%) | 0 | 100.0% | 0 | 0 of 0 |
+| icarus_run2_detvar_nosyst | icarus_wiremod_xthetaxw_run2 | 1,809,767 | 550 (0.030%) | 0 | 100.0% | 0 | 0 of 0 |
+| icarus_run2_detvar_nosyst | icarus_wiremod_yz_run2 | 1,786,548 | 450 (0.025%) | 0 | 100.0% | 0 | 0 of 0 |
+| icarus_run2_dirt_nosyst | icarus_dirt_run2 | 490,534 | 300 (0.061%) | 300 | 0.0% | 300 | 600 of 600 |
+| icarus_run2_nosyst | icarus_offbeam_run2 | 1,282,878 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| icarus_run2_nosyst | icarus_run2 | 1,649,739 | 400 (0.024%) | 0 | 100.0% | 0 | 0 of 0 |
+| icarus_run4_detvar_nosyst | icarus_detvar_charge_scale_run4 | 2,967,001 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| icarus_run4_detvar_nosyst | icarus_detvar_sce0x_run4 | 2,659,861 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| icarus_run4_detvar_nosyst | icarus_detvar_sce2x_run4 | 2,690,681 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| icarus_run4_detvar_nosyst | icarus_wiremod_xthetaxw_run4 | 2,625,102 | 13,878 (0.529%) | 13,878 | 0.0% | 13,878 | 27,756 of 27,756 |
+| icarus_run4_detvar_nosyst | icarus_wiremod_yz_run4 | 3,481,280 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| icarus_run4_dirt_nosyst | icarus_dirt_run4 | 1,389,297 | 181,780 (13.084%) | 181,780 | 0.0% | 181,780 | 363,560 of 363,560 |
+| icarus_run4_nosyst | icarus_offbeam_run4 | 208,989 | 220 (0.105%) | 220 | 0.0% | 138 | 266 of 435 |
+| icarus_run4_nosyst | icarus_run4 | 2,806,621 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| sbnd_detvar_nosyst | sbnd_detvar_charge_scale | 6,306,804 | 208 (0.003%) | 208 | 0.0% | 208 | 416 of 416 |
+| sbnd_detvar_nosyst | sbnd_detvar_cv | 1,627,100 | 98,210 (6.036%) | 0 | 100.0% | 0 | 0 of 0 |
+| sbnd_detvar_nosyst | sbnd_detvar_dent | 1,579,145 | 90,356 (5.722%) | 0 | 100.0% | 0 | 0 of 0 |
+| sbnd_detvar_nosyst | sbnd_detvar_m5_gain | 6,320,856 | 208 (0.003%) | 208 | 0.0% | 208 | 416 of 416 |
+| sbnd_detvar_nosyst | sbnd_detvar_mattmod_yz | 6,106,384 | 208 (0.003%) | 208 | 0.0% | 208 | 416 of 416 |
+| sbnd_detvar_nosyst | sbnd_detvar_newcv | 4,006,250 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| sbnd_detvar_nosyst | sbnd_detvar_newdent | 3,800,142 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| sbnd_detvar_nosyst | sbnd_detvar_p5_gain | 6,078,117 | 208 (0.003%) | 208 | 0.0% | 208 | 416 of 416 |
+| sbnd_detvar_nosyst | sbnd_detvar_sce0x | 6,303,240 | 208 (0.003%) | 208 | 0.0% | 208 | 416 of 416 |
+| sbnd_detvar_nosyst | sbnd_detvar_sce2x | 6,257,494 | 164 (0.003%) | 164 | 0.0% | 164 | 328 of 328 |
+| sbnd_detvar_nosyst | sbnd_detvar_smear15 | 6,309,654 | 208 (0.003%) | 208 | 0.0% | 208 | 416 of 416 |
+| sbnd_detvar_nosyst | sbnd_detvar_wiremod_xthetaxw | 5,556,318 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| sbnd_detvar_nosyst | sbnd_detvar_wiremod_yz | 6,346,087 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| sbnd_detvar_nosyst | sbnd_intime | 2,384,909 | 4,665 (0.196%) | 4,665 | 0.0% | 0 | 0 of 9,330 |
+| sbnd_dirt_nosyst | sbnd_dirt | 1,330,763 | 1,250,763 (93.988%) | 33,924 | 97.3% | 1,385 | 1,442 of 67,086 |
+| sbnd_nosyst | sbnd_large | 6,341,202 | 208 (0.003%) | 208 | 0.0% | 208 | 416 of 416 |
+| sbnd_nosyst | sbnd_offbeam | 1,643,131 | 0 (0.000%) | 0 | n/a | 0 | 0 of 0 |
+| sbnd_nosyst | sbnd_small | 157,812 | 114 (0.072%) | 0 | 100.0% | 0 | 0 of 0 |

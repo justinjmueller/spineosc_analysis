@@ -1,0 +1,7 @@
+template = "coverage"
+
+[values]
+study         = "proton_calo_csda"
+channel_label = "Proton Calo-CSDA Bias"
+fit_variable  = "reco_leading_proton_calo_csda_diff"
+fit_bins      = "<bins unit=\"Proton Calo-CSDA Bias\" min=\"-0.9\" max=\"0.0\" nbins=\"20\"/>"

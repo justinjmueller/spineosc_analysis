@@ -1,0 +1,14 @@
+# Closure tests: the identity (no effects) and a by-hand oscillation injection, Asimov (no Poisson).
+dataset:
+  name: closure_osc
+  mc_xml: xml/systematics/systematics_suite.xml
+  base_dir: runs/fakedata_data          # the XML's work/ paths resolve here
+  outdir: output/fdgen/closure_osc
+  seed: 1
+  poisson: false
+  shuffle: false
+
+scenarios:
+  - id: identity
+  - id: osc_a                           # linear units, the way PROfit's --inject takes them
+    oscillation: {dmsq: 2.0, sinsq2thmm: 0.2}

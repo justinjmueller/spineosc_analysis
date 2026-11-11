@@ -1,0 +1,6 @@
+study,injected,chi2_total,fitted_injected,max_other_pull,max_other_name
+muon_score_inclusive_s2,none,0.0,,0.0,CORSIKA
+muon_score_inclusive_s2,DENT,0.958963,0.95897,0.0228136,Non-uniformity SBND
+muon_score_inclusive_s2,ChargeScale15,0.997687,0.997686,0.0144853,MaCCRES
+muon_score_inclusive_s2,WireModxThetaXW,0.847231,0.847408,0.0544504,MaNCRES
+muon_score_inclusive_s2,MattModYZ,0.978095,0.978015,0.045781,MaCCRES

@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+
+<!-- 
+Label for the "mode" of the neutrino production mechanism. That is, either
+neutrino ("nu") or antineutrino ("nubar") mode. This is sorta not important
+here since SBND and ICARUS have only run in neutrino mode, but it's good to be
+explicit.
+-->
+<mode name="nu" />
+
+<!--
+This is a two-detector analysis, so we need to specify both detectors here. We
+have:
+ - SBND:   110 m baseline (near detector)
+ - ICARUS: 600 m baseline (far detector)
+Additionally, this is where we specify the target POT for each detector, which
+are not necessarily identical. These values are used as the target POT when
+scaling the MC samples for each detector. The MC samples in general have a very
+different POT than the target POT.
+
+Finally, we have two separate ICARUS runs, which mechanically are treated as
+two separate detectors due to the different collection of detector model
+systematics and the different POT.
+
+This is the data/MC comparison companion to coverage/{{study}}_data.xml, so
+the target POT here is set to the actual collected data POT for each detector
+(matching {{detector_block_reference}}'s <detector> block exactly) rather than a
+future-sensitivity target - PROfit requires the data and MC configs to agree
+on POT per detector.
+-->
+<detector name="SBND"       pot="4.196270e+18" />
+<detector name="ICARUSRun2" pot="1.806050e+19" />
+<detector name="ICARUSRun4" pot="1.713296e+19" />
+
+<!--
+Configure the model used within PROfit to a simple two-flavor (nu_mu) neutrino
+disappearance model. This is the model used for the oscillation fit in this
+analysis.
+-->
+<model tag="numudis">
+    <rule index="0" name="No Osc"/>
+    <rule index="1" name="Numu Dis"/>
+    <parameter name="L/E" variable_index="1"/>
+</model>
+
+<!--
+==================================
+= Exclusive final-state analysis =
+==================================
+Two channels split by reconstructed proton multiplicity:
+ - ccqelike: exactly one reconstructed proton
+ - nproton:  more than one reconstructed proton
+-->
+<channel name="ccqelike" unit="{{channel_label}}">
+
+    {{fit_bins}}
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.3 0.4 0.46 0.52 0.58 0.64 0.7 0.76 0.82 0.88 0.94 1.0 1.06 1.13 1.2 1.3 1.5" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
+    <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
+    <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffed"/>
+    <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
+    <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
+
+</channel>
+
+<channel name="nproton" unit="{{channel_label}}">
+
+    {{fit_bins}}
+    <bins unit="True L/E"     min="0.0" max="3.0" nbins="300" plot="false"/>
+    <bins unit="True E [GeV]" min="0.3" max="3.0" nbins="20"  plot="false"/>
+    <bins unit="RecoE" edges="0.4 0.5 0.59 0.67 0.75 0.83 0.91 0.99 1.07 1.16 1.26 1.37 1.5 1.7 2.0" plot="false"/>
+    <bins unit="Count"        min="0.0" max="1.0" nbins="1"/>
+
+    <subchannel name="intime"  plotname="Intime Cosmics" color="#FBBC04"/>
+    <subchannel name="cos"     plotname="Cosmics"        color="#E37400"/>
+    <subchannel name="nc"      plotname="NC"             color="#FF6961"/>
+    <subchannel name="nuecc"   plotname="#nu_e CC"       color="#47ffed"/>
+    <subchannel name="othercc" plotname="Other #nu CC"   color="#03fc3d"/>
+    <subchannel name="target"  plotname="Target"         color="#99CCFF"/>
+
+</channel>
+
+<!--
+Declare the histogram-based detector systematics. These are the detector model
+systematics that are applied to the MC samples in the analysis. Each detector
+systematic is represented by a <HistVarSection> containing one or more
+<variation> elements, which specify the histogram file, histogram name, and
+knob value.
+-->
+{{> detsys_histvarfiles}}
+
+{{> systematics_standard}}
+
+{{> mcfiles_coverage}}
+
+<correlation>ToroidCalibration_sbnd_Run1 ToroidCalibration_icarus_Run4 0.33</correlation>
+<correlation>ProtonMiss_sbnd_Run1 ProtonMiss_icarus_Run4 0.33</correlation>
